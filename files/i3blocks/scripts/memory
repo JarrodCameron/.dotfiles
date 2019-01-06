@@ -1,0 +1,85 @@
+#!/bin/bash
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+
+# This script was inspired by Luke Smith:
+# https://www.youtube.com/watch?v=MNwpdqD_I8Y
+
+# notify-send markdown syntax;
+# http://www.galago-project.org/specs/notification/0.9/x161.html
+
+# Display info
+notify () {
+  free=$(free -h | awk '/^Mem/ {print $4}')
+  used=$(free -h | awk '/^Mem/ {print $3}')
+  total=$(free -h | awk '/^Mem/ {print $2}')
+
+  results="$( ps -e ch -o "pid cmd %mem" --sort=-%mem | awk -F" " 'NR<11 { printf "   %d: %s (%.1f%%)\n", $1, $2, $3}' -)"
+
+  notify-send --expire-time=10000 "\
+
+    <span font='20px'><b>Memory Summary</b></span>
+    <span font='15px'>Used:  "$used"</span>
+    <span font='15px'>Free:  "$free"</span>
+    <span font='15px'>Total: "$total"</span>
+
+<span font='15px'>$results</span>
+"
+}
+
+
+# Pick color depending on memory usage
+# Colors are picked from:
+#   https://mycolor.space/gradient3
+# Selected colors:
+# - 00FF00 (Green)
+# - FFFF00 (Yellow)
+# - FF0000 (Red)
+get_color () {
+
+  usage=$(free | awk '/^Mem:/ {print int (100 * $3 / $2)}')
+
+  if [ $usage -le "8" ]; then
+    retval="00ff00"
+  elif [ $usage -le "16" ]; then
+    retval="6dff00"
+  elif [ $usage -le "25" ]; then
+    retval="9aff00"
+  elif [ $usage -le "33" ]; then
+    retval="bdff00"
+  elif [ $usage -le "41" ]; then
+    retval="dbff00"
+  elif [ $usage -le "50" ]; then
+    retval="eaef00"
+  elif [ $usage -le "58" ]; then
+    retval="f6e000"
+  elif [ $usage -le "66" ]; then
+    retval="ffd000"
+  elif [ $usage -le "75" ]; then
+    retval="ffad00"
+  elif [ $usage -le "83" ]; then
+    retval="ff8700"
+  elif [ $usage -le "91" ]; then
+    retval="ff5b00"
+  else
+    retval="ff0000"
+  fi
+
+  # Return the color
+  echo $retval
+}
+
+case $BLOCK_BUTTON in
+  1) notify        ;;& # Left click
+  2) notify        ;;& # Scroll click
+  3) notify        ;;& # Right click
+esac
+
+# Label
+output="Mem: "
+output+="$(free -h | awk '/^Mem:/ { print $3 " / " $2 }')"
+
+echo "$output" # Long text
+echo "$output" # Short text
+echo \#$(get_color)

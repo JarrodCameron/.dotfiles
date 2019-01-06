@@ -1,0 +1,124 @@
+#!/bin/bash
+
+# Author: Jarrod Cameron (z5210220)
+# NOTE: A `sink` is an audio output (i.e. speakers, headphones, etc)
+#       To view all sink use the command: pacmd list-sinks
+
+# Toggle output between headphones and speakers
+toggle_output () {
+  output=$(pacmd list-sinks | grep "active port:" | awk -F" " ' NR==1 { print $3 } ')
+
+  if [ "$output" == "<analog-output-headphones>" ]; then
+    # Speaker is now sink
+    pacmd set-sink-port 0 analog-output-speaker
+
+  elif [ "$output" == "<analog-output-speaker>" ]; then
+    # Headphones is now sink
+    pacmd set-sink-port 0 analog-output-headphones
+
+  else
+    # Yeah no idea...
+    # Will cause i3blocks to display error
+    echo "ERROR: Problem occured when toggling output!"
+    exit 33
+
+  fi
+}
+
+# Toggle the output to muted/not muted
+toggle_mute () {
+  pactl set-sink-mute 0 toggle
+}
+
+# Increase volume (by "$inc"%)
+# If new volume is larger than $max_vol then volume is set 
+#   to $max_volume (default is 100)
+# If muted then unmute
+vol_inc () {
+  curr=$(pactl list sinks | awk -F" " '/^\sVolume/ {print $5}' | sed "s/%//g")
+  new_vol=$(echo "$curr + $inc" | bc -q)
+  max_vol="100"
+
+  if [ $new_vol -gt $max_vol ]; then
+    pactl set-sink-volume 0 "$max_vol"%
+  else
+    pactl set-sink-volume 0 "$new_vol"%
+  fi
+
+  pactl set-sink-mute 0 0
+}
+
+# Decrease volume (by "$inc"%)
+# If muted then unmute
+# Volume can't be less than zero, therefore no checking is needed
+vol_dec () {
+  pactl set-sink-volume 0 -"$inc"%
+  pactl set-sink-mute 0 0
+}
+
+# Keyboard button to increase volume (fn+<F3>)
+# Change incremeant amount to `5`
+# Don't need to wprint output, therefore exit
+btn_vol_inc () {
+  inc="5"
+  vol_inc
+  exit 0
+}
+
+# Keyboard button to decrease volume (fn+<F2>)
+# Change incremeant amount to `5`
+# Don't need to wprint output, therefore exit
+btn_vol_dec () {
+  inc="5"
+  vol_dec
+  exit 0
+}
+
+print_output () {
+
+  # Make label
+  sink=$(pacmd list-sinks | grep "active port:" | awk -F" " ' NR==1 { print $3 } ')
+  if [ "$sink" == "<analog-output-headphones>" ]; then
+    output="Headphones: "
+  elif [ "$sink" == "<analog-output-speaker>" ]; then
+    output="Speakers: "
+  else
+    output=$(echo "$sink: ")
+  fi
+
+  # Get volume
+  if [ $(pulsemixer --get-mute) = "1" ]; then
+    output+="MUTE"
+  else
+    output+=$(pactl list sinks | awk -F" " '/^\sVolume/ {print $5}')
+  fi
+
+  echo "$output"  # Long text
+  echo "$output"  # Short text
+  echo \#00AAFF   # Color
+
+}
+
+# The amount the increase/decrease volume by
+inc=1
+
+# PulseAudio daemon needs to be running
+# If not running then start it up
+pulseaudio --check
+if [ $? == '1' ]; then
+  pulseaudio --start
+fi
+
+case $BLOCK_BUTTON in
+  1) toggle_output  ;;&  # Left click
+  2) toggle_output  ;;&  # Scroll click
+  3) toggle_mute    ;;&  # Right click
+  4) vol_inc        ;;&  # Scroll up
+  5) vol_dec        ;;&  # Scroll down
+  10) btn_vol_inc;  ;;&  # Volume up button
+  11) btn_vol_dec;  ;;&  # Volume down button
+esac
+
+print_output
+
+exit 0
