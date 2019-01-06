@@ -5,4 +5,3 @@ Dot files for:
 - i3
 - i3blocks
 - bash
-- Xresources
