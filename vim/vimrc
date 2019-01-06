@@ -115,17 +115,13 @@ set list listchars=tab:>-
 command! T :vertical terminal
 
 " Skeletons
-autocmd BufNewFile *.c 0r ~/.vim/templates/c_def.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 13
+autocmd BufNewFile *.c 0r ~/.vim/templates/c.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 13
 autocmd BufNewFile *.cpp 0r ~/.vim/templates/cpp.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 8
-autocmd BufNewFile Makefile 0r ~/.vim/templates/make_def.skel | 7
-autocmd BufNewFile *.sh 0r ~/.vim/templates/bash_def.skel | 5
-autocmd BufNewFile *.rmd 0r ~/.vim/templates/rmd_def.skel | 9
-autocmd BufNewFile *.html 0r ~/.vim/templates/html_def.skel | 7
-autocmd BufNewFile *.py 0r ~/.vim/templates/py_def.skel | 4
-"add this: date +"%x %k:%M"
-
-"autocmd BufNewFile * %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g
-"autocmd BufNewFile * %s/==NAME==/Jarrod Cameron (z5210220)/g
+autocmd BufNewFile Makefile 0r ~/.vim/templates/make.skel | 7
+autocmd BufNewFile *.sh 0r ~/.vim/templates/bash.skel | 5
+autocmd BufNewFile *.rmd 0r ~/.vim/templates/rmd.skel | 9
+autocmd BufNewFile *.html 0r ~/.vim/templates/html.skel | 7
+autocmd BufNewFile *.py 0r ~/.vim/templates/py.skel | 4
 
 " Turn on hlsearch when searching
 " Turn it off in insert mode
@@ -141,7 +137,6 @@ autocmd InsertEnter * set nohlsearch
 " NOTE: errors are omitted
 autocmd BufWritePost .Xresources silent: !xrdb .Xresources
 autocmd BufWritePost ~/.config/i3/config silent: !i3-msg restart
-autocmd BufWritePost /etc/i3status.conf silent: !i3-msg restart
 autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
 
 autocmd FileType c iabbrev \N \n
