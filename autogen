@@ -2,13 +2,8 @@
 
 # Author: Jarrod Cameron (z5210220)
 
-
 # Ascii art (big font) from:
 # https://www.ascii-art-generator.org
-
-# TODO:
-# - Check if ~/.config/ direcorty exists
-# - Make sure .dotfiles is in $HOME
 
 # Colors
 RED="\e[31m"
@@ -57,35 +52,32 @@ usage () {
   echo ""
   echo -e "    ""$BOLD""i3""$RESET"
   echo "        Adds configuration files for the i3 window manager, inside"
-  echo "        the \""'$HOME'"/.config/\" direcorty"
+  echo "        the \""'$HOME'"/.config/\" direcorty."
   echo ""
   echo -e "    ""$BOLD""i3blocks""$RESET"
   echo "        Adds configuration files for the i3blocks status bar, inside"
-  echo "        the \""'$HOME'"/.config/\" direcorty"
+  echo "        the \""'$HOME'"/.config/\" direcorty."
   echo ""
   echo -e "    ""$BOLD""scripts""$RESET"
   echo "        Adds scripts to automate tasks. Scripts include:"
   echo ""
   echo -e "        ""$BOLD""brightness""$RESET"
   echo "            Script for changing the brightness of the primary"
-  echo "            display from the terminal"
+  echo "            display from the terminal."
   echo ""
   echo -e "        ""$BOLD""cleanup""$RESET"
   echo "            Script for updating packages using the apt"
-  echo "            package manager"
+  echo "            package manager."
   echo ""
   echo -e "        ""$BOLD""screen""$RESET"
-  echo "            Script for updating secondary display using dmenu"
+  echo "            Script for updating secondary display using dmenu."
   echo ""
   echo -e "    ""$BOLD""full""$RESET"
-  echo "        Adds all possible options"
+  echo "        Adds all possible options."
   echo ""
   echo -e "$BOLD""AUTHOR""$RESET"
-  echo "    Written by Jarrod Cameron"
+  echo "    Written by Jarrod Cameron."
 }
-
-usage
-exit # DELETE THIS
 
 # If no args
 if [ -z $1 ]; then
@@ -119,6 +111,7 @@ fi
 
 # Link the i3 window manager
 if [ "$(grep -E "{full}|{i3}" <<< "$options")" ]; then
+  mkdir "$HOME""/.config/" -p
   src="$HOME""/.dotfiles/files/i3" 
   dst="$HOME""/.config/i3"
   rm -f "$dst"
@@ -128,6 +121,7 @@ fi
 
 # link the i3blocks
 if [ "$(grep -E "{full}|{i3blocks}" <<< "$options")" ]; then
+  mkdir "$HOME""/.config/" -p
   src="$HOME""/.dotfiles/files/i3blocks" 
   dst="$HOME""/.config/i3blocks"
   rm -f "$dst"
