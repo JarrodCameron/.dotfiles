@@ -75,6 +75,9 @@ usage () {
   echo -e "    ""$BOLD""full""$RESET"
   echo "        Adds all possible options."
   echo ""
+  echo -e "    ""$BOLD""-h, --help""$RESET"
+  echo "        Display this help and exit."
+  echo ""
   echo -e "$BOLD""AUTHOR""$RESET"
   echo "    Written by Jarrod Cameron."
 }
