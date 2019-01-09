@@ -5,7 +5,11 @@
 primary=$(xrandr --query | grep " connected " | awk -F" " ' NR==1 { print $1 } ')
 secondary=$(xrandr --query | grep " connected " | awk -F" " ' NR==2 { print $1 } ')
 
-options="Extend Right (ER)\nExtend Left (EL)\nDuplicate (D)\nKill (K)\n"
+options="Extend Right (ER)\n"
+options+="Extend Left (EL)\n"
+options+="Duplicate (D)\n"
+options+="Kill (K)\n"
+
 output=$(echo -ne "$options" | dmenu -i -l 4 -p "Secondary output:")
 
 if [[ ! -n "$output" ]]; then

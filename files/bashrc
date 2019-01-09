@@ -123,7 +123,10 @@ fi
 # Bash with vim keys
 set -o vi
 
+## `export' sets global variables
 export PATH="$PATH"":""$HOME""/.scripts/"
+export EDITOR="$(which vim)"
+export TERMINAL="$(which urxvt)"
 
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
@@ -144,6 +147,15 @@ alias untar="tar -xvf"
 # Disable terminal beeps
 stty -ixon
 
-# Display todo list when opening terminal
-cat ~/.TODO 2> /dev/null
-
+echo "To do list:"
+echo ""
+echo "1) wargames (3/23)"
+echo "2) dotfiles -> github"
+echo "3) Urxvt resize font"
+echo "4) Leetcode (53/100)"
+echo "5) Ranger image viewer"
+echo "6) mod+hjkl = change focus"
+echo "7) shift+mod+hjkl = resize"
+echo "8) shift+enter = hori terminal"
+echo "9) i3-sensible-terminal"
+echo "10) i3-sensible-editor"
