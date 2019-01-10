@@ -72,6 +72,9 @@ usage () {
   echo -e "        ""$BOLD""screen""$RESET"
   echo "            Script for updating secondary display using dmenu."
   echo ""
+  echo -e "    ""$BOLD""xresources""$RESET"
+  echo "        Adds the .Xresources file to "'$HOME'
+  echo ""
   echo -e "    ""$BOLD""full""$RESET"
   echo "        Adds all possible options."
   echo ""
@@ -91,13 +94,14 @@ fi
 options=""
 for arg in "$@"; do
   case "$arg" in
-    "vim")      options+="{vim}"      ;;
-    "i3")       options+="{i3}"       ;;
-    "i3blocks") options+="{i3blocks}" ;;
-    "bash")     options+="{bash}"     ;;
-    "scripts")  options+="{scripts}"  ;;
-    "full")     options+="{full}"     ;;
-    *) usage ; exit 0                 ;;
+    "vim")        options+="{vim}"         ;;
+    "i3")         options+="{i3}"          ;;
+    "i3blocks")   options+="{i3blocks}"    ;;
+    "bash")       options+="{bash}"        ;;
+    "scripts")    options+="{scripts}"     ;;
+    "xresources") options+="{xresources}"  ;;
+    "full")       options+="{full}"        ;;
+    *) usage ; exit 0                      ;;
   esac
 done
 
@@ -107,9 +111,18 @@ print_banner
 if [ "$(grep -E "{full}|{vim}" <<< "$options")" ]; then
   src="$HOME""/.dotfiles/files/vim"
   dst="$HOME""/.vim"
-  rm -f "$dst"
+  rm -rf "$dst"
   ln -s "$src" "$dst"
   echo -e "$GREEN""Successfully added: ""$BOLD""Vim config""$RESET"
+fi
+
+# Link .Xresources
+if [ "$(grep -E "{full}|{xresources}" <<< "$options")" ]; then
+  src="$HOME""/.dotfiles/files/Xresources"
+  dst="$HOME""/.Xresources"
+  rm -rf "$dst"
+  ln -s "$src" "$dst"
+  echo -e "$GREEN""Successfully added: ""$BOLD"".Xresources""$RESET"
 fi
 
 # Link the i3 window manager
@@ -117,7 +130,7 @@ if [ "$(grep -E "{full}|{i3}" <<< "$options")" ]; then
   mkdir "$HOME""/.config/" -p
   src="$HOME""/.dotfiles/files/i3" 
   dst="$HOME""/.config/i3"
-  rm -f "$dst"
+  rm -rf "$dst"
   ln -s "$src" "$dst"
   echo -e "$GREEN""Successfully added: ""$BOLD""i3wm config""$RESET"
 fi
@@ -127,7 +140,7 @@ if [ "$(grep -E "{full}|{i3blocks}" <<< "$options")" ]; then
   mkdir "$HOME""/.config/" -p
   src="$HOME""/.dotfiles/files/i3blocks" 
   dst="$HOME""/.config/i3blocks"
-  rm -f "$dst"
+  rm -rf "$dst"
   ln -s "$src" "$dst"
   echo -e "$GREEN""Successfully added: ""$BOLD""i3blocks config""$RESET"
 fi
@@ -136,7 +149,7 @@ fi
 if [ "$(grep -E "{full}|{bash}" <<< "$options")" ]; then
   src="$HOME""/.dotfiles/files/bashrc" 
   dst="$HOME""/.bashrc"
-  rm -f "$dst"
+  rm -rf "$dst"
   ln -s "$src" "$dst"
   echo -e "$GREEN""Successfully added: ""$BOLD""bash config""$RESET"
 fi
@@ -145,7 +158,7 @@ fi
 if [ "$(grep -E "{full}|{scripts}" <<< "$options")" ]; then
   src="$HOME""/.dotfiles/files/scripts" 
   dst="$HOME""/.scripts"
-  rm -f "$dst"
+  rm -rf "$dst"
   ln -s "$src" "$dst"
   echo -e "$GREEN""Successfully added: ""$BOLD""scripts""$RESET"
 fi

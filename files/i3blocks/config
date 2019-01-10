@@ -32,7 +32,7 @@ separator=true
 
 [battery]
 separator=true
-interval=10
+interval=5
 
 [time]
 command=date '+%d-%m-%Y %I:%M %p'
