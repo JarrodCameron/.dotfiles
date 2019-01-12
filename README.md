@@ -16,7 +16,7 @@ and using symbolic links to allow other programs to access them.
 To install all dotfiles use the following commands:
 
 ```{sh}
-git clone https://github.com/z5210220/.dotfiles ~
+git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 ~/.dotfiles/autogen full
 ```
 
@@ -24,6 +24,6 @@ However, to install a single configuration (such as `.vim`), use
 the following commands:
 
 ```{sh}
-git clone https://github.com/z5210220/.dotfiles ~
+git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 ~/.dotfiles/autogen vim
 ```
