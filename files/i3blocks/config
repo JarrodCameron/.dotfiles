@@ -34,7 +34,6 @@ separator=true
 separator=true
 interval=5
 
-[time]
-command=date '+%d-%m-%Y %I:%M %p'
+[date]
 interval=5
 separator=true

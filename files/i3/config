@@ -71,7 +71,8 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # Toggle orientation to vertical/horizontal
-bindsym $mod+v split toggle
+bindsym $mod+Shift+v split horizontal
+bindsym $mod+v split vertical
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -166,7 +167,7 @@ bar {
 }
 
 # Remove title bar of windows
-new_window 1pixel
+for_window [class=".*"] border pixel 1
 
 # i3-lock wallpaper
 bindsym $mod+shift+x exec i3lock -i ~/Pictures/Wallpapers/wallpaper037.png
@@ -205,5 +206,11 @@ exec_always --no-startup-id nm-applet
 # Use `entr' to restart particular programs when files are modified
 exec echo "$HOME"/.config/i3/config | entr -p i3-msg restart &
 exec echo "$HOME"/.config/i3blocks/config | entr -p i3-msg restart &
-exec ls -d "$HOME"/.config/i3blocks/scripts/* | entr -p i3-msg restart &
 exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
+
+# Prevents mouse to moving to focused windows
+mouse_warping none
+
+## Calculator ##
+for_window [instance="math"] floating enable
+for_window [instance="math"] border pixel 5

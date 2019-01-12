@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+
+open_cal () {
+  halt='read -sn 1 -p "Press any key to close...";'
+  float='i3-msg floating enable;'
+  cal='clear; cal -y;'
+  size='i3-msg resize set 600 px 650;'
+
+  urxvt -e bash -c "$float""$size""$cal""$halt"
+}
+
+text="$(date '+%d-%m-%Y %I:%M %p')"
+echo "$text"        # Long text
+echo "$text"        # short text
+
+case $BLOCK_BUTTON in
+  1) open_cal  ;;&  # Left click
+  2) open_cal  ;;&  # Scroll click
+  3) open_cal  ;;&  # Right click
+esac
+

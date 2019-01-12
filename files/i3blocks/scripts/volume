@@ -110,13 +110,13 @@ if [ $? == '1' ]; then
 fi
 
 case $BLOCK_BUTTON in
-  1) toggle_output  ;;&  # Left click
-  2) toggle_output  ;;&  # Scroll click
-  3) toggle_mute    ;;&  # Right click
-  4) vol_inc        ;;&  # Scroll up
-  5) vol_dec        ;;&  # Scroll down
-  10) btn_vol_inc;  ;;&  # Volume up button
-  11) btn_vol_dec;  ;;&  # Volume down button
+  1) toggle_output  ;;  # Left click
+  2) toggle_output  ;;  # Scroll click
+  3) toggle_mute    ;;  # Right click
+  4) vol_inc        ;;  # Scroll up
+  5) vol_dec        ;;  # Scroll down
+  10) btn_vol_inc;  ;;  # Volume up button
+  11) btn_vol_dec;  ;;  # Volume down button
 esac
 
 print_output
