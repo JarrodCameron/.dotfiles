@@ -8,12 +8,14 @@ open_cal () {
   cal='clear; cal -y;'
   size='i3-msg resize set 600 px 650;'
 
-  urxvt -e bash -c "$float""$size""$cal""$halt"
+  #urxvt -e bash -c "$float""$size""$cal""$halt"
+  urxvt -e bash -c "$float"
 }
 
 text="$(date '+%d-%m-%Y %I:%M %p')"
 echo "$text"        # Long text
 echo "$text"        # short text
+echo \#00AAFF       # Color
 
 case $BLOCK_BUTTON in
   1) open_cal  ;;&  # Left click

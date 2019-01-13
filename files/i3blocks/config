@@ -13,11 +13,6 @@ command="$HOME/.config/i3blocks/scripts/$BLOCK_NAME"
 separator_block_width=15
 markup=none
 
-[volume]
-interval=once
-signal=12
-separator=true
-
 [memory]
 separator=true
 interval=5
@@ -33,6 +28,11 @@ separator=true
 [battery]
 separator=true
 interval=5
+
+[volume]
+interval=once
+signal=12
+separator=true
 
 [date]
 interval=5

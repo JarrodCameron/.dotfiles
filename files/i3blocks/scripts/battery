@@ -2,51 +2,38 @@
 
 # Author: Jarrod Cameron (z5210220)
 
-# Given two points (`min` and `max`) and a level return 
-#   the correct value.
-# Math is fron:
-#   https://stackoverflow.com/questions/21835739/smooth-color-transition-algorithm
-get_val () {
-  python3 -c "
-max_val = "$1"
-min_val = "$2"
-level = "$3"
-# Only 100 possible battery levels
-width = 100
-gradient = ( max_val - min_val ) / width
-final = gradient * level + min_val
-print (int (final))"
-}
-
-# When fully charged the module will be `max_color`
-# When no battery is remaining module will be `min_color`
-# Depending on current battery level color will be in between
-#   max_color and min_color
-max_color="00FF00" # Green
-min_color="FF0000" # Red
+# Pick color depending on remaining battery
+# Colors are picked from:
+#   https://mycolor.space/gradient3
+# Selected colors:
+# - 00FF00 (Green)
+# - 00FF00 (Green)
+# - FF0000 (Red)
 get_color () {
 
   # Battery level
   level=$(sed 's/%//g' <<< "$bat")
 
-  # Generate red position
-  max="0x""${max_color:0:2}"
-  min="0x""${min_color:0:2}"
-  red=$(get_val "$max" "$min" "$level")
+  if [ $level -le "8" ]; then
+    retval="ff0000"
+  elif [ $level -le "16" ]; then
+    retval="f36300"
+  elif [ $level -le "25" ]; then
+    retval="de9200"
+  elif [ $level -le "33" ]; then
+    retval="c2b700"
+  elif [ $level -le "41" ]; then
+    retval="a0d600"
+  elif [ $level -le "50" ]; then
+    retval="8ae400"
+  elif [ $level -le "58" ]; then
+    retval="67f100"
+  else
+    retval="00ff00"
+  fi
 
-  # Generate green position
-  max="0x""${max_color:2:2}"
-  min="0x""${min_color:2:2}"
-  green=$(get_val "$max" "$min" "$level")
-
-  # Generate blue position
-  max="0x""${max_color:4:2}"
-  min="0x""${min_color:4:2}"
-  blue=$(get_val "$max" "$min" "$level")
-
-  # Return final color
-  # Add leading zeros
-  printf "%02X%02X%02X\n" "$red" "$green" "$blue"
+  # Return the color
+  echo $retval
 
 }
 
