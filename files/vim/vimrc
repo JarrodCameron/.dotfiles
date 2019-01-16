@@ -71,6 +71,10 @@ nnoremap <space> i<space><esc>l
 " Yank the whole line
 nnoremap yy Vy
 
+" Yank/paste to the system keyboard
+vnoremap Y :'<,'>:w !xclip -selection clip <CR><CR>
+nnoremap P :r !xclip -selection clip -out<CR>
+
 " Convert word to upper case, not recursive
 inoremap <c-u> <esc>mxviwu`xa
 nnoremap <c-u> <esc>mxviwu`x
@@ -152,16 +156,8 @@ autocmd FileType rmd command! O :!clear && xdg-open %<.pdf
 autocmd FileType rmd iabbrev tbf textbf
 autocmd FileType rmd iabbrev tit textit
 
-autocmd FileType sh command! R :w | :!clear && bash %
-
-autocmd FileType s command! R :w | :!clear && spim -file %
-
 autocmd FileType tex command! C :w | :!clear && pdflatex %
 autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf 
-
-autocmd FileType py command! R :w | :!clear && python3 %
-
-autocmd FileType pl command! R :w | :!clear && perl %
 
 autocmd FileType html inoremap {<CR> {<CR>}<esc>O
 autocmd FileType html inoremap <tr><CR> <tr><CR></tr><esc>O

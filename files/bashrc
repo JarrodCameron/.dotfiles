@@ -1,3 +1,10 @@
+#    _               _
+#   | |             | |
+#   | |__   __ _ ___| |__  _ __ ___
+#   | '_ \ / _` / __| '_ \| '__/ __|
+#  _| |_) | (_| \__ \ | | | | | (__
+# (_)_.__/ \__,_|___/_| |_|_|  \___|
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -120,6 +127,8 @@ fi
 # CUSTOM #
 ##########
 
+#[ ! -z "$(ps -x | grep "urxvt" | grep -v "grep")" ] || neofetch
+
 # Bash with vim keys
 set -o vi
 
@@ -128,6 +137,7 @@ export PATH="$PATH"":""$HOME""/.scripts/"
 export EDITOR="$(which vim)"
 export TERMINAL="$(which urxvt)"
 
+alias copy="xclip -selection clip 2> /dev/null"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
@@ -155,4 +165,4 @@ echo "3) gruvbox + airline"
 echo "4) Floating calculator (mod+p)"
 echo "5) Date click -> floating cal"
 echo "6) i3 window resize (no mode)"
-echo "7) Vim tags"
+echo "7) Vim copy to clipboard"

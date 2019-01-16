@@ -10,7 +10,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-# Sed `mod` key
+# Set `mod' key
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -209,8 +209,4 @@ exec echo "$HOME"/.config/i3blocks/config | entr -p i3-msg restart &
 exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
 
 # Prevents mouse to moving to focused windows
-mouse_warping none
-
-## Calculator ##
-for_window [instance="math"] floating enable
-for_window [instance="math"] border pixel 5
+#mouse_warping none

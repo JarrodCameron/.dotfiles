@@ -2,6 +2,10 @@
 
 # Author: Jarrod Cameron (z5210220)
 
+# NOTE: Using `entr' to wait for the files to update doesn't work.
+#       I assume this is because the files are generated when 
+#       being read.
+
 # Pick color depending on remaining battery
 # Colors are picked from:
 #   https://mycolor.space/gradient3
@@ -10,9 +14,6 @@
 # - 00FF00 (Green)
 # - FF0000 (Red)
 get_color () {
-
-  # Battery level
-  level=$(sed 's/%//g' <<< "$bat")
 
   if [ $level -le "8" ]; then
     retval="ff0000"
@@ -38,14 +39,14 @@ get_color () {
 }
 
 # Remaining battery level
-bat=$(acpi | awk '/^Battery 0/ {print $4}' | sed 's/,//g')
+level=$(cat /sys/class/power_supply/BAT0/capacity)
 
-if [ !  -z "$(acpi | grep "Charging")" ]; then
-  echo "Charging: $bat" # Long text
-  echo "Chr: $bat"      # Short text
+if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
+  echo "Battery: $level""%"    # Long text
+  echo "Bat: $level""%"        # Short text
 else
-  echo "Battery: $bat" # Long text
-  echo "Bat: $bat"     # Short text
+  echo "Charging: $level""%"   # Long text
+  echo "Chr: $level""%"        # Short text
 fi
 
 echo \#$(get_color)
