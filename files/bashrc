@@ -23,7 +23,7 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
+HISTSIZE=10000
 HISTFILESIZE=10000
 
 # check the window size after each command and, if necessary,
@@ -137,7 +137,9 @@ export PATH="$PATH"":""$HOME""/.scripts/"
 export EDITOR="$(which vim)"
 export TERMINAL="$(which urxvt)"
 
+# Copy
 alias copy="xclip -selection clip 2> /dev/null"
+
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
@@ -150,6 +152,8 @@ alias LS="ls"
 alias sl="ls"
 alias s="ls"
 alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 
 # Open up a tar file
 alias untar="tar -xvf"
@@ -160,9 +164,7 @@ stty -ixon
 echo "To do list:"
 echo ""
 echo "1) wargames (3/23)"
-echo "2) Leetcode (66/100)"
+echo "2) Leetcode (71/100)"
 echo "3) gruvbox + airline"
 echo "4) Floating calculator (mod+p)"
 echo "5) Date click -> floating cal"
-echo "6) i3 window resize (no mode)"
-echo "7) Vim copy to clipboard"

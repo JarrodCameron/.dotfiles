@@ -143,6 +143,8 @@ autocmd InsertEnter * set nohlsearch
 "autocmd BufWritePost ~/.config/i3/config silent: !i3-msg restart
 "autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
 
+autocmd BufWritePost ~/.vim/vimrc :source $MYVIMRC
+
 autocmd FileType c iabbrev \N \n
 autocmd FileType c iabbrev \m \n
 autocmd FileType c iabbrev struc struct
