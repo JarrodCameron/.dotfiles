@@ -93,7 +93,7 @@ fi
 
 options=""
 for arg in "$@"; do
-  case "$arg" in
+  case "${arg,,}" in
     "vim")        options+="{vim}"         ;;
     "i3")         options+="{i3}"          ;;
     "i3blocks")   options+="{i3blocks}"    ;;
