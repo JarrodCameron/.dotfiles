@@ -75,6 +75,10 @@ usage () {
   echo -e "    ""$BOLD""xresources""$RESET"
   echo "        Adds the .Xresources file to "'$HOME'
   echo ""
+  echo -e "    ""$BOLD""wallpapers""$RESET"
+  echo "        Adds the Wallpapers file to \""'$HOME'"/Pictures/Wallpapers/\""
+  echo -e "        There are "$ULINE"$(ls ~/.dotfiles/files/wallpapers/*.png | wc -l)"$RESET" images in total."
+  echo ""
   echo -e "    ""$BOLD""full""$RESET"
   echo "        Adds all possible options."
   echo ""
@@ -96,6 +100,7 @@ for arg in "$@"; do
   case "${arg,,}" in
     "vim")        options+="{vim}"         ;;
     "i3")         options+="{i3}"          ;;
+    "wallpapers") options+="{wallpapers}"  ;;
     "i3blocks")   options+="{i3blocks}"    ;;
     "bash")       options+="{bash}"        ;;
     "scripts")    options+="{scripts}"     ;;
@@ -106,6 +111,15 @@ for arg in "$@"; do
 done
 
 print_banner
+
+# Link the wallpapers
+if [ "$(grep -E "{full}|{wallpapers}" <<< "$options")" ]; then
+  src="$HOME""/.dotfiles/files/wallpapers"
+  dst="$HOME""/Pictures/Wallpapers"
+  rm -rf "$dst"
+  ln -s "$src" "$dst"
+  echo -e "$GREEN""Successfully added: ""$BOLD""Wallpapers""$RESET"
+fi
 
 # Link the vim stuff
 if [ "$(grep -E "{full}|{vim}" <<< "$options")" ]; then
