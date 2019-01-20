@@ -30,7 +30,7 @@ print_banner () {
 
 usage () {
   echo -e "$BOLD""NAME""$RESET"
-  echo "    autogen - tool for keeping all my dotfiles in one place"
+  echo "    autogen - tool for keeping all my dotfiles in one place."
   echo ""
   echo -ne "$BOLD"
   echo "SYNOPSIS"
@@ -98,12 +98,12 @@ fi
 options=""
 for arg in "$@"; do
   case "${arg,,}" in
-    "vim")        options+="{vim}"         ;;
     "i3")         options+="{i3}"          ;;
-    "wallpapers") options+="{wallpapers}"  ;;
-    "i3blocks")   options+="{i3blocks}"    ;;
+    "vim")        options+="{vim}"         ;;
     "bash")       options+="{bash}"        ;;
     "scripts")    options+="{scripts}"     ;;
+    "i3blocks")   options+="{i3blocks}"    ;;
+    "wallpapers") options+="{wallpapers}"  ;;
     "xresources") options+="{xresources}"  ;;
     "full")       options+="{full}"        ;;
     *) usage ; exit 0                      ;;

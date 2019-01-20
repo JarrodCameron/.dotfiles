@@ -5,8 +5,9 @@ Dot files for:
 - i3
 - i3blocks
 - Bash
-
-and some handy scripts.
+- Handy scripts
+- Wallpapers
+- Xresources
 
 `autogen` is a tool for keeping all these files in one location
 and using symbolic links to allow other programs to access them.
