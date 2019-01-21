@@ -68,9 +68,6 @@ inoremap <F1> <esc>
 nnoremap <cr> o<esc>
 nnoremap <space> i<space><esc>l
 
-" Yank the whole line
-nnoremap yy Vy
-
 " Yank/paste to the system keyboard
 vnoremap Y :'<,'>:w !xclip -selection clip <CR><CR>
 nnoremap P :r !xclip -selection clip -out<CR>

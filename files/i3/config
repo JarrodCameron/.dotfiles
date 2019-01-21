@@ -8,9 +8,14 @@
 #                                  __/ |
 #                                 |___/
 #
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
 # All colors were copied from:
 #   https://github.com/a-schaefers/i3-wm-gruvbox-theme
+#
+# Documentation for i3wm:
+#   https://i3wm.org/docs/userguide.html
+#
+# Documentation for i3-gaps:
+#   https://github.com/Airblader/i3
 
 # Set `mod' key
 set $mod Mod4
@@ -24,71 +29,113 @@ font pango:DejaVu Sans Mono 10
 floating_modifier $mod
 
 # set primary gruvbox colorscheme colors
-set $bg             "#282828"
-set $white          "#ebdbb2"
-set $red            "#cc241d"
-set $green          "#98971a"
-set $yellow         "#d79921"
-set $blue           "#458588"
-set $purple         "#b16286"
-set $aqua           "#689d68"
-set $gray           "#a89984"
-set $darkgray       "#1d2021"
+set $bg          "#282828"
+set $white       "#ebdbb2"
+set $red         "#cc241d"
+set $green       "#98971a"
+set $yellow      "#d79921"
+set $blue        "#458588"
+set $purple      "#b16286"
+set $aqua        "#689d68"
+set $gray        "#a89984"
+set $darkgray    "#1d2021"
+set $transparent "#00000000"
 
-# start a terminal
-#bindsym $mod+Return exec i3-sensible-terminal
+# Remove title bar of windows
+for_window [class=".*"] border pixel 2
+
+# Dropdown calculator
+for_window [instance="dropdown_calculator"] floating enable
+for_window [instance="dropdown_calculator"] border pixel 5
+for_window [instance="dropdown_calculator"] move position center
+
+# Dropdown file explorer
+for_window [instance="dropdown_explorer"] floating enable
+for_window [instance="dropdown_explorer"] border pixel 5
+for_window [instance="dropdown_explorer"] resize set 1440 810
+for_window [instance="dropdown_explorer"] move position center
+
+
 bindsym $mod+Return exec urxvt
 
-# kill focused window
+#bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
+bindsym $mod+w exec google-chrome --new-window https://webcms3.cse.unsw.edu.au/
+#bindsym $mod+Shift+w 
+
+#bindsym $mod+e
+#bindsym $mod+Shift+e
+
+#bindsym $mod+r
+#bindsym $mod+Shift+r
+
+#bindsym $mod+t
+#bindsym $mod+Shift+t
+
+bindsym $mod+y exec google-chrome --new-window https://www.youtube.com/
+bindsym $mod+Shift+y resize shrink width 1 px or 1 ppt
+
+#bindsym $mod+u
+bindsym $mod+Shift+u resize grow height 1 px or 1 ppt
+
+bindsym $mod+o exec google-chrome --new-window https://www.office.com/
+bindsym $mod+Shift+o resize grow width 1 px or 1 ppt
+
+bindsym $mod+p exec urxvt -name "dropdown_calculator" -e python3 -q
+#bindsym $mod+Shift+p
+
+#bindsym $mod+a
+#bindsym $mod+Shift+a
+
+bindsym $mod+s exec urxvt -name "dropdown_explorer" -e ranger
+#bindsym $mod+Shift+s
+
 bindsym $mod+d exec dmenu_run -l 10 -i -nb $bg -nf $white -sf $darkgray -sb $aqua
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
 bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
 
-# change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+bindsym $mod+f fullscreen toggle
+#bindsym $mod+Shift+f 
 
-# move focused window
+#bindsym $mod+g
+#bindsym $mod+Shift+g
+
+bindsym $mod+h focus left
 bindsym $mod+Shift+h move left
+
+bindsym $mod+j focus down
 bindsym $mod+Shift+j move down
+
+bindsym $mod+k focus up
 bindsym $mod+Shift+k move up
+
+bindsym $mod+l focus right
 bindsym $mod+Shift+l move right
 
-# Toggle orientation to vertical/horizontal
-bindsym $mod+Shift+v split horizontal
+#bindsym $mod+x
+bindsym $mod+Shift+x exec i3lock -i ~/Pictures/Wallpapers/wallpaper037.png
+
+bindsym $mod+c exec google-chrome
+bindsym $mod+Shift+c exec google-chrome --incognito
+
 bindsym $mod+v split vertical
+bindsym $mod+Shift+v split horizontal
 
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+#bindsym $mod+b
+#bindsym $mod+Shift+b
 
-# Change wallpaper (random each time)
 bindsym $mod+n exec feh --bg-scale $(ls ~/Pictures/Wallpapers/*.png | shuf | head -n 1)
+#bindsym $mod+Shift+n
+
+bindsym $mod+m exec bash "$HOME"/.scripts/screen
+#bindsym $mod+Shift+m
+
+bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+space floating toggle
 
 # Disable Screen saver
 exec_always xset s off
 
-# Open Chrome
-bindsym $mod+c exec google-chrome
-bindsym $mod+shift+c exec google-chrome --incognito
-bindsym $mod+w exec google-chrome --new-window https://webcms3.cse.unsw.edu.au/
-bindsym $mod+y exec google-chrome --new-window https://www.youtube.com/
-bindsym $mod+o exec google-chrome --new-window https://www.office.com/
-
-# toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -117,10 +164,7 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 0
 
-bindsym $mod+shift+y resize shrink width 1 px or 1 ppt
-bindsym $mod+shift+u resize grow height 1 px or 1 ppt
-bindsym $mod+shift+i resize shrink height 1 px or 1 ppt
-bindsym $mod+shift+o resize grow width 1 px or 1 ppt
+bindsym $mod+Shift+i resize shrink height 1 px or 1 ppt
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -141,25 +185,14 @@ bar {
 
 }
 
-## green gruvbox
-## class                 border    backgr    text      indicator child_border
-#client.focused          $green    $green    $darkgray $purple   $darkgray
-#client.focused_inactive $darkgray $darkgray $yellow   $purple   $darkgray
-#client.unfocused        $darkgray $darkgray $yellow   $purple   $darkgray
-#client.urgent           $red      $red      $white    $red      $red
-
-# blue gruvbox
+# Blue Gruvbox
 # class                 border    backgr    text      indicator child_border
-client.focused          $blue     $blue     $darkgray $purple   $darkgray
+client.focused          $blue     $blue     $darkgray $purple   $yellow
 client.focused_inactive $darkgray $darkgray $yellow   $purple   $darkgray
 client.unfocused        $darkgray $darkgray $yellow   $purple   $darkgray
 client.urgent           $red      $red      $white    $red      $red
 
-# Remove title bar of windows
-for_window [class=".*"] border pixel 1
-
 # i3-lock wallpaper
-bindsym $mod+shift+x exec i3lock -i ~/Pictures/Wallpapers/wallpaper037.png
 
 # typical wallpaper
 exec_always feh --bg-scale $(ls ~/Pictures/Wallpapers/*.png | shuf | head -n 1)
@@ -183,12 +216,6 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle && pkill
 bindsym XF86MonBrightnessUp exec --no-startup-id sudo brightness -inc auto
 bindsym XF86MonBrightnessDown exec --no-startup-id sudo brightness -dec auto
 
-# Open a terminal and open ranger
-bindsym $mod+s exec urxvt -e "ranger"
-
-# Use dmenu script to update display
-bindsym $mod+m exec bash "$HOME"/.scripts/screen
-
 # Open the networking manager applet
 exec_always --no-startup-id nm-applet
 
@@ -199,3 +226,12 @@ exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
 
 # Prevents mouse to moving to focused windows
 #mouse_warping none
+
+gaps inner 20
+gaps outer 0
+gaps horizontal 0
+gaps vertical 0
+gaps top 0
+gaps right 0
+gaps bottom 0
+gaps left 0

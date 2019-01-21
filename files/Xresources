@@ -10,6 +10,9 @@ URxvt.jumpScroll: true
 
 URxvt.saveLines: 5000
 
+URxvt*transparent: true
+URxvt*shading: 30
+
 ! Gruvbox Color Scheme 
 *background: #1d2021
 *foreground: #ebdbb2
