@@ -5,12 +5,15 @@
 " \ \ / / | '_ ` _ \| '__/ __|
 "  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
+
+" Set the <leader> to ","
+let mapleader=","
  
 " spell-check set to F6
 map <F6> :setlocal spell! spelllang=en_eu<CR>
 
 " Toggle the grey bar thing
-map <F8> :call ToggleCC()<CR>
+map <F8> :call ToggleCC(79)<CR>
 
 syntax enable
 syntax on
@@ -27,6 +30,9 @@ set autoindent
 set showcmd
 set wildmenu
 
+" Helpful when pasting with older versions of vim
+set paste
+
 " Display current line number
 set number 
 
@@ -38,9 +44,6 @@ set expandtab
 
 " Disable error bell
 set belloff=all
-
-" Set the <leader> to ","
-let mapleader=","
 
 " Leave 3 lines above/beloc cursor
 set scrolloff=3
@@ -91,13 +94,13 @@ set backspace=2
 autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
 " maps "WQ" to ":wq"
-command! -nargs=* WQ :wq <args>
-command! -nargs=* Wq :wq <args>
-command! -nargs=* W  :w <args>
-command! -nargs=* Q  :q <args>
-command! -nargs=* Vsp  :vsp <args>
-command! -nargs=* VSp  :vsp <args>
-command! -nargs=* VSP  :vsp <args>
+command! -nargs=* WQ  :wq <args>
+command! -nargs=* Wq  :wq <args>
+command! -nargs=* W   :w <args>
+command! -nargs=* Q   :q <args>
+command! -nargs=* Vsp :vsp <args>
+command! -nargs=* VSp :vsp <args>
+command! -nargs=* VSP :vsp <args>
 command! -nargs=* Sp  :sp <args>
 command! -nargs=* SP  :sp <args>
 
@@ -105,15 +108,15 @@ command! -nargs=* SP  :sp <args>
 " IBeam -> Insert
 " Underline -> replace
 " Block -> Normal
-let &t_SI = "\<Esc>[6 q"
-let &t_SR = "\<Esc>[4 q"
-let &t_EI = "\<Esc>[2 q"
+
+if tolower ($TERM) =~ "rxvt"
+  let &t_SI = "\<Esc>[6 q"
+  let &t_SR = "\<Esc>[4 q"
+  let &t_EI = "\<Esc>[2 q"
+endif
 
 " Shows the tabs
 set list listchars=tab:>-
-
-" Opens the terminal vertical
-command! T :vertical terminal
 
 " Skeletons
 autocmd BufNewFile *.c 0r ~/.vim/templates/c.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 13
@@ -171,13 +174,11 @@ iabbrev adn and
 iabbrev si is
 iabbrev nad and
 
-
-" Alternate between a 79 character column
-"   and hiding the column
-fun! ToggleCC()
-	if &cc == 0
-		set colorcolumn=79
-	else
-		set colorcolumn=0
-	endif
+" Toggle the vertical bar
+function! ToggleCC(width)
+  if &cc == 0
+    execute "set colorcolumn=".a:width
+  else
+    set colorcolumn=0
+  endif
 endfunction

@@ -5,31 +5,23 @@
 primary=$(xrandr --query | grep " connected " | awk -F" " ' NR==1 { print $1 } ')
 secondary=$(xrandr --query | grep " connected " | awk -F" " ' NR==2 { print $1 } ')
 
+black="#282828"
+white="#ebdbb2"
+gray="#1d2021"
+aqua="#689d68"
+
 options="Extend Right (ER)\n"
 options+="Extend Left (EL)\n"
 options+="Duplicate (D)\n"
 options+="Kill (K)\n"
 
-output=$(echo -ne "$options" | dmenu -i -l 4 -p "Secondary output:")
+height="$(echo -e "$options" | wc -l)"
+colors="-nb $black -nf $white -sf $gray -sb $aqua"
+output=$(echo -ne "$options" | dmenu -i -l $height -p "Secondary output:" $colors)
 
-if [[ ! -n "$output" ]]; then
-  # Do nothing
-  true
-
-elif [ "$output" = "Extend Right (ER)" ]; then
-  # Secondary output is on the RIGHT of the primary output
-  xrandr --output "$secondary" --auto --right-of "$primary"
-
-elif [ "$output" = "Extend Left (EL)" ]; then
-  # Secondary output is on the LEFT of the primary output
-  xrandr --output "$primary" --auto --right-of "$secondary"
-
-elif [ "$output" = "Duplicate (D)" ]; then
-  # Primary and secondary output are duplicated
-  xrandr --output "$secondary" --auto --same-as "$primary"
-
-elif [ "$output" = "Kill (K)" ]; then
-  # Kill the secondary output
-  xrandr --output "$secondary" --auto --off
-
-fi
+case "$output" in
+  "Extend Right (ER)") xrandr --output "$secondary" --auto --right-of "$primary" ;;
+  "Extend Left (EL)")  xrandr --output "$primary" --auto --right-of "$secondary" ;;
+  "Duplicate (D)")     xrandr --output "$secondary" --auto --same-as "$primary"  ;;
+  "Kill (K)")          xrandr --output "$secondary" --auto --off                 ;;
+esac

@@ -47,16 +47,51 @@ for_window [class=".*"] border pixel 2
 # Dropdown calculator
 for_window [instance="dropdown_calculator"] floating enable
 for_window [instance="dropdown_calculator"] border pixel 5
+for_window [instance="dropdown_calculator"] resize set 600 640
 for_window [instance="dropdown_calculator"] move position center
 
 # Dropdown file explorer
 for_window [instance="dropdown_explorer"] floating enable
 for_window [instance="dropdown_explorer"] border pixel 5
-for_window [instance="dropdown_explorer"] resize set 1440 810
+for_window [instance="dropdown_explorer"] resize set 1728 972
 for_window [instance="dropdown_explorer"] move position center
 
+# Dropdown calendar
+for_window [instance="dropdown_cal"] floating enable
+for_window [instance="dropdown_cal"] border pixel 5
+for_window [instance="dropdown_cal"] resize set 610 630
+for_window [instance="dropdown_cal"] move position center
+
+# Dropdown editor
+for_window [instance="dropdown_editor"] floating enable
+for_window [instance="dropdown_editor"] border pixel 5
+for_window [instance="dropdown_editor"] resize set 900 600
+for_window [instance="dropdown_editor"] move position center
+
+set $resize Resize
+
+# gaps 
+# <inner|outer|horizontal|vertical|top|right|bottom|left> 
+# <current|all> 
+# <set|plus|minus|toggle> <px>
+mode "$resize" {
+
+#  bindsym h resize shrink width 10 px
+#  bindsym j resize grow height 10 px
+#  bindsym k resize shrink height 10 px
+#  bindsym l resize grow width 10 px
+
+  bindsym h resize shrink width 10 px
+  bindsym j resize grow height 10 px
+  bindsym k resize shrink height 10 px
+  bindsym l resize grow width 10 px
+
+  bindsym Escape mode "default"
+  bindsym Return mode "default"
+}
 
 bindsym $mod+Return exec urxvt
+bindsym $mod+Shift+Return exec bash "$HOME"/.scripts/samedir
 
 #bindsym $mod+q kill
 bindsym $mod+Shift+q kill
@@ -64,11 +99,11 @@ bindsym $mod+Shift+q kill
 bindsym $mod+w exec google-chrome --new-window https://webcms3.cse.unsw.edu.au/
 #bindsym $mod+Shift+w 
 
-#bindsym $mod+e
+bindsym $mod+e exec --no-startup-id ~/.scripts/editconfig
 #bindsym $mod+Shift+e
 
-#bindsym $mod+r
-#bindsym $mod+Shift+r
+bindsym $mod+r mode "$resize"
+bindsym $mod+Shift+r restart
 
 #bindsym $mod+t
 #bindsym $mod+Shift+t
@@ -180,7 +215,7 @@ bar {
     focused_workspace    $aqua     $aqua      $darkgray
     inactive_workspace   $darkgray $darkgray  $yellow
     active_workspace     $darkgray $darkgray  $yellow
-    urgent_workspace     $red      $red       $bg
+    urgent_workspace     $blue     $blue       $bg
   }
 
 }
@@ -227,7 +262,7 @@ exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
 # Prevents mouse to moving to focused windows
 #mouse_warping none
 
-gaps inner 20
+gaps inner 10
 gaps outer 0
 gaps horizontal 0
 gaps vertical 0
@@ -235,3 +270,5 @@ gaps top 0
 gaps right 0
 gaps bottom 0
 gaps left 0
+
+#exec_always compton --config "$HOME""/.config/compton/config"

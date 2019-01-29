@@ -1,7 +1,6 @@
 ! To disable bell, edit '/etc/inputrc' and uncomment:
 !  set bell-style none
 
-URxvt*geometry:   80x24
 URxvt*scrollBar:  false
 
 URxvt.font: xft:monospace:size=10
@@ -10,8 +9,8 @@ URxvt.jumpScroll: true
 
 URxvt.saveLines: 5000
 
-URxvt*transparent: true
-URxvt*shading: 30
+!URxvt*transparent: true
+!URxvt*shading: 30
 
 ! Gruvbox Color Scheme 
 *background: #1d2021

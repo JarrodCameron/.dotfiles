@@ -4,11 +4,10 @@
 
 open_cal () {
   halt='read -sn 1 -p "Press any key to close...";'
-  float='i3-msg floating enable;'
-  cal='clear; cal -y;'
-  size='i3-msg resize set 600 px 650;'
+  cal='cal -y;'
 
-  urxvt -e bash -c "$float""$size""$cal""$halt"
+  urxvt -name dropdown_editor -e sh -c "vim test.c"
+  #urxvt -name "dropdown_cal" -e bash -c "$cal""$halt"
 }
 
 text="$(date '+%d-%m-%Y %I:%M %p')"
@@ -17,8 +16,8 @@ echo "$text"        # short text
 echo \#00AAFF       # Color
 
 case $BLOCK_BUTTON in
-  1) open_cal  ;;&  # Left click
-  2) open_cal  ;;&  # Scroll click
-  3) open_cal  ;;&  # Right click
+  1) open_cal  ;;  # Left click
+  2) open_cal  ;;  # Scroll click
+  3) open_cal  ;;  # Right click
 esac
 

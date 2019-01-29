@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+
+black="#282828"
+white="#ebdbb2"
+gray="#1d2021"
+aqua="#689d68"
+
+options=".vimrc\n"
+options+="i3-gaps\n"
+options+="i3blocks\n"
+options+=".bashrc\n"
+options+=".Xresources\n"
+options+="compton\n"
+
+height="$(echo -e $options | wc -l)"
+colors="-nb $black -nf $white -sf $gray -sb $aqua"
+output=$(echo -ne "$options" | dmenu -i -l $height -p "Edit file:" $colors)
+
+case "$output" in
+  "i3-gaps")     cmd="$EDITOR "$HOME"/.config/i3/config"       ;;
+  "i3blocks")    cmd="$EDITOR "$HOME"/.config/i3blocks/config" ;;
+  ".vimrc")      cmd="$EDITOR "$HOME"/.vim/vimrc"              ;;
+  ".bashrc")     cmd="$EDITOR "$HOME"/.bashrc"                 ;;
+  ".Xresources") cmd="$EDITOR "$HOME"/.Xresources"             ;;
+  "compton")     cmd="$EDITOR "$HOME"/.config/compton/config"  ;;
+  *)             exit 1                                        ;;
+esac
+
+echo "$cmd" 
+
+urxvt -name "dropdown_editor" -e sh -c "sh -c ""$cmd"
+#urxvt -name "dropdown_editor" -e sh -c "$cmd"
+
+

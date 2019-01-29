@@ -9,6 +9,11 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# Bash formatting constants
+BOLD="\e[1m"
+ULINE="\e[4m"
+RESET="\e[0m"
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -23,8 +28,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=10000
+HISTSIZE=20000
+HISTFILESIZE=20000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -140,6 +145,8 @@ export TERMINAL="$(which urxvt)"
 # Copy
 alias copy="xclip -selection clip 2> /dev/null"
 
+alias compton="compton --config ~/.config/compton/config"
+
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
@@ -161,12 +168,31 @@ alias untar="tar -xvf"
 # Disable terminal beeps
 stty -ixon
 
-echo "To do list:"
-echo ""
-echo "1) wargames (3/23)"
-echo "2) Leetcode (71/100)"
-echo "3) gruvbox + airline"
-echo "4) Floating calculator (mod+p)"
-echo "5) Date click -> floating cal"
-echo "6) 12pm put dinner in fridge. If dinner is warm wait a bit"
-echo "7) Dad can take spag for lunch"
+echo -e "$BOLD""To do list:""$RESET"
+echo -e "1) wargames (3/23)"
+echo -e "2) Leetcode (71/100)"
+echo -e "3) gruvbox + airline"
+echo -e "4) entr to restart compton"
+echo -e "5) QR scanner with pipe"
+echo -e "6) i3-gaps resize mode"
+echo -e "7) editconfig script won't stay open"
+echo -e ""
+echo -e "$BOLD""COMP3121 Lectures:    COMP3411 Lectures:""$RESET"
+echo -e "07) Ep. 18 0:45       Lec 3: Wumpus World (21:23)"
+echo -e "08) Ep. 17 1:43       Lec 4: Chess vs Robocup (19:45)"
+echo -e "09) Ep. 16 0:40       Lec 5: Classifying Environments (19:20)"
+echo -e "10) Ep. 15 1:49       Lec 6: Agent Types (26:03)"
+echo -e "11) Ep. 14 0:50       Lec 7: Path Search (19:23)"
+echo -e "12) Ep. 12 0:43       Lec 8: Uninformed Path Search Algorithms (28:03)"
+echo -e "13) Ep. 13 0:57       Lec 9: Heuristic Path Search Algorithms (22:30)"
+echo -e "14) Ep. 11 0:38       Lec 10: Finding Admissible Heuristics (22:33)"
+echo -e "15) Ep. 10 1:50       Lec 11: Computers Playing Games (15:09)"
+echo -e "16) Ep. 9  0:48       Lec 12: Minimax and Alpha Beta (29:14)"
+echo -e "17) Ep. 8  1:36       Lec 13: Games in Detail (31:23)"
+echo -e "18) Ep. 7  0:52"      
+echo -e "19) Ep. 6  1:29       "$BOLD"""COMP3841 Lectures:""$RESET"
+echo -e "20) Ep. 5  0:48       [01] [02] [03] [04]"
+echo -e "21) Ep. 4  1:45       [05] [06] [07] [08]"
+echo -e "22) Ep. 3  0:36       [09] [10] [11]"
+echo -e "23) Ep. 2  0:49"
+echo -e "24) Ep. 1  1:59"

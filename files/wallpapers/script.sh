@@ -2,6 +2,10 @@
 
 # Author: Jarrod Cameron (z5210220)
 
+# Converts all images in the current folder the the correct format (1080p) 
+#   and naming scheme. Each image is named `wallpaper###.png` where `#` is
+#   a digit between 0-9.
+
 function get_template () {
   ret="wallpaper"
   ret+="$(printf "%03d" "$index")"
