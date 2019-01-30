@@ -44,28 +44,23 @@ set $transparent "#00000000"
 # Remove title bar of windows
 for_window [class=".*"] border pixel 2
 
+for_window [instance="dropdown_*"] floating enable
+for_window [instance="dropdown_*"] border pixel 5
+
 # Dropdown calculator
-for_window [instance="dropdown_calculator"] floating enable
-for_window [instance="dropdown_calculator"] border pixel 5
 for_window [instance="dropdown_calculator"] resize set 600 640
 for_window [instance="dropdown_calculator"] move position center
 
 # Dropdown file explorer
-for_window [instance="dropdown_explorer"] floating enable
-for_window [instance="dropdown_explorer"] border pixel 5
 for_window [instance="dropdown_explorer"] resize set 1728 972
 for_window [instance="dropdown_explorer"] move position center
 
 # Dropdown calendar
-for_window [instance="dropdown_cal"] floating enable
-for_window [instance="dropdown_cal"] border pixel 5
 for_window [instance="dropdown_cal"] resize set 610 630
 for_window [instance="dropdown_cal"] move position center
 
 # Dropdown editor
-for_window [instance="dropdown_editor"] floating enable
-for_window [instance="dropdown_editor"] border pixel 5
-for_window [instance="dropdown_editor"] resize set 900 600
+for_window [instance="dropdown_editor"] resize set 1400 800
 for_window [instance="dropdown_editor"] move position center
 
 set $resize Resize
@@ -86,6 +81,7 @@ mode "$resize" {
   bindsym k resize shrink height 10 px
   bindsym l resize grow width 10 px
 
+  bindsym q mode "default"
   bindsym Escape mode "default"
   bindsym Return mode "default"
 }
@@ -215,7 +211,7 @@ bar {
     focused_workspace    $aqua     $aqua      $darkgray
     inactive_workspace   $darkgray $darkgray  $yellow
     active_workspace     $darkgray $darkgray  $yellow
-    urgent_workspace     $blue     $blue       $bg
+    urgent_workspace     $blue     $blue      $bg
   }
 
 }

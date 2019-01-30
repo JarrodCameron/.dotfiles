@@ -40,7 +40,7 @@ usage () {
   echo -e "DESCRIPTION""$RESET"
   echo "    Create a bunch of symbolic links for my dotfiles (e.g. .vim/,"
   echo "    files found in .config/). Allows system configuration to become"
-  echo "    device agnostic"
+  echo "    device agnostic."
   echo ""
   echo "    Possible arguments include:"
   echo ""

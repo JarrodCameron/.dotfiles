@@ -2,6 +2,8 @@
 
 # Author: Jarrod Cameron (z5210220)
 
+[ -z "$EDITOR" ] && EDITOR="$(which vim)"
+
 black="#282828"
 white="#ebdbb2"
 gray="#1d2021"
@@ -28,9 +30,4 @@ case "$output" in
   *)             exit 1                                        ;;
 esac
 
-echo "$cmd" 
-
-urxvt -name "dropdown_editor" -e sh -c "sh -c ""$cmd"
-#urxvt -name "dropdown_editor" -e sh -c "$cmd"
-
-
+urxvt -name "dropdown_editor" -e $cmd

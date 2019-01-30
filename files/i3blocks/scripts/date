@@ -6,8 +6,7 @@ open_cal () {
   halt='read -sn 1 -p "Press any key to close...";'
   cal='cal -y;'
 
-  urxvt -name dropdown_editor -e sh -c "vim test.c"
-  #urxvt -name "dropdown_cal" -e bash -c "$cal""$halt"
+  urxvt -name "dropdown_cal" -e bash -c "$cal""$halt"
 }
 
 text="$(date '+%d-%m-%Y %I:%M %p')"

@@ -12,6 +12,7 @@
 command="$HOME/.config/i3blocks/scripts/$BLOCK_NAME"
 separator_block_width=15
 markup=none
+color=#d79921
 
 [memory]
 separator=true
