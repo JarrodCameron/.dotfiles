@@ -3,14 +3,18 @@
 
 URxvt*scrollBar:  false
 
-URxvt.font: xft:monospace:size=10
+URxvt.font: xft:Fantasque Sans Mono Nerd Font:size=12, \
+            xft:Space Mono Nerd Font:size=10, \
+            xft:Droid Sans Mono Nerd Font:size=10, \
+            xft:Roboto Mono Nerd Font:size=10, \
+            xft:DejaVu Sans Mono Nerd Font:size=10, \
+            xft:Ubuntu Mono Nerd Font:size=13, \
+            xft:Literation Mono Nerd Font:size=11, \
+            xft:monospace:size=10
 
 URxvt.jumpScroll: true
 
 URxvt.saveLines: 5000
-
-!URxvt*transparent: true
-!URxvt*shading: 30
 
 ! Gruvbox Color Scheme 
 *background: #1d2021

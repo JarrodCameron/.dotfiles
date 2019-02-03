@@ -44,23 +44,26 @@ set $transparent "#00000000"
 # Remove title bar of windows
 for_window [class=".*"] border pixel 2
 
-for_window [instance="dropdown_*"] floating enable
-for_window [instance="dropdown_*"] border pixel 5
-
 # Dropdown calculator
+for_window [instance="dropdown_calculator"] floating enable
+for_window [instance="dropdown_calculator"] border pixel 5
 for_window [instance="dropdown_calculator"] resize set 600 640
 for_window [instance="dropdown_calculator"] move position center
 
 # Dropdown file explorer
+for_window [instance="dropdown_explorer"] floating enable
+for_window [instance="dropdown_explorer"] border pixel 5
 for_window [instance="dropdown_explorer"] resize set 1728 972
 for_window [instance="dropdown_explorer"] move position center
 
 # Dropdown calendar
-for_window [instance="dropdown_cal"] resize set 610 630
+for_window [instance="dropdown_cal"] floating enable
+for_window [instance="dropdown_cal"] border pixel 5
+for_window [instance="dropdown_cal"] resize set 610 670
 for_window [instance="dropdown_cal"] move position center
 
 # Dropdown editor
-for_window [instance="dropdown_editor"] resize set 1400 800
+for_window [instance="dropdown_editor"] border pixel 5
 for_window [instance="dropdown_editor"] move position center
 
 set $resize Resize
@@ -250,10 +253,10 @@ bindsym XF86MonBrightnessDown exec --no-startup-id sudo brightness -dec auto
 # Open the networking manager applet
 exec_always --no-startup-id nm-applet
 
-# Use `entr' to restart particular programs when files are modified
-exec echo "$HOME"/.config/i3/config | entr -p i3-msg restart &
-exec echo "$HOME"/.config/i3blocks/config | entr -p i3-msg restart &
-exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
+## Use `entr' to restart particular programs when files are modified
+#exec echo "$HOME"/.config/i3/config | entr -p i3-msg restart &
+#exec echo "$HOME"/.config/i3blocks/config | entr -p i3-msg restart &
+#exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
 
 # Prevents mouse to moving to focused windows
 #mouse_warping none
@@ -267,4 +270,4 @@ gaps right 0
 gaps bottom 0
 gaps left 0
 
-#exec_always compton --config "$HOME""/.config/compton/config"
+exec_always compton --config "$HOME""/.config/compton/config"

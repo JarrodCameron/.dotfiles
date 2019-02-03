@@ -145,8 +145,6 @@ export TERMINAL="$(which urxvt)"
 # Copy
 alias copy="xclip -selection clip 2> /dev/null"
 
-alias compton="compton --config ~/.config/compton/config"
-
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
