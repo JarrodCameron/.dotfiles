@@ -135,10 +135,10 @@ autocmd InsertEnter * set nohlsearch
 
 " Reload Xresources after writing to file
 " NOTE: errors are omitted
-autocmd BufWritePost ~/.dotfiles/files/Xresources silent: !xrdb .Xresources
-autocmd BufWritePost ~/.dotfiles/files/i3/config silent :!i3-msg restart
-autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
-autocmd BufWritePost ~/.dotfiles/files/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
+autocmd BufWritePost ~/.Xresources silent: !xrdb .Xresources
+autocmd BufWritePost ~/.config/i3/config silent :!i3-msg restart
+autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
+autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
 
 autocmd FileType c iabbrev \N \n
 autocmd FileType c iabbrev \m \n

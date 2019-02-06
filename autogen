@@ -174,5 +174,14 @@ if [ "$(grep -E "{full}|{scripts}" <<< "$options")" ]; then
   dst="$HOME""/.scripts"
   rm -rf "$dst"
   ln -s "$src" "$dst"
-  echo -e "$GREEN""Successfully added: ""$BOLD""scripts""$RESET"
+  echo -e "$GREEN""Successfully added: ""$BOLD""scripts""$RESET"sh
+
+
+
+
+
+
+
+
+
 fi

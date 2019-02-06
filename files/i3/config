@@ -158,7 +158,7 @@ bindsym $mod+Shift+v split horizontal
 #bindsym $mod+b
 #bindsym $mod+Shift+b
 
-bindsym $mod+n exec feh --bg-scale $(ls ~/Pictures/Wallpapers/*.png | shuf | head -n 1)
+bindsym $mod+n exec feh --bg-scale $(ls ~/Pictures/wallpapers/*.png | shuf | head -n 1)
 #bindsym $mod+Shift+n
 
 bindsym $mod+m exec bash "$HOME"/.scripts/screen
