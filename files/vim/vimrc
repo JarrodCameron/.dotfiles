@@ -135,13 +135,10 @@ autocmd InsertEnter * set nohlsearch
 
 " Reload Xresources after writing to file
 " NOTE: errors are omitted
-autocmd BufWritePost .Xresources silent: !xrdb .Xresources
-autocmd BufWritePost ~/.config/i3/config silent: !i3-msg restart
-autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
-autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
-
-" Doesn't work
-autocmd BufWritePost ~/.vim/vimrc :source $MYVIMRC
+autocmd BufWritePost ~/.dotfiles/files/Xresources silent: !xrdb .Xresources
+autocmd BufWritePost ~/.dotfiles/files/i3/config silent :!i3-msg restart
+autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
+autocmd BufWritePost ~/.dotfiles/files/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
 
 autocmd FileType c iabbrev \N \n
 autocmd FileType c iabbrev \m \n
@@ -160,23 +157,18 @@ autocmd FileType html inoremap <tr><CR> <tr><CR></tr><esc>O
 autocmd FileType html inoremap <th><space> <th><space></th><esc>O
 autocmd FileType html inoremap <td><space> <td><space></td><esc>O
 
-"" Brackets stuff
-"inoremap {<CR> {<CR>}<esc>O
-"inoremap [<CR> [<CR>]<esc>O<space><space>
-"inoremap (<CR> (<CR>)<esc>O<space><space>
-"
-"inoremap {;<CR> {<CR>};<esc>O
-"inoremap [;<CR> [<CR>];<esc>O<space><space>
-"inoremap (;<CR> (<CR>);<esc>O<space><space>
-"
-"inoremap { {}<left>
-"inoremap [ []<left>
-"inoremap ( ()<left>
+" Brackets stuff
+inoremap {<CR> {<CR>}<esc>O
+inoremap [<CR> [<CR>]<esc>O<space><space>
+inoremap (<CR> (<CR>)<esc>O<space><space>
 
-""inoremap ) <ESC>:call InsNormBrac()<CR>i
-"inoremap ] <C-o>:call InsertPair("]")<CR>
-"inoremap ) <C-o>:call InsertPair(")")<CR>
-"inoremap } <C-o>:call InsertPair("}")<CR>
+inoremap {;<CR> {<CR>};<esc>O
+inoremap [;<CR> [<CR>];<esc>O<space><space>
+inoremap (;<CR> (<CR>);<esc>O<space><space>
+
+inoremap { {}<left>
+inoremap [ []<left>
+inoremap ( ()<left>
 
 " Kindergarten spelling skills
 iabbrev tehn then
@@ -195,77 +187,3 @@ function! ToggleCC(width)
     set colorcolumn=0
   endif
 endfunction
-
-" If: the cursor is under a ')'
-"   Then: shift cursor
-" Else: 
-"   Then: add ')'
-function! InsNormBrac ()
-  let l:ch = getline('.')[col('.')]
-  if l:ch == ")"
-    call ShiftCursor (1)
-  else
-    execute "normal! a)\<esc>"
-  endif
-  call ShiftCursor (1)
-endfunction
-
-" Many characters come in pairs such as: {}, [], (), etc
-" This function will perform the following logic
-" If: the cursor is under a ')'
-"   Then: shift cursor
-" Else: 
-"   Then: add ')'
-function! InsertPair (brac)
-
-  if !IsClosed (a:brac)
-    echo "Invalid use of function!"
-    return
-  elseif col('.') == col('$')-1
-    " Final character of line must be unique
-    execute "normal! a" . a:brac . "\<esc>"
-    echo "Early exit"
-    return
-  endif
-
-  execute "normal! i" . a:brac . "\<esc>"
-
-  echo "Len:  " . col('$')
-  echo "Col:  " . col('.')
-  echo "Line: " . getline('.')
-  echo "Char: " . getline('.')[col('.')]
-  echo getcurpos ()
-  echo getpos ('.')
-
-  return
-  let l:curr = getline('.')[col('.')]
-
-  if a:brac != l:curr
-    execute "normal! a" . a:brac . "\<esc>"
-  else
-    call ShiftCursor (1)
-  endif
-
-endfunction
-
-" Return true/false if `ch' is a closed bracket
-function! IsClosed (ch)
-  if a:ch =~ "[\])}]"
-    return 1
-  else
-    return 0
-  endif
-endfunction
-
-" Shift the cursor over by 'n' units
-function! ShiftCursor (n)
-  let l:info = getcurpos ()
-  let l:info[2] += a:n
-  call setpos ('.', l:info)
-endfunction
-
-
-
-
-
-
