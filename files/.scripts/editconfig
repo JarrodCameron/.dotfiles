@@ -30,4 +30,5 @@ case "$output" in
   *)             exit 1                                        ;;
 esac
 
-urxvt -name "dropdown_editor" -e $cmd
+#urxvt -name "dropdown_editor" -e $cmd
+urxvt -e $cmd

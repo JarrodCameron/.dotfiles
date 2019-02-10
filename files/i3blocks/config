@@ -9,6 +9,9 @@
 # Documentation:
 # https://github.com/vivien/i3blocks/wiki/Writing-Your-Own-Blocklet
 
+# How to have json output
+# https://i3wm.org/docs/i3bar-protocol.html#_blocks_in_detail
+
 command="$HOME/.config/i3blocks/scripts/$BLOCK_NAME"
 separator_block_width=15
 markup=none

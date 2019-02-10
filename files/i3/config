@@ -24,6 +24,7 @@ set $mod Mod4
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:DejaVu Sans Mono 10
+#font pango:Fira Mono, Icons 10
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -63,7 +64,9 @@ for_window [instance="dropdown_cal"] resize set 610 670
 for_window [instance="dropdown_cal"] move position center
 
 # Dropdown editor
+for_window [instance="dropdown_editor"] floating enable
 for_window [instance="dropdown_editor"] border pixel 5
+for_window [instance="dropdown_editor"] resize set 1536 864
 for_window [instance="dropdown_editor"] move position center
 
 set $resize Resize
@@ -147,7 +150,7 @@ bindsym $mod+l focus right
 bindsym $mod+Shift+l move right
 
 #bindsym $mod+x
-bindsym $mod+Shift+x exec i3lock -i ~/Pictures/Wallpapers/wallpaper037.png
+bindsym $mod+Shift+x exec i3lock -i ~/Pictures/wallpapers/wallpaper096.png
 
 bindsym $mod+c exec google-chrome
 bindsym $mod+Shift+c exec google-chrome --incognito
@@ -229,7 +232,7 @@ client.urgent           $red      $red      $white    $red      $red
 # i3-lock wallpaper
 
 # typical wallpaper
-exec_always feh --bg-scale $(ls ~/Pictures/Wallpapers/*.png | shuf | head -n 1)
+exec_always feh --bg-scale $(ls ~/Pictures/wallpapers/*.png | shuf | head -n 1)
 
 # Increment volume + update i3blocks
 bindsym XF86AudioRaiseVolume exec --no-startup-id \

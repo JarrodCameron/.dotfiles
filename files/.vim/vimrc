@@ -6,6 +6,9 @@
 "  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
 
+" TODO:
+" - Toggle Comments and ToggleCC need to be global functions
+
 " Set the <leader> to ","
 let mapleader=","
  
@@ -13,7 +16,7 @@ let mapleader=","
 map <F6> :setlocal spell! spelllang=en_eu<CR>
 
 " Toggle the grey bar thing
-map <F8> :call ToggleCC(79)<CR>
+map <F8> :call g:ToggleCC(79)<CR>
 
 syntax enable
 syntax on
@@ -29,6 +32,9 @@ set smartindent
 set autoindent
 set showcmd
 set wildmenu
+
+" Activate filetype detection
+filetype on
 
 " Helpful when pasting with older versions of vim
 "set paste
@@ -138,11 +144,12 @@ autocmd InsertEnter * set nohlsearch
 autocmd BufWritePost ~/.Xresources silent: !xrdb .Xresources
 autocmd BufWritePost ~/.config/i3/config silent :!i3-msg restart
 autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
-autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
+"autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
+"autocmd BufWritePost ~/.vim/vimrc source $MYVIMRC
 
-autocmd FileType c iabbrev \N \n
-autocmd FileType c iabbrev \m \n
-autocmd FileType c iabbrev struc struct
+autocmd FileType c iabbrev <buffer> \N \n
+autocmd FileType c iabbrev <buffer> \m \n
+autocmd FileType c iabbrev <buffer> struc struct
 
 autocmd FileType rmd command! R :w | :!clear && Rscript -e "rmarkdown::render('%')" && xdg-open %<.pdf
 autocmd FileType rmd command! C :w | :!clear && Rscript -e "rmarkdown::render('%')"
@@ -153,9 +160,7 @@ autocmd FileType rmd iabbrev tit textit
 autocmd FileType tex command! C :w | :!clear && pdflatex %
 autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf 
 
-autocmd FileType html inoremap <tr><CR> <tr><CR></tr><esc>O
-autocmd FileType html inoremap <th><space> <th><space></th><esc>O
-autocmd FileType html inoremap <td><space> <td><space></td><esc>O
+autocmd FileType text setlocal spell spelllang=en_eu
 
 " Brackets stuff
 inoremap {<CR> {<CR>}<esc>O
@@ -166,9 +171,11 @@ inoremap {;<CR> {<CR>};<esc>O
 inoremap [;<CR> [<CR>];<esc>O<space><space>
 inoremap (;<CR> (<CR>);<esc>O<space><space>
 
-inoremap { {}<left>
-inoremap [ []<left>
-inoremap ( ()<left>
+vnoremap <leader>c :call g:ToggleComments()<CR>
+
+"inoremap { {}<left>
+"inoremap [ []<left>
+"inoremap ( ()<left>
 
 " Kindergarten spelling skills
 iabbrev tehn then
@@ -180,10 +187,52 @@ iabbrev si is
 iabbrev nad and
 
 " Toggle the vertical bar
-function! ToggleCC(width)
+function! g:ToggleCC(width)
   if &cc == 0
     execute "set colorcolumn=".a:width
   else
     set colorcolumn=0
+  endif
+endfunction
+
+function! s:GetComment()
+  if &filetype == "vim"
+    return "\""
+  elseif &filetype == "c"
+    return "\\/\\/"
+  else
+    echom "CANNOT COMMENT FILE"
+    echom "UNKNOWN FILE TYPE: " . &filetype
+    return "0"
+  endif
+endfunction
+
+" Toggle comments
+function! g:ToggleComments() range
+
+  let l:comment_type=s:GetComment()
+
+  if l:comment_type == "0"
+    return
+  endif
+
+  let l:is_commented=1
+  for l:line_num in range(a:firstline, a:lastline)
+    let l:line = getline(l:line_num)
+
+    let l:regexp = "^\\s*" . l:comment_type
+
+    if l:line !~ l:regexp
+      let l:cmd = string(l:line_num) . "s/^/" . l:comment_type . "/"
+      execute l:cmd
+      let l:is_commented=0
+    endif
+  endfor
+
+  if l:is_commented == 1
+    let l:range = string(a:firstline) . "," . string (a:lastline)
+    let l:subs = "s/" . l:comment_type . "//"
+    let l:cmd = l:range . l:subs
+    execute l:cmd
   endif
 endfunction

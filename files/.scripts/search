@@ -13,6 +13,7 @@ options+="Google\n"
 options+="Youtube\n"
 options+="Webcms3\n"
 options+="Facebook\n"
+options+="myUNSW\n"
 
 colors="-nb $black -nf $white -sf $gray -sb $aqua"
 output="$(echo -ne "$options" | dmenu -i -p "Search:" $colors)"
@@ -27,6 +28,7 @@ case "$output" in
   "Youtube")    url="https://www.youtube.com/"                 ;;
   "Webcms3")    url="https://webcms3.cse.unsw.edu.au/"         ;;
   "Facebook")   url="https://www.facebook.com/"                ;;
+  "myUNSW")     url="https://my.unsw.edu.au/"                  ;;
   *)            url="http://www.google.com/search?q=""$output" ;;
 esac
 

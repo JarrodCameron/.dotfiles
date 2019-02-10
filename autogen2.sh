@@ -25,10 +25,33 @@ print_banner () {
   echo -ne "$RESET"
 }
 
-
 usage () {
   echo "This is the usage"
 }
+
+# Backup all files to the .dotfiles/files/ directory
+backup () {
+  local loc="$1"
+  local name="$2"
+  local full_name="$loc""$name"
+  if [ ! -e "$full_name" ]; then
+    echo -e "$RED""ERROR: File does not exist ""$BOLD""$name""$RESET"
+  else
+    cp -r "$full_name" ~/.dotfiles/files/
+    echo -e "$GREEN""Backed up: ""$BOLD""$name""$RESET"
+  fi
+}
+
+# Distribute files through out the system
+distribute () {
+  local loc="$1"
+  local name="$2"
+  local full_name="$loc""$name"
+  mkdir -p "$loc"
+  cp -r ".dotfiles/files/""$name" "$loc"
+  echo -e "$GREEN""Successfully added: ""$BOLD""$name""$RESET"
+}
+
 
 # If no args
 if [ -z $1 ]; then
@@ -54,86 +77,65 @@ done
 
 print_banner
 
-# Link the i3wm
+# Linke the i3wm
 if [ "$(echo "$options" | grep -E "{full}|{i3}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/.config/i3/ ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD""i3wm""$RESET"
+    backup ~/.config/ i3/
   else
-    mkdir -p ~/.config/i3/
-    cp -r ~/.dotfiles/files/i3/ ~/.config/i3/
-    echo -e "$GREEN""Successfully added: ""$BOLD""i3wm""$RESET"
+    distribute ~/.config/ i3/
   fi
 fi
 
 # Link the vim stuff
 if [ "$(echo "$options" | grep -E "{full}|{vim}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/.vim/ ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD"".vim/""$RESET"
+    backup ~/ .vim/
   else
-    mkdir -p ~/
-    cp -r ~/.dotfiles/files/.vim/ ~/
-    echo -e "$GREEN""Successfully added: ""$BOLD"".vim/""$RESET"
+    distribute ~/ .vim/
   fi
 fi
 
 # Link the .bashrc
 if [ "$(echo "$options" | grep -E "{full}|{bash}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/.bashrc ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD"".bashrc""$RESET"
+    backup ~/ .bashrc
   else
-    mkdir -p ~/
-    cp -r ~/.dotfiles/files/.bashrc ~/
-    echo -e "$GREEN""Successfully added: ""$BOLD"".bashrc""$RESET"
+    distribute ~/ .bashrc
   fi
 fi
 
 # Link the personal scripts
 if [ "$(echo "$options" | grep -E "{full}|{scripts}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/.scripts ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD"".scripts/""$RESET"
+    backup ~/ .scripts/
   else
-    mkdir -p ~/
-    cp -r ~/.dotfiles/files/.scripts ~/
-    echo -e "$GREEN""Successfully added: ""$BOLD"".scripts/""$RESET"
+    distribute ~/ .scripts/
   fi
 fi
 
 # Link i3blocks (status bar)
 if [ "$(echo "$options" | grep -E "{full}|{i3blocks}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/.config/i3blocks/ ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD""i3blocks/""$RESET"
+    backup ~/.config/ i3blocks/
   else
-    mkdir -p ~/.config/i3blocks/
-    cp -r ~/.dotfiles/files/i3blocks/ ~/.config/i3blocks/
-    echo -e "$GREEN""Successfully added: ""$BOLD""i3blocks/""$RESET"
+    distribute ~/.config/ i3blocks/
   fi
 fi
 
 # Link wallpapers
 if [ "$(echo "$options" | grep -E "{full}|{wallpapers}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/Pictures/wallpapers/ ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD""wallpapers/""$RESET"
+    backup ~/Pictures/ wallpapers/
   else
-    mkdir -p ~/Pictures/wallpapers/
-    cp -r ~/.dotfiles/files/wallpapers ~/Pictures/wallpapers/
-    echo -e "$GREEN""Successfully added: ""$BOLD""wallpapers/""$RESET"
+    distribute ~/Pictures/ wallpapers/
   fi
 fi
 
 # Link the .Xresources file
 if [ "$(echo "$options" | grep -E "{full}|{xresources}")" ]; then
   if [ "$(echo "$options" | grep "backup")" ]; then
-    cp -r ~/.Xresources ~/.dotfiles/files/
-    echo -e "$GREEN""Backed up: ""$BOLD"".Xresources""$RESET"
+    backup ~/ .Xresources
   else
-    mkdir -p ~/
-    cp -r ~/.dotfiles/files/.Xresources ~/
-    echo -e "$GREEN""Successfully added: ""$BOLD"".Xresources""$RESET"
+    distribute ~/ .Xresources
   fi
 fi

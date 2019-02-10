@@ -49,5 +49,12 @@ else
   echo "Chr: $level""%"        # Short text
 fi
 
-echo \#$(get_color)
+#if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
+#  echo "🔋 $level""%"    # Long text
+#  echo "🔋 $level""%"    # Short text
+#else
+#  echo "⚡ $level""%"    # Long text
+#  echo "⚡ $level""%"    # Shoft text
+#fi
 
+echo \#$(get_color)
