@@ -6,14 +6,14 @@
 "  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
 
-" TODO:
-" - Toggle Comments and ToggleCC need to be global functions
+" Reset all autocmds (useful for sourcing $MYVIMRC" multiple times)
+autocmd!
 
 " Set the <leader> to ","
 let mapleader=","
  
 " spell-check set to F6
-map <F6> :setlocal spell! spelllang=en_eu<CR>
+map <F6> :setlocal spell! spelllang=en_au<CR>
 
 " Toggle the grey bar thing
 map <F8> :call g:ToggleCC(79)<CR>
@@ -57,6 +57,9 @@ set scrolloff=3
 " Highligh current line
 set cursorline
 
+" Ignoring case when searching
+set ignorecase
+
 " Go to start/end of line in insert mode
 inoremap <leader>a <esc>A
 inoremap <leader>i <esc>I
@@ -88,16 +91,14 @@ inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x
 
 " Nice
-nnoremap j j<c-g>
-nnoremap k k<c-g>
-nnoremap <up> <up><c-g>
-nnoremap <down> <down><c-g>
+"nnoremap j j<c-g>
+"nnoremap k k<c-g>
+"nnoremap <up> <up><c-g>
+"nnoremap <down> <down><c-g>
 
 " ???
 set backspace=indent,eol,start
 set backspace=2
-
-autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
@@ -119,6 +120,8 @@ endif
 
 " Shows the tabs
 set list listchars=tab:>-
+
+autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
 " Skeletons
 autocmd BufNewFile *.c 0r ~/.vim/templates/c.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 13
@@ -147,10 +150,6 @@ autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
 "autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
 "autocmd BufWritePost ~/.vim/vimrc source $MYVIMRC
 
-autocmd FileType c iabbrev <buffer> \N \n
-autocmd FileType c iabbrev <buffer> \m \n
-autocmd FileType c iabbrev <buffer> struc struct
-
 autocmd FileType rmd command! R :w | :!clear && Rscript -e "rmarkdown::render('%')" && xdg-open %<.pdf
 autocmd FileType rmd command! C :w | :!clear && Rscript -e "rmarkdown::render('%')"
 autocmd FileType rmd command! O :!clear && xdg-open %<.pdf
@@ -160,7 +159,11 @@ autocmd FileType rmd iabbrev tit textit
 autocmd FileType tex command! C :w | :!clear && pdflatex %
 autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf 
 
-autocmd FileType text setlocal spell spelllang=en_eu
+autocmd FileType c iabbrev <buffer> \N \n
+autocmd FileType c iabbrev <buffer> \m \n
+autocmd FileType c iabbrev <buffer> struc struct
+
+autocmd FileType text setlocal spell spelllang=en_au
 
 " Brackets stuff
 inoremap {<CR> {<CR>}<esc>O
@@ -173,9 +176,13 @@ inoremap (;<CR> (<CR>);<esc>O<space><space>
 
 vnoremap <leader>c :call g:ToggleComments()<CR>
 
-"inoremap { {}<left>
-"inoremap [ []<left>
-"inoremap ( ()<left>
+inoremap { {}<left>
+inoremap [ []<left>
+inoremap ( ()<left>
+
+inoremap } }<esc>:call g:InsertPair("}")<CR>a
+inoremap ] ]<esc>:call g:InsertPair("]")<CR>a
+inoremap ) )<esc>:call g:InsertPair(")")<CR>a
 
 " Kindergarten spelling skills
 iabbrev tehn then
@@ -195,6 +202,7 @@ function! g:ToggleCC(width)
   endif
 endfunction
 
+" Return the comment per filetype
 function! s:GetComment()
   if &filetype == "vim"
     return "\""
@@ -209,26 +217,20 @@ endfunction
 
 " Toggle comments
 function! g:ToggleComments() range
-
   let l:comment_type=s:GetComment()
-
   if l:comment_type == "0"
     return
   endif
-
   let l:is_commented=1
   for l:line_num in range(a:firstline, a:lastline)
     let l:line = getline(l:line_num)
-
     let l:regexp = "^\\s*" . l:comment_type
-
     if l:line !~ l:regexp
       let l:cmd = string(l:line_num) . "s/^/" . l:comment_type . "/"
       execute l:cmd
       let l:is_commented=0
     endif
   endfor
-
   if l:is_commented == 1
     let l:range = string(a:firstline) . "," . string (a:lastline)
     let l:subs = "s/" . l:comment_type . "//"
@@ -236,3 +238,15 @@ function! g:ToggleComments() range
     execute l:cmd
   endif
 endfunction
+
+" Insert closing bracket
+function! g:InsertPair(bracket)
+  if col("$") == 1 || col(".") == col("$")-1
+    return
+  endif
+  if getline(".")[col(".")] == a:bracket
+    execute "normal! x"
+  endif
+endfunction
+
+

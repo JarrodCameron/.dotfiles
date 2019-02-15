@@ -59,12 +59,12 @@ esac
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
@@ -173,24 +173,19 @@ echo -e "3) gruvbox + airline"
 echo -e "4) entr to restart compton"
 echo -e "5) QR scanner with pipe"
 echo -e "6) i3-gaps resize mode"
-echo -e "7) Learn VS 15"
+echo -e "7) Learn VS 14"
 echo -e ""
-echo -e "$BOLD""COMP3121 Lectures:    COMP3411 Lectures:""$RESET"
-echo -e "07) Ep. 18 0:45       Lec 6: Agent Types (26:03)"
-echo -e "08) Ep. 17 1:43       Lec 7: Path Search (19:23)"
-echo -e "09) Ep. 16 0:40       Lec 8: Uninformed Path Search Algorithms (28:03)"
-echo -e "10) Ep. 15 1:49       Lec 9: Heuristic Path Search Algorithms (22:30)"
-echo -e "11) Ep. 14 0:50       Lec 10: Finding Admissible Heuristics (22:33)"
-echo -e "12) Ep. 12 0:43       Lec 11: Computers Playing Games (15:09)"
-echo -e "13) Ep. 13 0:57       Lec 12: Minimax and Alpha Beta (29:14)"
-echo -e "14) Ep. 11 0:38       Lec 13: Games in Detail (31:23)"
-echo -e "15) Ep. 10 1:50"
-echo -e "16) Ep. 9  0:48       "$BOLD"""COMP3841 Lectures:""$RESET"
-echo -e "17) Ep. 8  1:36       [01] [02] [03] [04]"
-echo -e "18) Ep. 7  0:52       [05] [06] [07] [08]"
-echo -e "19) Ep. 6  1:29       [09] [10] [11]"
-echo -e "20) Ep. 5  0:48"
-echo -e "21) Ep. 4  1:45"
-echo -e "22) Ep. 3  0:36"
-echo -e "23) Ep. 2  0:49"
-echo -e "24) Ep. 1  1:59"
+echo -e "$BOLD""COMP3121 Lectures:$RESET"
+echo -e "07) Ep. 18 0:45           08) Ep. 17 1:43"
+echo -e "09) Ep. 16 0:40           10) Ep. 15 1:49"
+echo -e "11) Ep. 14 0:50           12) Ep. 12 0:43"
+echo -e "13) Ep. 13 0:57           14) Ep. 11 0:38"
+echo -e "15) Ep. 10 1:50           16) Ep. 9  0:48"
+echo -e "17) Ep. 8  1:36           18) Ep. 7  0:52"
+echo -e "19) Ep. 6  1:29           20) Ep. 5  0:48"
+echo -e "21) Ep. 4  1:45           22) Ep. 3  0:36"
+echo -e "23) Ep. 2  0:49           24) Ep. 1  1:59"
+echo -e "$BOLD""COMP3841 Lectures:""$RESET"
+echo -e "[01] [02] [03] [04]"
+echo -e "[05] [06] [07] [08]"
+echo -e "[09] [10] [11]"

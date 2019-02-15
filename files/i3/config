@@ -256,11 +256,6 @@ bindsym XF86MonBrightnessDown exec --no-startup-id sudo brightness -dec auto
 # Open the networking manager applet
 exec_always --no-startup-id nm-applet
 
-## Use `entr' to restart particular programs when files are modified
-#exec echo "$HOME"/.config/i3/config | entr -p i3-msg restart &
-#exec echo "$HOME"/.config/i3blocks/config | entr -p i3-msg restart &
-#exec echo "$HOME"/.Xresources | entr -p xrdb "$HOME"/.Xresources &
-
 # Prevents mouse to moving to focused windows
 #mouse_warping none
 
@@ -273,4 +268,5 @@ gaps right 0
 gaps bottom 0
 gaps left 0
 
+# Startup compton (compositor)
 exec_always compton --config "$HOME""/.config/compton/config"
