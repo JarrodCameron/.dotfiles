@@ -4,10 +4,25 @@
 
 [ -z "$EDITOR" ] && EDITOR="$(which vim)"
 
-black="#282828"
-white="#ebdbb2"
-gray="#1d2021"
-aqua="#689d68"
+BLACK="#282828"
+WHITE="#ebdbb2"
+GRAY="#1d2021"
+AQUA="#689d68"
+COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
+
+function get_file () {
+  local FULL_PATH="$1"
+  local OPTIONS="$(ls $FULL_PATH)"
+  local HEIGHT="$(echo "$OPTIONS" | wc -l)"
+  local OUTPUT="$(echo -ne "$OPTIONS" | dmenu -i -l $HEIGHT -p "Edit file:" $COLORS)"
+
+  if [ -z "$OUTPUT" ]; then
+    notify-send "Invalid file"
+    exit 1
+  fi
+
+  echo $OUTPUT
+}
 
 options=".vimrc\n"
 options+="i3-gaps\n"
@@ -15,19 +30,28 @@ options+="i3blocks\n"
 options+=".bashrc\n"
 options+=".Xresources\n"
 options+="compton\n"
+options+="home_scripts ->\n"
+options+="i3blocks_scripts ->\n"
 
 height="$(echo -e $options | wc -l)"
-colors="-nb $black -nf $white -sf $gray -sb $aqua"
-output=$(echo -ne "$options" | dmenu -i -l $height -p "Edit file:" $colors)
+output=$(echo -ne "$options" | dmenu -i -l $height -p "Edit file:" $COLORS)
+
+FULL_PATH=""
+case "$output" in
+  "home_scripts ->")     FULL_PATH="$HOME""/.scripts/" ;;
+  "i3blocks_scripts ->") FULL_PATH="$HOME""/.config/i3blocks/scripts/" ;;
+esac
 
 case "$output" in
-  "i3-gaps")     cmd="$EDITOR "$HOME"/.config/i3/config"       ;;
-  "i3blocks")    cmd="$EDITOR "$HOME"/.config/i3blocks/config" ;;
-  ".vimrc")      cmd="$EDITOR "$HOME"/.vim/vimrc"              ;;
-  ".bashrc")     cmd="$EDITOR "$HOME"/.bashrc"                 ;;
-  ".Xresources") cmd="$EDITOR "$HOME"/.Xresources"             ;;
-  "compton")     cmd="$EDITOR "$HOME"/.config/compton/config"  ;;
-  *)             exit 1                                        ;;
+  "i3-gaps")     cmd="$EDITOR "$HOME"/.config/i3/config"                      ;;
+  "i3blocks")    cmd="$EDITOR "$HOME"/.config/i3blocks/config"                ;;
+  ".vimrc")      cmd="$EDITOR "$HOME"/.vim/vimrc"                             ;;
+  ".bashrc")     cmd="$EDITOR "$HOME"/.bashrc"                                ;;
+  ".Xresources") cmd="$EDITOR "$HOME"/.Xresources"                            ;;
+  "compton")     cmd="$EDITOR "$HOME"/.config/compton/config"                 ;;
+  "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
+  "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
+  *)             notify-send "Invalid config: $output" ; exit 1 ;;
 esac
 
 #urxvt -name "dropdown_editor" -e $cmd

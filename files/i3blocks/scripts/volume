@@ -1,11 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Author: Jarrod Cameron (z5210220)
-# NOTE: A `sink` is an audio output (i.e. speakers, headphones, etc)
-#       To view all sink use the command: pacmd list-sinks
+# Date:   01/03/19  9:14
 
-# Toggle output between headphones and speakers
-toggle_output () {
+# Bugs:
+# - Can't toggle to/from hdmi output
+
+BACKGROUND=689d6a
+FOREGROUND=282828
+
+MIXER="pulse"
+SCONTROL="Master"
+
+# Toggle the output
+# 'speakers' -> 'headphones' -> 'hdmi'
+#    ^                             |
+#     \----------------------------v
+function toggle_output () {
   output=$(pacmd list-sinks | grep "active port:" | awk -F" " ' NR==1 { print $3 } ')
 
   if [ "$output" == "<analog-output-headphones>" ]; then
@@ -25,100 +36,65 @@ toggle_output () {
   fi
 }
 
-# Toggle the output to muted/not muted
-toggle_mute () {
-  pactl set-sink-mute 0 toggle
+function get_volume() {
+  local VOL="$(pacmd list-sinks | grep "^\s*volume:" | grep -o "[0-9]*%" \
+        | head -1 | sed 's/%//g')"
+  echo $VOL
 }
 
-# Increase volume (by "$inc"%)
-# If new volume is larger than $max_vol then volume is set 
-#   to $max_volume (default is 100)
-# If muted then unmute
-vol_inc () {
-  curr=$(pactl list sinks | awk -F" " '/^\sVolume/ {print $5}' | sed "s/%//g")
-  new_vol=$(echo "$curr + $inc" | bc -q)
-  max_vol="100"
-
-  if [ $new_vol -gt $max_vol ]; then
-    pactl set-sink-volume 0 "$max_vol"%
-  else
-    pactl set-sink-volume 0 "$new_vol"%
-  fi
-
-  pactl set-sink-mute 0 0
+# Toggle mute...
+function toggle_mute() {
+  amixer -q -D "$MIXER" sset "$SCONTROL" toggle
 }
 
-# Decrease volume (by "$inc"%)
-# If muted then unmute
-# Volume can't be less than zero, therefore no checking is needed
-vol_dec () {
-  pactl set-sink-volume 0 -"$inc"%
-  pactl set-sink-mute 0 0
+# Change the volume
+# $VOLUME_DELTA is the change in volume
+function update_volume() {
+  amixer -q -D "$MIXER" sset "$SCONTROL" "$VOLUME_DELTA"
 }
 
-# Keyboard button to increase volume (fn+<F3>)
-# Change incremeant amount to `5`
-# Don't need to wprint output, therefore exit
-btn_vol_inc () {
-  inc="5"
-  vol_inc
-  exit 0
+# Forces current output to be unmuted
+function force_unmute() {
+  amixer -q -D "$MIXER" sset "$SCONTROL" unmute
 }
 
-# Keyboard button to decrease volume (fn+<F2>)
-# Change incremeant amount to `5`
-# Don't need to wprint output, therefore exit
-btn_vol_dec () {
-  inc="5"
-  vol_dec
-  exit 0
-}
+# Force pulseaudio to start up
+pulseaudio --start
 
-print_output () {
-
-  # Make label
-  sink=$(pacmd list-sinks | grep "active port:" | awk -F" " ' NR==1 { print $3 } ')
-  if [ "$sink" == "<analog-output-headphones>" ]; then
-    output="Headphones: "
-  elif [ "$sink" == "<analog-output-speaker>" ]; then
-    output="Speakers: "
-  else
-    output=$(echo "$sink: ")
-  fi
-
-  # Get volume
-  if [ $(pulsemixer --get-mute) = "1" ]; then
-    output+="MUTE"
-  else
-    output+=$(pactl list sinks | awk -F" " '/^\sVolume/ {print $5}')
-  fi
-
-  echo "$output"  # Long text
-  echo "$output"  # Short text
-  echo \#00AAFF   # Color
-
-}
-
-# The amount the increase/decrease volume by
-inc=1
-
-# PulseAudio daemon needs to be running
-# If not running then start it up
-pulseaudio --check
-if [ $? == '1' ]; then
-  pulseaudio --start
-fi
-
+VOLUME_DELTA=""
 case $BLOCK_BUTTON in
-  1) toggle_output  ;;  # Left click
-  2) toggle_output  ;;  # Scroll click
-  3) toggle_mute    ;;  # Right click
-  4) vol_inc        ;;  # Scroll up
-  5) vol_dec        ;;  # Scroll down
-  10) btn_vol_inc;  ;;  # Volume up button
-  11) btn_vol_dec;  ;;  # Volume down button
+  4)  VOLUME_DELTA="1%+" ;; # Scroll up
+  5)  VOLUME_DELTA="1%-" ;; # Scroll down
+  10) VOLUME_DELTA="5%+" ;; # Vol up btn
+  11) VOLUME_DELTA="5%-" ;; # Vol down btn
 esac
 
-print_output
+case "$BLOCK_BUTTON" in
+  1)  toggle_output                 ;; # Left click
+  2)  toggle_mute                   ;; # Scroll click
+  3)  toggle_mute                   ;; # Right click
+  4)  update_volume                 ;; # Scroll up
+  5)  update_volume                 ;; # Scroll down
+  10) force_unmute ; update_volume  ;; # Volume up btn
+  11) force_unmute ; update_volume  ;; # Volume down bt
+esac
 
-exit 0
+OUTPUT="$(pacmd list-sinks | grep "^\sactive port:" | awk '{print $3}')"
+case "$OUTPUT" in
+  "<analog-output-headphones>") OUTPUT="Headphones:" ;;
+  "<analog-output-speaker>")    OUTPUT="Speakers:"   ;;
+  "<hdmi-output-0>")            OUTPUT="HDMI: "      ;;
+  *) notify-send "ERROR (vol2): unknown output ""$OUTPUT" ; exit 1 ;;
+esac
+
+MUTED="$(pacmd list-sinks | grep '^\s*muted:' | awk '{print $2}')"
+
+TEXT="$OUTPUT "
+if [ "$MUTED" = "yes" ]; then
+  TEXT+="MUTE"
+else
+  TEXT+="$(get_volume)""%"
+fi
+
+echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"
+echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"

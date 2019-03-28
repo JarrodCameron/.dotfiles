@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   26/02/19 13:41
+
+export FLASK_APP=~/website/run.py
+export FLASK_DEBUG=1
+flask run

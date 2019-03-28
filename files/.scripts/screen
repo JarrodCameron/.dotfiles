@@ -25,3 +25,7 @@ case "$output" in
   "Duplicate (D)")     xrandr --output "$secondary" --auto --same-as "$primary"  ;;
   "Kill (K)")          xrandr --output "$secondary" --auto --off                 ;;
 esac
+
+# Sometimes background won't load on secondary display
+# Choose a random wallpaper
+feh --bg-scale $(ls ~/Pictures/wallpapers/*.png | shuf | head -n 1)

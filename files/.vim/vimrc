@@ -6,32 +6,38 @@
 "  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
 
+" ctags shit:
+"https://stackoverflow.com/questions/563616/vim-and-ctags-tips-and-tricks
+
 " Reset all autocmds (useful for sourcing $MYVIMRC" multiple times)
 autocmd!
 
 " Set the <leader> to ","
 let mapleader=","
- 
+
 " spell-check set to F6
 map <F6> :setlocal spell! spelllang=en_au<CR>
 
 " Toggle the grey bar thing
 map <F8> :call g:ToggleCC(79)<CR>
 
+" Global settings ---------------------- {{{
 syntax enable
 syntax on
 
-set t_Co=256 
+set t_Co=256
 set background=dark
-colorscheme gruvbox 
+colorscheme gruvbox
 
-set tabstop=2
 set shiftwidth=2
 set numberwidth=4
 set smartindent
 set autoindent
 set showcmd
 set wildmenu
+
+" The width of tab characters
+set tabstop=2
 
 " Activate filetype detection
 filetype on
@@ -40,12 +46,12 @@ filetype on
 "set paste
 
 " Display current line number
-set number 
+set number
 
 " Why are your numbers weird?
 set relativenumber
 
-" Spaces (not tabs)
+" Spaces (not tabs), except in Makefiles
 set expandtab
 
 " Disable error bell
@@ -54,15 +60,46 @@ set belloff=all
 " Leave 3 lines above/below cursor
 set scrolloff=3
 
-" Highligh current line
+" Highlight current line
 set cursorline
 
 " Ignoring case when searching
-set ignorecase
+"set ignorecase
 
-" Go to start/end of line in insert mode
-inoremap <leader>a <esc>A
-inoremap <leader>i <esc>I
+" Force statusline to always be displayed
+set laststatus=2
+
+" How to fold stuff
+set foldmethod=syntax
+
+" No folds when opening buffer
+set foldlevelstart=99
+
+" Shows the tabs
+set list listchars=tab:>-
+
+" ???
+set backspace=indent,eol,start
+set backspace=2
+
+" Make the status line
+set statusline=%r   " Is modifiable
+set statusline+=\   " <space>
+set statusline+=%f  " File name
+set statusline+=\   " <space>
+set statusline+=%y  " File type
+set statusline+=%=  " Switch to right side
+set statusline+=%l  " Current line
+set statusline+=/   " Seperator
+set statusline+=%L  " Total lines
+set statusline+=\   " <space>
+set statusline+=(%p " Percentage through file
+set statusline+=%%) " Percent sign
+set statusline+=\   " <space>
+
+" }}}
+
+"{{{
 
 " Edit + reload vimrc anytime
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
@@ -90,16 +127,6 @@ nnoremap <c-u> <esc>mxviwu`x
 inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x
 
-" Nice
-"nnoremap j j<c-g>
-"nnoremap k k<c-g>
-"nnoremap <up> <up><c-g>
-"nnoremap <down> <down><c-g>
-
-" ???
-set backspace=indent,eol,start
-set backspace=2
-
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
 command! -nargs=* Wq  :wq <args>
@@ -118,46 +145,60 @@ if tolower ($TERM) =~ "rxvt"
   let &t_EI = "\<Esc>[2 q"
 endif
 
-" Shows the tabs
-set list listchars=tab:>-
-
 autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
+"}}}
+
+" File initilisation ---------------------- {{{
 " Skeletons
-autocmd BufNewFile *.c 0r ~/.vim/templates/c.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 13
-autocmd BufNewFile *.cpp 0r ~/.vim/templates/cpp.skel | %s/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/g | %s/==NAME==/Jarrod Cameron (z5210220)/g | 8
-autocmd BufNewFile Makefile 0r ~/.vim/templates/make.skel | 7
-autocmd BufNewFile *.sh 0r ~/.vim/templates/bash.skel | 5
-autocmd BufNewFile *.rmd 0r ~/.vim/templates/rmd.skel | 9
-autocmd BufNewFile *.html 0r ~/.vim/templates/html.skel | 7
-autocmd BufNewFile *.py 0r ~/.vim/templates/py.skel | 4
+autocmd BufNewFile *.c      0r ~/.vim/templates/c.skel
+autocmd BufNewFile *.cpp    0r ~/.vim/templates/cpp.skel
+autocmd BufNewFile Makefile 0r ~/.vim/templates/make.skel
+autocmd BufNewFile *.sh     0r ~/.vim/templates/bash.skel
+autocmd BufNewFile *.rmd    0r ~/.vim/templates/rmd.skel
+autocmd BufNewFile *.html   0r ~/.vim/templates/html.skel
+autocmd BufNewFile *.py     0r ~/.vim/templates/py.skel
+autocmd BufNewFile *.pl     0r ~/.vim/templates/prolog.skel
+
+" ==DATE==  Current date
+" ==NAME==  Authors name
+" ==START== Starting cursor position
+autocmd BufNewFile * %substitute/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/eg
+autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
+autocmd BufNewFile * %substitute/==START==//eg
+" }}}
 
 " Turn on hlsearch when searching
 " Turn it off in insert mode
-nnoremap / :set hlsearch<cr>/
-nnoremap ? :set hlsearch<cr>?
-nnoremap n :set hlsearch<cr>n
-nnoremap N :set hlsearch<cr>N
-nnoremap # :set hlsearch<cr>#
-nnoremap * :set hlsearch<cr>*
-autocmd InsertEnter * set nohlsearch
+nnoremap / :setlocal hlsearch<cr>/
+nnoremap ? :setlocal hlsearch<cr>?
+nnoremap n :setlocal hlsearch<cr>n
+nnoremap N :setlocal hlsearch<cr>N
+nnoremap # :setlocal hlsearch<cr>#
+nnoremap * :setlocal hlsearch<cr>*
+autocmd InsertEnter * setlocal nohlsearch
+
+" Remove any trailing white space
+autocmd BufWritePre * %substitute/\s\+$//e
 
 " Reload Xresources after writing to file
 " NOTE: errors are omitted
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
 autocmd BufWritePost ~/.Xresources silent: !xrdb .Xresources
 autocmd BufWritePost ~/.config/i3/config silent :!i3-msg restart
 autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
 "autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
-"autocmd BufWritePost ~/.vim/vimrc source $MYVIMRC
 
+" Custom file settings ---------------------- {{{
 autocmd FileType rmd command! R :w | :!clear && Rscript -e "rmarkdown::render('%')" && xdg-open %<.pdf
 autocmd FileType rmd command! C :w | :!clear && Rscript -e "rmarkdown::render('%')"
 autocmd FileType rmd command! O :!clear && xdg-open %<.pdf
 autocmd FileType rmd iabbrev tbf textbf
 autocmd FileType rmd iabbrev tit textit
+autocmd FileType text setlocal spell spelllang=en_au
 
 autocmd FileType tex command! C :w | :!clear && pdflatex %
-autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf 
+autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
 
 autocmd FileType c iabbrev <buffer> \N \n
 autocmd FileType c iabbrev <buffer> \m \n
@@ -165,7 +206,13 @@ autocmd FileType c iabbrev <buffer> struc struct
 
 autocmd FileType text setlocal spell spelllang=en_au
 
-" Brackets stuff
+autocmd FileType make setlocal noexpandtab
+
+autocmd FileType vim setlocal foldmethod=marker
+autocmd FileType vim normal zM
+" }}}
+
+" Brackets stuff ---------------------- {{{
 inoremap {<CR> {<CR>}<esc>O
 inoremap [<CR> [<CR>]<esc>O<space><space>
 inoremap (<CR> (<CR>)<esc>O<space><space>
@@ -183,16 +230,24 @@ inoremap ( ()<left>
 inoremap } }<esc>:call g:InsertPair("}")<CR>a
 inoremap ] ]<esc>:call g:InsertPair("]")<CR>a
 inoremap ) )<esc>:call g:InsertPair(")")<CR>a
+" }}}
 
-" Kindergarten spelling skills
+" Kindergarten spelling skills ---------------------- {{{
 iabbrev tehn then
+iabbrev didnt didn't
+iabbrev dont don't
 iabbrev waht what
 iabbrev wehn when
+iabbrev wont won't
 iabbrev teh the
 iabbrev adn and
 iabbrev si is
 iabbrev nad and
+iabbrev ifle file
+iabbrev im I'm
+" }}}
 
+" vimscript functions  ---------------------- {{{
 " Toggle the vertical bar
 function! g:ToggleCC(width)
   if &cc == 0
@@ -208,19 +263,19 @@ function! s:GetComment()
     return "\""
   elseif &filetype == "c"
     return "\\/\\/"
+  elseif &filetype == "prolog"
+    return "%"
+  elseif &filetype == "xdefaults"
+    return "!"
   else
-    echom "CANNOT COMMENT FILE"
-    echom "UNKNOWN FILE TYPE: " . &filetype
-    return "0"
+    " Default comment type
+    return "#"
   endif
 endfunction
 
 " Toggle comments
 function! g:ToggleComments() range
   let l:comment_type=s:GetComment()
-  if l:comment_type == "0"
-    return
-  endif
   let l:is_commented=1
   for l:line_num in range(a:firstline, a:lastline)
     let l:line = getline(l:line_num)
@@ -249,4 +304,25 @@ function! g:InsertPair(bracket)
   endif
 endfunction
 
+" Search recursivly up the directory tree to find tags files (for ctags)
+set tags=./tags;/
 
+" Yeah no idea what this does
+"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+"map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+command! Htags :call g:DisplayCtagsHelp()
+
+function! g:DisplayCtagsHelp()
+  echo 'Ctrl+] - go to definition'
+  echo 'Ctrl+T - Jump back from the definition.'
+  echo 'Ctrl+W Ctrl+] - Open the definition in a horizontal split'
+  echo 'Ctrl+\ - Open the definition in a new tab'
+  echo 'Alt+] - Open the definition in a vertical split'
+  echo 'map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>'
+  echo 'map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>'
+endfunction
+" }}}

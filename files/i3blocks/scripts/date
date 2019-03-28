@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 # Author: Jarrod Cameron (z5210220)
+BACKGROUND=689d6a
+BACKGROUND=458588
+
+FOREGROUND=282828
 
 open_cal () {
   halt='read -sn 1 -p "Press any key to close...";'
@@ -9,14 +13,22 @@ open_cal () {
   urxvt -name "dropdown_cal" -e bash -c "$cal""$halt"
 }
 
-text="$(date '+%d-%m-%Y %I:%M %p')"
-echo "$text"        # Long text
-echo "$text"        # short text
-echo \#00AAFF       # Color
+# Copy date to clopboard
+copy_date () {
+  local date="$(date '+%A, %B, %d-%m-%Y %I:%M %p')"
+  local text="Copied to clipboard: \"""$date""\""
+
+  echo -n "$date" | xclip -selection clip 2> /dev/null
+  notify-send "<span font='15px'>""$text""</span>"
+}
+
+curr_date="$(date '+%A, %B, %d-%m-%Y %I:%M %p')"
+echo "<span foreground='#${FOREGROUND}' background='#${BACKGROUND}'> $curr_date </span>"
+echo "<span foreground='#${FOREGROUND}' background='#${BACKGROUND}'> $curr_date </span>"
 
 case $BLOCK_BUTTON in
-  1) open_cal  ;;  # Left click
-  2) open_cal  ;;  # Scroll click
-  3) open_cal  ;;  # Right click
+  1) open_cal   ;;  # Left click
+  2) open_cal   ;;  # Scroll click
+  3) copy_date  ;;  # Right click
 esac
 

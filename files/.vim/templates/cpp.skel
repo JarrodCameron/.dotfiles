@@ -5,7 +5,7 @@
 
 int main (void) {
 
-	
+	==START==
 
 	return 0;
 }

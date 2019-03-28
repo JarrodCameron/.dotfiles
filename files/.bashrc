@@ -9,10 +9,17 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# For more info about how to set up the powerline-shell, visit:
+# https://github.com/b-ryan/powerline-shell
+
 # Bash formatting constants
 BOLD="\e[1m"
 ULINE="\e[4m"
 RESET="\e[0m"
+
+function _update_ps1() {
+    PS1=$(powerline-shell $?)
+}
 
 # If not running interactively, don't do anything
 case $- in
@@ -26,6 +33,9 @@ HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
+
+# Change directory using filename
+shopt -s autocd
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=20000
@@ -132,9 +142,58 @@ fi
 # CUSTOM #
 ##########
 
-#[ ! -z "$(ps -x | grep "urxvt" | grep -v "grep")" ] || neofetch
+# Export colors used in man pages, less, etc
+export LESS_TERMCAP_mb=$(printf "\e[1;34m")
+export LESS_TERMCAP_md=$(printf "\e[1;34m")
+export LESS_TERMCAP_me=$(printf "\e[0m")
+export LESS_TERMCAP_se=$(printf "\e[0m")
+export LESS_TERMCAP_so=$(printf "\e[1;44;33m")
+export LESS_TERMCAP_ue=$(printf "\e[0m")
+export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
-# Bash with vim keys
+#if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+#    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+#fi
+
+# compile/run the cs3231 kernel
+kernel () {
+
+  case "$1" in
+    "compile")
+      cd "~/cs3231/asst2-src/kern/compile/ASST2/"
+      bmake depend && bmake && bmake install ;;
+    "run")
+      cd "~/cs3231/root/"
+      sys161 kernel $2 ;;
+    *)
+      echo "[kernel compile] -> compule the os161 kernel"
+      echo "[kernel run <args>] -> run the os161 kernel with <args>" ;;
+  esac
+}
+
+# cd and then ls
+cl () {
+  cd "$*" && ls
+}
+
+# Search for files using find
+vfind () {
+  local FILES="$(find $*)"
+  if [ -n "$FILES" ]; then
+    vim -p $FILES
+  fi
+}
+
+# Search using for files matching greps output
+# Open up all files in vim  (tab mode)
+vgrep () {
+  local FILES="$(grep --files-with-matches $* )"
+  if [ -n "$FILES" ]; then
+    vim -p $FILES
+  fi
+}
+
+# Bash with vim keys (god tier bash mode)
 set -o vi
 
 ## `export' sets global variables
@@ -145,20 +204,26 @@ export TERMINAL="$(which urxvt)"
 # Copy
 alias copy="xclip -selection clip 2> /dev/null"
 
+# COMP3411 stuff
+alias prolog="prolog -q"
+alias swipl="swipl --traditional"
+
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
 alias p="python3 -q"
 alias gdb="gdb -q"
-alias v="vim"
+alias rr="ranger"
 alias bim="vim"
 alias gim="vim"
+alias v="vim"
 alias LS="ls"
 alias sl="ls"
 alias s="ls"
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
+alias .....="cd ../../../.."
 
 # Open up a tar file
 alias untar="tar -xvf"
@@ -167,25 +232,8 @@ alias untar="tar -xvf"
 stty -ixon
 
 echo -e "$BOLD""To do list:""$RESET"
-echo -e "1) wargames (3/23)"
-echo -e "2) Leetcode (71/100)"
-echo -e "3) gruvbox + airline"
-echo -e "4) entr to restart compton"
-echo -e "5) QR scanner with pipe"
-echo -e "6) i3-gaps resize mode"
-echo -e "7) Learn VS 14"
-echo -e ""
-echo -e "$BOLD""COMP3121 Lectures:$RESET"
-echo -e "07) Ep. 18 0:45           08) Ep. 17 1:43"
-echo -e "09) Ep. 16 0:40           10) Ep. 15 1:49"
-echo -e "11) Ep. 14 0:50           12) Ep. 12 0:43"
-echo -e "13) Ep. 13 0:57           14) Ep. 11 0:38"
-echo -e "15) Ep. 10 1:50           16) Ep. 9  0:48"
-echo -e "17) Ep. 8  1:36           18) Ep. 7  0:52"
-echo -e "19) Ep. 6  1:29           20) Ep. 5  0:48"
-echo -e "21) Ep. 4  1:45           22) Ep. 3  0:36"
-echo -e "23) Ep. 2  0:49           24) Ep. 1  1:59"
-echo -e "$BOLD""COMP3841 Lectures:""$RESET"
-echo -e "[01] [02] [03] [04]"
-echo -e "[05] [06] [07] [08]"
-echo -e "[09] [10] [11]"
+echo "Wifi module not working (see bug)"
+echo "volume block can't change to hdmi"
+echo "cleanup powerline (prompt)"
+echo "fixup dotfiles script"
+

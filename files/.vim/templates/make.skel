@@ -1,10 +1,11 @@
-# Author: Jarrod Cameron (z5210220)
+# Author: ==NAME==
+# Date:   ==DATE==
 
 CC=gcc
 CFLAGS=-Wall -Wextra -ggdb 
 
 all:
-	
+	==START==
 
 clean:
 	rm -f *.o

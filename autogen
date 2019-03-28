@@ -142,7 +142,7 @@ fi
 # Link the i3 window manager
 if [ "$(grep -E "{full}|{i3}" <<< "$options")" ]; then
   mkdir "$HOME""/.config/" -p
-  src="$HOME""/.dotfiles/files/i3" 
+  src="$HOME""/.dotfiles/files/i3"
   dst="$HOME""/.config/i3"
   rm -rf "$dst"
   ln -s "$src" "$dst"
@@ -152,7 +152,7 @@ fi
 # link the i3blocks
 if [ "$(grep -E "{full}|{i3blocks}" <<< "$options")" ]; then
   mkdir "$HOME""/.config/" -p
-  src="$HOME""/.dotfiles/files/i3blocks" 
+  src="$HOME""/.dotfiles/files/i3blocks"
   dst="$HOME""/.config/i3blocks"
   rm -rf "$dst"
   ln -s "$src" "$dst"
@@ -161,7 +161,7 @@ fi
 
 # link bashrc
 if [ "$(grep -E "{full}|{bash}" <<< "$options")" ]; then
-  src="$HOME""/.dotfiles/files/bashrc" 
+  src="$HOME""/.dotfiles/files/bashrc"
   dst="$HOME""/.bashrc"
   rm -rf "$dst"
   ln -s "$src" "$dst"
@@ -170,18 +170,9 @@ fi
 
 # link scripts
 if [ "$(grep -E "{full}|{scripts}" <<< "$options")" ]; then
-  src="$HOME""/.dotfiles/files/scripts" 
+  src="$HOME""/.dotfiles/files/scripts"
   dst="$HOME""/.scripts"
   rm -rf "$dst"
   ln -s "$src" "$dst"
   echo -e "$GREEN""Successfully added: ""$BOLD""scripts""$RESET"sh
-
-
-
-
-
-
-
-
-
 fi

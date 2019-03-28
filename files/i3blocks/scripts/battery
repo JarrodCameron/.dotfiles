@@ -3,58 +3,20 @@
 # Author: Jarrod Cameron (z5210220)
 
 # NOTE: Using `entr' to wait for the files to update doesn't work.
-#       I assume this is because the files are generated when 
+#       I assume this is because the files are generated when
 #       being read.
 
-# Pick color depending on remaining battery
-# Colors are picked from:
-#   https://mycolor.space/gradient3
-# Selected colors:
-# - 00FF00 (Green)
-# - 00FF00 (Green)
-# - FF0000 (Red)
-get_color () {
-
-  if [ $level -le "8" ]; then
-    retval="ff0000"
-  elif [ $level -le "16" ]; then
-    retval="f36300"
-  elif [ $level -le "25" ]; then
-    retval="de9200"
-  elif [ $level -le "33" ]; then
-    retval="c2b700"
-  elif [ $level -le "41" ]; then
-    retval="a0d600"
-  elif [ $level -le "50" ]; then
-    retval="8ae400"
-  elif [ $level -le "58" ]; then
-    retval="67f100"
-  else
-    retval="00ff00"
-  fi
-
-  # Return the color
-  echo $retval
-
-}
+FOREGROUND=282828
+BACKGROUND=458588
 
 # Remaining battery level
 level=$(cat /sys/class/power_supply/BAT0/capacity)
 
 if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
-  echo "Battery: $level""%"    # Long text
-  echo "Bat: $level""%"        # Short text
+  TEXT="Battery: $level""%"
 else
-  echo "Charging: $level""%"   # Long text
-  echo "Chr: $level""%"        # Short text
+  TEXT="Charging: $level%"
 fi
 
-#if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
-#  echo "🔋 $level""%"    # Long text
-#  echo "🔋 $level""%"    # Short text
-#else
-#  echo "⚡ $level""%"    # Long text
-#  echo "⚡ $level""%"    # Shoft text
-#fi
-
-echo \#$(get_color)
+echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"
+echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"

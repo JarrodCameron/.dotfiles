@@ -2,6 +2,9 @@
 
 # Author: Jarrod Cameron (z5210220)
 
+FOREGROUND=282828
+BACKGROUND=458588
+
 # Returns the average temperature of the cpu cores
 get_temp () {
   temps="$(sensors | awk '/^Core / { print $3 }' | sed 's/[+°C]//g')"
@@ -20,49 +23,6 @@ get_temp () {
 get_usage () {
   idle=$(mpstat 1 1 | awk '/Average:/ {print $12}')
   echo "$(echo "scale=2; 100 - $idle" | bc)"
-}
-
-# Pick color depending on CPU usage
-# Colors are picked from:
-#   https://mycolor.space/gradient3
-# Selected colors:
-# - 00FF00 (Green)
-# - FFFF00 (Yellow)
-# - FF0000 (Red)
-get_color () {
-
-  # Easier to compare integer values
-  int_usage=$(python3 -c "print (int (float ("$usage")))")
-
-  if [ $int_usage -le "8" ]; then
-    retval="00ff00"
-  elif [ $int_usage -le "16" ]; then
-    retval="6dff00"
-  elif [ $int_usage -le "25" ]; then
-    retval="9aff00"
-  elif [ $int_usage -le "33" ]; then
-    retval="bdff00"
-  elif [ $int_usage -le "41" ]; then
-    retval="dbff00"
-  elif [ $int_usage -le "50" ]; then
-    retval="eaef00"
-  elif [ $int_usage -le "58" ]; then
-    retval="f6e000"
-  elif [ $int_usage -le "66" ]; then
-    retval="ffd000"
-  elif [ $int_usage -le "75" ]; then
-    retval="ffad00"
-  elif [ $int_usage -le "83" ]; then
-    retval="ff8700"
-  elif [ $int_usage -le "91" ]; then
-    retval="ff5b00"
-  else
-    retval="ff0000"
-  fi
-
-  # Return the color
-  echo $retval
-
 }
 
 # Display info about CPU usage
@@ -85,7 +45,7 @@ notify () {
 
 usage=$(get_usage)
 temp=$(get_temp)
-text="CPU: ""$usage""% (""$temp""°C)"
+TEXT="CPU: ""$usage""% (""$temp""°C)"
 
 case $BLOCK_BUTTON in
   1) notify        ;;& # Left click
@@ -93,6 +53,5 @@ case $BLOCK_BUTTON in
   3) notify        ;;& # Right click
 esac
 
-echo "$text"     # Long text
-echo "$text"     # Short text
-echo \#$(get_color)
+echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"
+echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"

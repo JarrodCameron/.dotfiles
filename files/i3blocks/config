@@ -8,36 +8,55 @@
 #
 # Documentation:
 # https://github.com/vivien/i3blocks/wiki/Writing-Your-Own-Blocklet
-
+#
 # How to have json output
 # https://i3wm.org/docs/i3bar-protocol.html#_blocks_in_detail
+#
+# Pango syntax
+# https://developer.gnome.org/pango/stable/PangoMarkupFormat.html
 
 command="$HOME/.config/i3blocks/scripts/$BLOCK_NAME"
-separator_block_width=15
-markup=none
-color=#d79921
+separator_block_width=0
+markup=pango
+color=#282828
+separator=false
+
+[separator]
+full_text=<span size='12000' foreground='#689d6a'></span>
 
 [memory]
-separator=true
 interval=5
 
-[wifi]
-separator=true
-interval=10
+[separator]
+full_text=<span size='12000' background='#689d6a' foreground='#458588'></span>
 
 [processors]
 interval=5
-separator=true
+
+[separator]
+full_text=<span size='12000' background='#458588' foreground='#689d6a'></span>
+
+[wifi]
+interval=10
+
+[separator]
+full_text=<span size='12000' background='#689d6a' foreground='#458588'></span>
 
 [battery]
-separator=true
-interval=5
+interval=2
+
+[separator]
+full_text=<span size='12000' background='#458588' foreground='#689d6a'></span>
 
 [volume]
 interval=once
 signal=12
-separator=true
+
+[separator]
+full_text=<span size='12000' background='#689d6a' foreground='#458588'></span>
 
 [date]
 interval=5
-separator=true
+
+[separator]
+full_text=<span size='12000' background='#458588'></span>
