@@ -25,25 +25,25 @@ separator=false
 full_text=<span size='12000' foreground='#689d6a'></span>
 
 [memory]
-interval=5
+interval=2
 
 [separator]
 full_text=<span size='12000' background='#689d6a' foreground='#458588'></span>
 
 [processors]
-interval=5
+interval=4
 
 [separator]
 full_text=<span size='12000' background='#458588' foreground='#689d6a'></span>
 
 [wifi]
-interval=10
+interval=5
 
 [separator]
 full_text=<span size='12000' background='#689d6a' foreground='#458588'></span>
 
 [battery]
-interval=2
+interval=1
 
 [separator]
 full_text=<span size='12000' background='#458588' foreground='#689d6a'></span>

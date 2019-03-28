@@ -78,6 +78,9 @@ set foldlevelstart=99
 " Shows the tabs
 set list listchars=tab:>-
 
+" When using the `find' command search recursively down
+"set path=**
+
 " ???
 set backspace=indent,eol,start
 set backspace=2
