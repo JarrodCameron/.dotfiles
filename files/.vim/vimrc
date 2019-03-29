@@ -55,7 +55,7 @@ set relativenumber
 set expandtab
 
 " Disable error bell
-set belloff=all
+"set belloff=all
 
 " Leave 3 lines above/below cursor
 set scrolloff=3
@@ -142,7 +142,8 @@ command! -nargs=* Sp  :sp <args>
 command! -nargs=* SP  :sp <args>
 
 " If the 'rxvt' is a substring of $TERM
-if tolower ($TERM) =~ "rxvt"
+" Make sure we are not on the CSE machines
+if tolower ($TERM) =~ "rxvt" && $USER !=? "z5210220"
   let &t_SI = "\<Esc>[6 q"
   let &t_SR = "\<Esc>[4 q"
   let &t_EI = "\<Esc>[2 q"
