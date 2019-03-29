@@ -14,7 +14,7 @@
 #      "sudo ~/.scripts/brightness <args>"
 #    NOTE: Full path is needed
 
-ITERATIONS=10
+ITERATIONS=15
 CURR_BRIGHT=$(cat /sys/class/backlight/intel_backlight/brightness)
 MAX_BRIGHT=$(cat /sys/class/backlight/intel_backlight/max_brightness)
 MIN_BRIGHT=0

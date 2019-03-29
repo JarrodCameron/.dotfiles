@@ -19,7 +19,7 @@ let mapleader=","
 map <F6> :setlocal spell! spelllang=en_au<CR>
 
 " Toggle the grey bar thing
-map <F8> :call g:ToggleCC(79)<CR>
+map <silent> <F8> :call g:ToggleCC(79)<CR>
 
 " Global settings ---------------------- {{{
 syntax enable

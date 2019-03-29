@@ -156,20 +156,35 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 #fi
 
 # compile/run the cs3231 kernel
-kernel () {
-
+kern () {
   case "$1" in
-    "compile")
-      cd "~/cs3231/asst2-src/kern/compile/ASST2/"
-      bmake depend && bmake && bmake install ;;
+    "comp")
+      cd "$HOME""/cs3231/asst2-src/kern/compile/ASST2/"
+      clear; bmake depend && bmake && bmake install ;;
+    "user")
+      cd "$HOME""/cs3231/asst2-src/"
+      clear; ./configure && bmake && bmake install ;;
     "run")
-      cd "~/cs3231/root/"
-      sys161 kernel $2 ;;
+      cd "$HOME"/cs3231/root/
+      clear; sys161 kernel $2 ;;
+    "wrun")
+      cd "$HOME"/cs3231/root/
+      clear; sys161 -w kernel $2 ;;
+    "gdb")
+      cd "$HOME"/cs3231/root/
+      clear; os161-gdb kernel -q $2 ;;
     *)
-      echo "[kernel compile] -> compule the os161 kernel"
-      echo "[kernel run <args>] -> run the os161 kernel with <args>" ;;
+      echo -e "$BOLD""[kern comp]"$RESET" -> compile the os161 kernel (uses \"bmake depend\",
+                  \"bmake\", and \"bmake install\")"
+      echo -e "$BOLD""[kern user]"$RESET" -> compile the userland programs (uses \"./configure\",
+                  \"bmake\", and \"bmake install\")"
+      echo -e "$BOLD""[kern run <args>]"$RESET" -> run the os161 kernel with <args>"
+      echo -e "$BOLD""[kern wrun <args>]"$RESET" -> run the os161 kernel, with debug flag, with <args    >"
+      echo -e "$BOLD""[kern gdb -q <args>]"$RESET" -> run the \"os161-gdb kernel\" with <args>"
+      echo "Are you in the 3231 subshell...?" ;;
   esac
 }
+
 
 # cd and then ls
 cl () {
@@ -236,4 +251,3 @@ echo "Wifi module not working (see bug)"
 echo "volume block can't change to hdmi"
 echo "cleanup powerline (prompt)"
 echo "fixup dotfiles script"
-
