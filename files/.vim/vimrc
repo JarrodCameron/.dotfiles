@@ -55,7 +55,7 @@ set relativenumber
 set expandtab
 
 " Disable error bell
-set belloff=all
+"set belloff=all
 
 " Leave 3 lines above/below cursor
 set scrolloff=3

@@ -38,7 +38,12 @@ function restore () {
   fi
 
   ln -s "${DOTFILES_SRC}""/""${name}" "${path}"
-  echo -e "${GREEN}""${path} successfully restored""${RESET}"
+  local retval="$?"
+  if [ "${retval}" = "0" ]; then
+    echo -e "${GREEN}""${path} successfully restored""${RESET}"
+  else
+    echo -e "${RED}"ERROR: \`ln\' returned ${retval}"${RESET}"
+  fi
 }
 
 # Create a `files' folder to store the files
