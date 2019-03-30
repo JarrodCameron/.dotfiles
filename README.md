@@ -13,14 +13,14 @@ Dot files for:
 - `.vim`
 - `.Xresources`
 
-## Usage
+## Install
 
 All that is needed to the clone the repository:
 ```{sh}
 git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 ```
 
-### `backup.sh` Usage
+## `backup.sh` Usage
 
 `backup.sh` is used to copy configuration files from the user.
 This can be used by running the following commands:
@@ -29,12 +29,7 @@ cd ~/.dotfiles
 bash backup.sh
 ```
 
-To back up more files add the following line to the end of `backup.sh`:
-```{sh}
-back_up /path/to/file
-```
-
-### `restore.sh` Usage
+## `restore.sh` Usage
 
 `restore.sh` is used to create symbolic links
 from files around the system to the backed up files.
@@ -44,13 +39,24 @@ cd ~/.dotfiles
 bash restore.sh
 ```
 
-To add another file to restore add the following line to the end of `restore.sh`:
-```{sh}
-restore name_of_file /path/to/file
-```
+## Hacking
 
-#### Hacking
+### Change default directory
 
 Currently `backup.sh` and `restore.sh` accesses all files from
 `DOTFILES_SRC` which is defined in both files.
 NOTE: moving `.dotfiles` requires `DOTFILES_SRC` to up updated.
+
+### Adding more files to `backup.sh`
+
+To back up more files add the following line to the end of `backup.sh`:
+```{sh}
+back_up /path/to/file
+```
+
+### Adding more files to `restore.sh`
+
+To add another file to restore add the following line to the end of `restore.sh`:
+```{sh}
+restore name_of_file /path/to/file
+```
