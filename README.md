@@ -1,8 +1,8 @@
 # .dotfiles
 
 These are my .dotfiles (files often used for configuring other programs).
-Also two scripts are used `backup.sh` and `restore.sh` which are used to
-automate the backing up process
+Two scripts are used, `backup.sh` and `restore.sh`, to automate the
+backing up process.
 
 Dot files for:
 - `.bashrc`
