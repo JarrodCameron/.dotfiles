@@ -1,30 +1,62 @@
 # .dotfiles
 
+These are my .dotfiles (files often used for configuring other programs).
+Two scripts are used, `backup.sh` and `restore.sh`, to automate the
+backing up process.
+
 Dot files for:
-- Vim
-- i3
-- i3blocks
-- Bash
-- Handy scripts
-- Wallpapers
-- Xresources
+- `.bashrc`
+- `i3`
+- `i3blocks`
+- `.scripts` (scripts used for automating various tasks)
+- `.tmux.conf`
+- `.vim`
+- `.Xresources`
 
-`autogen` is a tool for keeping all these files in one location
-and using symbolic links to allow other programs to access them.
+## Install
 
-# Install
-
-To install all dotfiles use the following commands:
-
+All that is needed to the clone the repository:
 ```{sh}
 git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
-~/.dotfiles/autogen full
 ```
 
-However, to install a single configuration (such as `.vim`), use
-the following commands:
+## `backup.sh` Usage
 
+`backup.sh` is used to copy configuration files from the user.
+This can be used by running the following commands:
 ```{sh}
-git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
-~/.dotfiles/autogen vim
+cd ~/.dotfiles
+bash backup.sh
+```
+
+## `restore.sh` Usage
+
+`restore.sh` is used to create symbolic links
+from files around the system to the backed up files.
+This can be used by running the following commands:
+```{sh}
+cd ~/.dotfiles
+bash restore.sh
+```
+
+## Hacking
+
+### Change default directory
+
+Currently `backup.sh` and `restore.sh` accesses all files from
+`DOTFILES_SRC` which is defined in both files.
+NOTE: moving `.dotfiles` requires `DOTFILES_SRC` to up updated.
+
+### Adding more files to `backup.sh`
+
+To back up more files add the following line to the end of `backup.sh`:
+```{sh}
+back_up /path/to/file
+```
+
+### Adding more files to `restore.sh`
+
+To add another file to restore add the following line to the end of `restore.sh`:
+```{sh}
+restore name_of_file /path/to/file
 ```

@@ -9,8 +9,17 @@
 FOREGROUND=282828
 BACKGROUND=458588
 
+function min () {
+  if [ "$1" -lt "$2" ]; then
+    echo "$1"
+  else
+    echo "$2"
+  fi
+}
+
 # Remaining battery level
 level=$(cat /sys/class/power_supply/BAT0/capacity)
+level="$(min "${level}" 100)"
 
 if [ "$(cat /sys/class/power_supply/BAT0/status)" = "Discharging" ]; then
   TEXT="Battery: $level""%"
