@@ -192,8 +192,8 @@ cl () {
 }
 
 # Search for files using find
-vfind () {
-  local FILES="$(find $*)"
+vf () {
+  local FILES="$(find -name $*)"
   if [ -n "$FILES" ]; then
     vim -p $FILES
   fi
@@ -222,6 +222,9 @@ alias copy="xclip -selection clip 2> /dev/null"
 # COMP3411 stuff
 alias prolog="prolog -q"
 alias swipl="swipl --traditional"
+
+alias gs="git status"
+alias gb="git branch"
 
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
