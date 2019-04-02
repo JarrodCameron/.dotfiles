@@ -115,16 +115,16 @@ bindsym $mod+Shift+r restart
 #bindsym $mod+Shift+t
 
 bindsym $mod+y exec google-chrome --new-window https://www.youtube.com/
-bindsym $mod+Shift+y resize shrink width 1 px or 1 ppt
+bindsym $mod+Shift+y resize shrink width 2 px or 2 ppt
 
 #bindsym $mod+u
-bindsym $mod+Shift+u resize grow height 1 px or 1 ppt
+bindsym $mod+Shift+u resize grow height 2 px or 2 ppt
 
 #bindsym $mod+i
-bindsym $mod+Shift+i resize shrink height 1 px or 1 ppt
+bindsym $mod+Shift+i resize shrink height 2 px or 2 ppt
 
 bindsym $mod+o exec google-chrome --new-window https://www.office.com/
-bindsym $mod+Shift+o resize grow width 1 px or 1 ppt
+bindsym $mod+Shift+o resize grow width 2 px or 2 ppt
 
 bindsym $mod+p exec urxvt -name "dropdown_calculator" -e python3 -q
 bindsym $mod+Shift+p exec pavucontrol
