@@ -189,12 +189,11 @@ autocmd InsertEnter * setlocal nohlsearch
 " Remove any trailing white space
 autocmd BufWritePre * %substitute/\s\+$//e
 
-" Reload Xresources after writing to file
-" NOTE: errors are omitted
+" Refresh program after saving config file
 autocmd BufWritePost $MYVIMRC source $MYVIMRC
-autocmd BufWritePost ~/.Xresources silent: !xrdb .Xresources
-autocmd BufWritePost ~/.config/i3/config silent :!i3-msg restart
-autocmd BufWritePost ~/.config/i3blocks/config silent: !i3-msg restart
+autocmd BufWritePost ~/.dotfiles/files/.Xresources silent: !xrdb .Xresources
+autocmd BufWritePost ~/.dotfiles/files/i3/config silent :!i3-msg restart
+autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
 "autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
 
 " Custom file settings ---------------------- {{{
@@ -204,6 +203,8 @@ autocmd FileType rmd command! O :!clear && xdg-open %<.pdf
 autocmd FileType rmd iabbrev tbf textbf
 autocmd FileType rmd iabbrev tit textit
 autocmd FileType text setlocal spell spelllang=en_au
+
+autocmd FileType html command! R :w | :!google-chrome --new-window %
 
 autocmd FileType tex command! C :w | :!clear && pdflatex %
 autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
