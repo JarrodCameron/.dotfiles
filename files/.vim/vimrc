@@ -102,7 +102,7 @@ set statusline+=\   " <space>
 
 " }}}
 
-"{{{
+" Function mappings -------------------- {{{
 
 " Edit + reload vimrc anytime
 nnoremap <leader>ev :tabnew $MYVIMRC<CR>
@@ -127,8 +127,12 @@ nnoremap P :r !xclip -selection clip -out<CR>
 " Convert word to upper case, not recursive
 inoremap <c-u> <esc>mxviwu`xa
 nnoremap <c-u> <esc>mxviwu`x
+
 inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x
+
+" Find the file, look recursibly
+nnoremap <leader>f :find **/
 
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
