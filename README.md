@@ -13,6 +13,10 @@ Dot files for:
 - `.vim`
 - `.Xresources`
 
+Obligatory screenshot:
+
+![screenshot](screenshots/screenshot.png)
+
 ## Install
 
 All that is needed to the clone the repository:
