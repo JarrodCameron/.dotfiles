@@ -226,6 +226,7 @@ alias swipl="swipl --traditional"
 alias gs="git status"
 alias gb="git branch"
 
+alias tag="vim -t $*"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
@@ -249,8 +250,8 @@ alias untar="tar -xvf"
 # Disable terminal beeps
 stty -ixon
 
-echo -e "$BOLD""To do list:""$RESET"
-echo "Wifi module not working (see bug)"
-echo "volume block can't change to hdmi"
-echo "cleanup powerline (prompt)"
-echo "dot files script with sh"
+if [ -r "$HOME""/.todo" ]; then
+  echo -e "$BOLD""To do list:""$RESET"
+  nl "$HOME""/.todo"
+fi
+
