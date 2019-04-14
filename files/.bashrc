@@ -250,8 +250,9 @@ alias untar="tar -xvf"
 # Disable terminal beeps
 stty -ixon
 
+# Print out todo list
 if [ -r "$HOME""/.todo" ]; then
   echo -e "$BOLD""To do list:""$RESET"
-  nl "$HOME""/.todo"
+  sed '/^$/d' .todo | nl -w 1 -b t -s ') '
 fi
 
