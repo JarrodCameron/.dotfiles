@@ -153,6 +153,16 @@ if tolower ($TERM) =~ "rxvt" && $USER !=? "z5210220"
   let &t_EI = "\<Esc>[2 q"
 endif
 
+" Turn on hlsearch when searching
+" Turn it off in insert mode
+nnoremap / :setlocal hlsearch<cr>/
+nnoremap ? :setlocal hlsearch<cr>?
+nnoremap n :setlocal hlsearch<cr>n
+nnoremap N :setlocal hlsearch<cr>N
+nnoremap # :setlocal hlsearch<cr>#
+nnoremap * :setlocal hlsearch<cr>*
+autocmd InsertEnter * setlocal nohlsearch
+
 autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
 "}}}
@@ -176,16 +186,6 @@ autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
 autocmd BufNewFile * %substitute/==START==//eg
 " }}}
 
-" Turn on hlsearch when searching
-" Turn it off in insert mode
-nnoremap / :setlocal hlsearch<cr>/
-nnoremap ? :setlocal hlsearch<cr>?
-nnoremap n :setlocal hlsearch<cr>n
-nnoremap N :setlocal hlsearch<cr>N
-nnoremap # :setlocal hlsearch<cr>#
-nnoremap * :setlocal hlsearch<cr>*
-autocmd InsertEnter * setlocal nohlsearch
-
 " Remove any trailing white space
 autocmd BufWritePre * %substitute/\s\+$//e
 
@@ -205,6 +205,7 @@ autocmd FileType rmd iabbrev tit textit
 autocmd FileType text setlocal spell spelllang=en_au
 
 autocmd FileType html command! R :w | :!google-chrome --new-window %
+autocmd FileType html setlocal cursorcolumn
 
 autocmd FileType tex command! C :w | :!clear && pdflatex %
 autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
