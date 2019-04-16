@@ -219,13 +219,10 @@ export TERMINAL="$(which urxvt)"
 # Copy
 alias copy="xclip -selection clip 2> /dev/null"
 
-# COMP3411 stuff
-alias prolog="prolog -q"
-alias swipl="swipl --traditional"
-
 alias gs="git status"
 alias gb="git branch"
 
+alias csc="cscope -R"
 alias tag="vim -t $*"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
@@ -253,6 +250,6 @@ stty -ixon
 # Print out todo list
 if [ -r "$HOME""/.todo" ]; then
   echo -e "$BOLD""To do list:""$RESET"
-  sed '/^$/d' .todo | nl -w 1 -b t -s ') '
+  sed '/^$/d' "$HOME""/.todo" | nl -w 1 -b t -s ') '
 fi
 

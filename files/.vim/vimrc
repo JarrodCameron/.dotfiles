@@ -132,7 +132,7 @@ inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x
 
 " Find the file, look recursibly
-nnoremap <leader>f :find **/
+nnoremap <leader>f :cscope find f<space>
 
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
@@ -213,6 +213,7 @@ autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
 autocmd FileType c iabbrev <buffer> \N \n
 autocmd FileType c iabbrev <buffer> \m \n
 autocmd FileType c iabbrev <buffer> struc struct
+autocmd FileType c if filereadable("cscope -R") | execute "cscope add cscope.out" | endif
 
 autocmd FileType text setlocal spell spelllang=en_au
 
