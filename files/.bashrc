@@ -159,10 +159,10 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 kern () {
   case "$1" in
     "comp")
-      cd "$HOME""/cs3231/asst2-src/kern/compile/ASST2/"
+      cd "$HOME""/cs3231/asst3-src/kern/compile/ASST3/"
       clear; bmake depend && bmake && bmake install ;;
     "user")
-      cd "$HOME""/cs3231/asst2-src/"
+      cd "$HOME""/cs3231/asst3-src/"
       clear; ./configure && bmake && bmake install ;;
     "run")
       cd "$HOME"/cs3231/root/
