@@ -208,6 +208,11 @@ vgrep () {
   fi
 }
 
+# Opens the pdf in my pdf viewer (evince)
+pdf () {
+  evince $* 2> /dev/null
+}
+
 # Bash with vim keys (god tier bash mode)
 set -o vi
 
@@ -223,7 +228,7 @@ alias gs="git status"
 alias gb="git branch"
 
 alias csc="cscope -R"
-alias tag="vim -t $*"
+alias tag="vim -t"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias r2="radare2"
