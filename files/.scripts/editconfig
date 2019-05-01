@@ -30,6 +30,7 @@ options+="i3blocks\n"
 options+=".bashrc\n"
 options+=".Xresources\n"
 options+="compton\n"
+options+="todo\n"
 options+="home_scripts ->\n"
 options+="i3blocks_scripts ->\n"
 
@@ -49,6 +50,7 @@ case "$output" in
   ".bashrc")     cmd="$EDITOR "$HOME"/.bashrc"                                ;;
   ".Xresources") cmd="$EDITOR "$HOME"/.Xresources"                            ;;
   "compton")     cmd="$EDITOR "$HOME"/.config/compton/config"                 ;;
+  "todo")        cmd="$EDITOR "$HOME"/.todo"                                  ;;
   "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   *)             notify-send "Invalid config: $output" ; exit 1 ;;
