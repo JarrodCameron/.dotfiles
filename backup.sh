@@ -1,7 +1,4 @@
-#!/usr/bin/env bash
-
-# Author: Jarrod Cameron (z5210220)
-# Date:   18/03/19 20:37
+#!/bin/sh
 
 # Colors
 RED="\e[31m"
@@ -13,22 +10,22 @@ RESET="\e[0m"
 # If changed don't forget to update restore.sh
 DOTFILES_SRC="${HOME}""/.dotfiles/files/"
 
-function back_up () {
+back_up () {
   local path="$1"
   if [ -L "${path}" ]; then
-    echo -e "${RED}""${path} is a symbolic link. Ignored.""${RESET}"
+    echo "${RED}""${path} is a symbolic link. Ignored.""${RESET}"
   elif [ -e "${path}" ]; then
     cp -r "${path}" "${DOTFILES_SRC}"
-    echo -e "${GREEN}""${path} successfully backed up.""${RESET}"
+    echo "${GREEN}""${path} successfully backed up.""${RESET}"
   else
-    echo -e "${RED}""${path} does not exist.""${RESET}"
+    echo "${RED}""${path} does not exist.""${RESET}"
   fi
 }
 
 # Create a `files' folder to store the files
 if [ ! -d "${DOTFILES_SRC}" ]; then
   mkdir "${DOTFILES_SRC}"
-  echo -e "${BOLD}""Creating directory in "'$DOTFILES_SRC'"${RESET}"
+  echo "${BOLD}""Creating directory in "'$DOTFILES_SRC'"${RESET}"
 fi
 
 # When adding/removing file remember to modify `restore.sh'

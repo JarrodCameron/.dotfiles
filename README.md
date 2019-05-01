@@ -30,7 +30,7 @@ git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 This can be used by running the following commands:
 ```{sh}
 cd ~/.dotfiles
-bash backup.sh
+sh backup.sh
 ```
 
 ## `restore.sh` Usage
@@ -40,7 +40,7 @@ from files around the system to the backed up files.
 This can be used by running the following commands:
 ```{sh}
 cd ~/.dotfiles
-bash restore.sh
+sh restore.sh
 ```
 
 ## Hacking

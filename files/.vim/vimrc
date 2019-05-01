@@ -196,6 +196,9 @@ autocmd BufWritePost ~/.dotfiles/files/i3/config silent :!i3-msg restart
 autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
 "autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
 
+" Vim jumps to the last position when reopening a file
+"autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
 " Custom file settings ---------------------- {{{
 autocmd FileType rmd command! R :w | :!clear && Rscript -e "rmarkdown::render('%')" && xdg-open %<.pdf
 autocmd FileType rmd command! C :w | :!clear && Rscript -e "rmarkdown::render('%')"
