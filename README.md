@@ -24,7 +24,7 @@ All that is needed to the clone the repository:
 git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 ```
 
-## `backup.sh` Usage
+## `backup.sh` usage
 
 `backup.sh` is used to copy configuration files from the user.
 This can be used by running the following commands:
@@ -33,7 +33,7 @@ cd ~/.dotfiles
 sh backup.sh
 ```
 
-## `restore.sh` Usage
+## `restore.sh` usage
 
 `restore.sh` is used to create symbolic links
 from files around the system to the backed up files.
