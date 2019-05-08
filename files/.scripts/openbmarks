@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   08/05/19 15:30
+
+# TODO: Test case with space in bookmark name
+
+declare -A bm_dict
+
+while read -r bm_name; do
+  read -r bm_url
+
+  # Clear leading and trailing white space and quotation marks
+  bm_url="$(echo "$bm_url" | sed  's/^"\(.*\)"$/\1/')"
+  bm_name="$(echo "$bm_name" | sed  's/^"\(.*\)"$/\1/')"
+
+  bm_dict["$bm_name"]+="$bm_url"
+
+  echo $bm_name - $bm_url
+done <<< "$(jq ".roots.bookmark_bar.children[] | .name, .url" "$HOME""/.config/google-chrome/Default/Bookmarks")"
+
+
+for name in "${!bm_dict[@]}"
+do
+  echo "$name -> ${bm_dict["$name"]}"
+done
+
+#cat Bookmarks | sed -n '/^ *name: [^ ]*,\r/p'
+
+
+
+
+

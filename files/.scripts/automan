@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   05/05/19 19:28
+
+BLACK="#282828"
+WHITE="#ebdbb2"
+GRAY="#1d2021"
+AQUA="#689d68"
+COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
+
+# Template for reading line by line
+#while IFS=: read -r p || [ -n "$p" ]
+#do
+#  printf '%s\n' "$p"
+#done < $(man -k .")
+
+
+
+man -k . | dmenu -i -l 30 $COLORS
+
+
+
+
