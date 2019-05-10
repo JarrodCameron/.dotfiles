@@ -155,37 +155,6 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 #    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 #fi
 
-# compile/run the cs3231 kernel
-kern () {
-  case "$1" in
-    "comp")
-      cd "$HOME""/cs3231/asst3-src/kern/compile/ASST3/"
-      clear; bmake depend && bmake && bmake install ;;
-    "user")
-      cd "$HOME""/cs3231/asst3-src/"
-      clear; ./configure && bmake && bmake install ;;
-    "run")
-      cd "$HOME"/cs3231/root/
-      clear; sys161 kernel $2 ;;
-    "wrun")
-      cd "$HOME"/cs3231/root/
-      clear; sys161 -w kernel $2 ;;
-    "gdb")
-      cd "$HOME"/cs3231/root/
-      clear; os161-gdb kernel -q $2 ;;
-    *)
-      echo -e "$BOLD""[kern comp]"$RESET" -> compile the os161 kernel (uses \"bmake depend\",
-                  \"bmake\", and \"bmake install\")"
-      echo -e "$BOLD""[kern user]"$RESET" -> compile the userland programs (uses \"./configure\",
-                  \"bmake\", and \"bmake install\")"
-      echo -e "$BOLD""[kern run <args>]"$RESET" -> run the os161 kernel with <args>"
-      echo -e "$BOLD""[kern wrun <args>]"$RESET" -> run the os161 kernel, with debug flag, with <args    >"
-      echo -e "$BOLD""[kern gdb -q <args>]"$RESET" -> run the \"os161-gdb kernel\" with <args>"
-      echo "Are you in the 3231 subshell...?" ;;
-  esac
-}
-
-
 # cd and then ls
 cl () {
   cd "$*" && ls
