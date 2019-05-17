@@ -195,6 +195,7 @@ alias copy="xclip -selection clip 2> /dev/null"
 
 alias gs="git status"
 alias gb="git branch"
+alias gc="git clone"
 
 alias csc="cscope -R"
 alias tag="vim -t"

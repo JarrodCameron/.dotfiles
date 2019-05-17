@@ -3,10 +3,22 @@
 # Author: Jarrod Cameron (z5210220)
 # Date:   08/05/19 15:30
 
+# A script which reads google-chrome's bookmarks from:
+#      ~/.config/google-chrome/Default/Bookmarks
+# The bookmarks are in a json file which is passed using
+#   `jq'. Finally, pipe everything into dmenu and grab the
+#   $url and open it in google-chrome
+
+BLACK="#282828"
+WHITE="#ebdbb2"
+GRAY="#1d2021"
+AQUA="#689d68"
+COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
+
 declare -A bm_dict
 
-# TODO: get the maximium length of the names
 max_len=0
+n_bmarks=0
 
 while read -r bm_name; do
   read -r bm_url
@@ -19,8 +31,24 @@ while read -r bm_name; do
   bm_dict["$bm_name"]+="$bm_url"
 
   curr_len="$(echo -n "$bm_name" | wc -c)"
-  [[ "$curr_len" > "$max_len" ]] && max_len="$curr_len"
+  [ "$curr_len" -gt "$max_len" ] && max_len="$curr_len"
+
+  n_bmarks=$((n_bmarks+1))
 
 done <<< "$(jq ".roots.bookmark_bar.children[] | .name, .url" "$HOME""/.config/google-chrome/Default/Bookmarks")"
 
-echo $max_len
+# NOTE: urls can't have spaces which makes using sed alot easier
+url=$(for name in "${!bm_dict[@]}"
+do
+  printf "%-""$max_len""s" "$name"
+  printf "%s" "  -->  "
+  printf "%s" "${bm_dict[$name]}"
+  printf '\n'
+done | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* --> //')
+
+if [ -z "$url" ]; then
+  notify-send "Invalid bookmark!"
+  exit 1
+fi
+
+google-chrome --new-window "$url"
