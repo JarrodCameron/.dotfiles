@@ -51,6 +51,12 @@ for_window [instance="dropdown_calculator"] border pixel 5
 for_window [instance="dropdown_calculator"] resize set 600 640
 for_window [instance="dropdown_calculator"] move position center
 
+# Dropdown manuals (man pages)
+for_window [instance="dropdown_manual"] floating enable
+for_window [instance="dropdown_manual"] border pixel 5
+for_window [instance="dropdown_manual"] resize set 1728 972
+for_window [instance="dropdown_manual"] move position center
+
 # Dropdown file explorer
 #for_window [instance="dropdown_explorer"] floating enable
 #for_window [instance="dropdown_explorer"] border pixel 5

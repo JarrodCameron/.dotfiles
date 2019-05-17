@@ -162,7 +162,7 @@ cl () {
 
 # Search for files using find
 vf () {
-  local FILES="$(find -name $*)"
+  local FILES="$( find -name $* 2> /dev/null )"
   if [ -n "$FILES" ]; then
     vim -p $FILES
   fi
@@ -171,7 +171,7 @@ vf () {
 # Search using for files matching greps output
 # Open up all files in vim  (tab mode)
 vgrep () {
-  local FILES="$(grep --files-with-matches $* )"
+  local FILES="$( grep --files-with-matches $* 2> /dev/null )"
   if [ -n "$FILES" ]; then
     vim -p $FILES
   fi
