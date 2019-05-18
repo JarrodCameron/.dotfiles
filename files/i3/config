@@ -92,57 +92,39 @@ mode "$resize" {
 #  bindsym k resize shrink height 10 px
 #  bindsym l resize grow width 10 px
 
-  bindsym h resize shrink width 10 px
-  bindsym j resize grow height 10 px
-  bindsym k resize shrink height 10 px
-  bindsym l resize grow width 10 px
+  bindsym h resize shrink width 2 px
+  bindsym j resize grow height 2 px
+  bindsym k resize shrink height 2 px
+  bindsym l resize grow width 2 px
 
-  bindsym q mode "default"
+  bindsym Shift+h resize shrink width 5 px
+  bindsym Shift+j resize grow height 5 px
+  bindsym Shift+k resize shrink height 5 px
+  bindsym Shift+l resize grow width 5 px
+
+  bindsym q      mode "default"
   bindsym Escape mode "default"
   bindsym Return mode "default"
+  bindsym space  mode "default"
 }
 
 bindsym $mod+Return exec urxvt
 bindsym $mod+Shift+Return exec bash "$HOME"/.scripts/samedir
 
-#bindsym $mod+q kill
-bindsym $mod+Shift+q kill
-
-bindsym $mod+w exec google-chrome --new-window https://webcms3.cse.unsw.edu.au/
-#bindsym $mod+Shift+w
-
-bindsym $mod+e exec --no-startup-id ~/.scripts/editconfig
-#bindsym $mod+Shift+e
-
-bindsym $mod+r mode "$resize"
-bindsym $mod+Shift+r restart
-
-#bindsym $mod+t
-#bindsym $mod+Shift+t
-
-bindsym $mod+y exec google-chrome --new-window https://www.youtube.com/
-bindsym $mod+Shift+y resize shrink width 5 px or 5 ppt
-
-#bindsym $mod+u
-bindsym $mod+Shift+u resize grow height 5 px or 5 ppt
-
-#bindsym $mod+i
-bindsym $mod+Shift+i resize shrink height 5 px or 5 ppt
-
-bindsym $mod+o exec google-chrome --new-window https://www.office.com/
-bindsym $mod+Shift+o resize grow width 5 px or 5 ppt
-
-bindsym $mod+p exec urxvt -name "dropdown_calculator" -e python3 -q
-bindsym $mod+Shift+p exec pavucontrol
-
 #bindsym $mod+a
 #bindsym $mod+Shift+a
 
-bindsym $mod+s exec urxvt -name "dropdown_explorer" -e ranger
-#bindsym $mod+Shift+s
+bindsym $mod+b exec --no-startup-id ~/.scripts/openbmarks
+#bindsym $mod+Shift+b
+
+bindsym $mod+c exec google-chrome
+bindsym $mod+Shift+c exec google-chrome --incognito
 
 bindsym $mod+d exec dmenu_run -l 10 -i -nb $bg -nf $white -sf $darkgray -sb $aqua
 bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
+
+bindsym $mod+e exec --no-startup-id ~/.scripts/editconfig
+#bindsym $mod+Shift+e
 
 bindsym $mod+f fullscreen toggle
 #bindsym $mod+Shift+f
@@ -153,6 +135,9 @@ bindsym $mod+f fullscreen toggle
 bindsym $mod+h focus left
 bindsym $mod+Shift+h move left
 
+#bindsym $mod+i
+#bindsym $mod+Shift+i
+
 bindsym $mod+j focus down
 bindsym $mod+Shift+j move down
 
@@ -162,30 +147,54 @@ bindsym $mod+Shift+k move up
 bindsym $mod+l focus right
 bindsym $mod+Shift+l move right
 
-#bindsym $mod+x
-bindsym $mod+Shift+x exec i3lock -i ~/Pictures/wallpapers/wallpaper054.png
-
-bindsym $mod+c exec google-chrome
-bindsym $mod+Shift+c exec google-chrome --incognito
-
-bindsym $mod+v split vertical
-bindsym $mod+Shift+v split horizontal
-
-#bindsym $mod+b
-#bindsym $mod+Shift+b
+bindsym $mod+m exec --no-startup-id ~/.scripts/automan
+bindsym $mod+Shift+m exec --no-startup-id ~/.scripts/screen
 
 bindsym $mod+n exec feh --bg-scale $(ls ~/Pictures/wallpapers/*.png | shuf | head -n 1)
 #bindsym $mod+Shift+n
 
-bindsym $mod+m exec bash "$HOME"/.scripts/screen
-#bindsym $mod+Shift+m
+bindsym $mod+o exec google-chrome --new-window https://www.office.com/
+#bindsym $mod+Shift+o
+
+bindsym $mod+p exec urxvt -name "dropdown_calculator" -e python3 -q
+bindsym $mod+Shift+p exec pavucontrol
+
+#bindsym $mod+q kill
+bindsym $mod+Shift+q kill
+
+bindsym $mod+r mode "$resize"
+bindsym $mod+Shift+r restart
+
+bindsym $mod+s exec urxvt -name "dropdown_explorer" -e ranger
+#bindsym $mod+Shift+s
+
+#bindsym $mod+t
+#bindsym $mod+Shift+t
+
+#bindsym $mod+u
+#bindsym $mod+Shift+u
+
+bindsym $mod+v split vertical
+bindsym $mod+Shift+v split horizontal
+
+bindsym $mod+w exec google-chrome --new-window https://webcms3.cse.unsw.edu.au/
+#bindsym $mod+Shift+w
+
+#bindsym $mod+x
+bindsym $mod+Shift+x exec i3lock -i ~/Pictures/wallpapers/wallpaper054.png
+
+bindsym $mod+y exec google-chrome --new-window https://www.youtube.com/
+#bindsym $mod+Shift+y
+
+#bindsym $mod+z
+#bindsym $mod+Shift+z
+
 
 bindsym $mod+space focus mode_toggle
 bindsym $mod+Shift+space floating toggle
 
 # Disable Screen saver
 exec_always xset s off
-
 
 # focus the child container
 #bindsym $mod+d focus child
