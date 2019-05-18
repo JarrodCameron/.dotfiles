@@ -223,7 +223,7 @@ alias untar="tar -xvf"
 stty -ixon
 
 # Print out todo list
-if [ -r "$HOME""/.todo" ]; then
+if [ -r "$HOME""/.todo" ] && [ -s "$HOME""/.todo" ]; then
   echo -e "$BOLD""To do list:""$RESET"
   sed '/^$/d' "$HOME""/.todo" | nl -w 1 -b t -s ') '
 fi
