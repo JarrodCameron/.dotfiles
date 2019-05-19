@@ -1,23 +1,33 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Author: Jarrod Cameron (z5210220)
 
-primary=$(xrandr --query | grep " connected " | awk -F" " ' NR==1 { print $1 } ')
-secondary=$(xrandr --query | grep " connected " | awk -F" " ' NR==2 { print $1 } ')
+BLACK="#282828"
+WHITE="#ebdbb2"
+GRAY="#1d2021"
+AQUA="#689d68"
+COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
 
-black="#282828"
-white="#ebdbb2"
-gray="#1d2021"
-aqua="#689d68"
+eval $(xrandr --query | awk '
+BEGIN {
+  FS=" ";
+  count=0
+}
+/connected/ {
+  printf "output_%d=%s ;\n", count, $1
+  count++
+}
+END {
+  printf "n_output=%d ;\n", count
+}')
 
-options="Extend Right (ER)\n"
-options+="Extend Left (EL)\n"
-options+="Duplicate (D)\n"
-options+="Kill (K)\n"
+primary="$output_1"
+secondary="$output_2"
+
+options="Extend Right (ER)\nExtend Left (EL)\nDuplicate (D)\nKill (K)"
 
 height="$(echo -e "$options" | wc -l)"
-colors="-nb $black -nf $white -sf $gray -sb $aqua"
-output=$(echo -ne "$options" | dmenu -i -l $height -p "Secondary output:" $colors)
+output="$(echo -ne "$options" | dmenu -i -l $height -p "Secondary output:" $COLORS)"
 
 case "$output" in
   "Extend Right (ER)") xrandr --output "$secondary" --auto --right-of "$primary" ;;

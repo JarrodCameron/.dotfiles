@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Author: Jarrod Cameron (z5210220)
 
@@ -10,7 +10,7 @@ GRAY="#1d2021"
 AQUA="#689d68"
 COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
 
-function get_file () {
+get_file () {
   local FULL_PATH="$1"
   local OPTIONS="$(ls $FULL_PATH)"
   local HEIGHT="$(echo "$OPTIONS" | wc -l)"
@@ -43,6 +43,7 @@ case "$output" in
   "i3blocks_scripts ->") FULL_PATH="$HOME""/.config/i3blocks/scripts/" ;;
 esac
 
+cmd=""
 case "$output" in
   "i3-gaps")     cmd="$EDITOR "$HOME"/.config/i3/config"                      ;;
   "i3blocks")    cmd="$EDITOR "$HOME"/.config/i3blocks/config"                ;;
@@ -53,7 +54,7 @@ case "$output" in
   "todo")        cmd="$EDITOR "$HOME"/.todo"                                  ;;
   "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
-  *)             notify-send "Invalid config: $output" ; exit 1 ;;
+  *)             notify-send "Invalid config!" ; exit 1 ;;
 esac
 
 #urxvt -name "dropdown_editor" -e $cmd

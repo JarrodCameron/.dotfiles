@@ -37,7 +37,7 @@ set showcmd
 set wildmenu
 
 " The width of tab characters
-set tabstop=2
+set tabstop=4
 
 " Activate filetype detection
 filetype on
@@ -77,6 +77,9 @@ set foldlevelstart=99
 
 " Shows the tabs
 set list listchars=tab:>-
+
+" Search recursivly up the directory tree to find tags files (for ctags)
+set tags=./tags;/
 
 " When using the `find' command search recursively down
 "set path=**
@@ -169,14 +172,15 @@ autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
 " File initilisation ---------------------- {{{
 " Skeletons
-autocmd BufNewFile *.c      0r ~/.vim/templates/c.skel
-autocmd BufNewFile *.cpp    0r ~/.vim/templates/cpp.skel
-autocmd BufNewFile Makefile 0r ~/.vim/templates/make.skel
-autocmd BufNewFile *.sh     0r ~/.vim/templates/bash.skel
-autocmd BufNewFile *.rmd    0r ~/.vim/templates/rmd.skel
-autocmd BufNewFile *.html   0r ~/.vim/templates/html.skel
-autocmd BufNewFile *.py     0r ~/.vim/templates/py.skel
-autocmd BufNewFile *.pl     0r ~/.vim/templates/prolog.skel
+autocmd BufNewFile *.c          0r ~/.vim/templates/c.skel
+autocmd BufNewFile *.cpp        0r ~/.vim/templates/cpp.skel
+autocmd BufNewFile Makefile     0r ~/.vim/templates/make.skel
+autocmd BufNewFile *.sh         0r ~/.vim/templates/bash.skel
+autocmd BufNewFile *.rmd        0r ~/.vim/templates/rmd.skel
+autocmd BufNewFile *.html       0r ~/.vim/templates/html.skel
+autocmd BufNewFile *.py         0r ~/.vim/templates/py.skel
+autocmd BufNewFile *.pl         0r ~/.vim/templates/prolog.skel
+autocmd BufNewFile *.js         0r ~/.vim/templates/js.skel
 
 " ==DATE==  Current date
 " ==NAME==  Authors name
@@ -228,12 +232,12 @@ autocmd FileType vim normal zM
 
 " Brackets stuff ---------------------- {{{
 inoremap {<CR> {<CR>}<esc>O
-inoremap [<CR> [<CR>]<esc>O<space><space>
-inoremap (<CR> (<CR>)<esc>O<space><space>
+inoremap [<CR> [<CR>]<esc>O<space><space><space><space>
+inoremap (<CR> (<CR>)<esc>O<space><space><space><space>
 
 inoremap {;<CR> {<CR>};<esc>O
-inoremap [;<CR> [<CR>];<esc>O<space><space>
-inoremap (;<CR> (<CR>);<esc>O<space><space>
+inoremap [;<CR> [<CR>];<esc>O<space><space><space><space>
+inoremap (;<CR> (<CR>);<esc>O<space><space><space><space>
 
 vnoremap <leader>c :call g:ToggleComments()<CR>
 
@@ -318,25 +322,4 @@ function! g:InsertPair(bracket)
   endif
 endfunction
 
-" Search recursivly up the directory tree to find tags files (for ctags)
-set tags=./tags;/
-
-" Yeah no idea what this does
-"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-"map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-"map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-map <C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-command! Htags :call g:DisplayCtagsHelp()
-
-function! g:DisplayCtagsHelp()
-  echo 'Ctrl+] - go to definition'
-  echo 'Ctrl+T - Jump back from the definition.'
-  echo 'Ctrl+W Ctrl+] - Open the definition in a horizontal split'
-  echo 'Ctrl+\ - Open the definition in a new tab'
-  echo 'Alt+] - Open the definition in a vertical split'
-  echo 'map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>'
-  echo 'map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>'
-endfunction
 " }}}
