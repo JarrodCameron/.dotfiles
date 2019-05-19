@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
 
@@ -24,18 +24,10 @@ get_file () {
   echo $OUTPUT
 }
 
-options=".vimrc\n"
-options+="i3-gaps\n"
-options+="i3blocks\n"
-options+=".bashrc\n"
-options+=".Xresources\n"
-options+="compton\n"
-options+="todo\n"
-options+="home_scripts ->\n"
-options+="i3blocks_scripts ->\n"
+options=".vimrc\ni3-gaps\ni3blocks\n.bashrc\n.Xresources\ncompton\ntodo\nhome_scripts ->\ni3blocks_scripts ->"
 
-height="$(echo -e $options | wc -l)"
-output=$(echo -ne "$options" | dmenu -i -l $height -p "Edit file:" $COLORS)
+height="$(echo $options | wc -l)"
+output=$(echo "$options" | dmenu -i -l $height -p "Edit file:" $COLORS)
 
 FULL_PATH=""
 case "$output" in
