@@ -19,11 +19,11 @@ SCONTROL="Master"
 toggle_output () {
   output=$(pacmd list-sinks | grep "active port:" | awk -F" " ' NR==1 { print $3 } ')
 
-  if [ "$output" == "<analog-output-headphones>" ]; then
+  if [ "$output" = "<analog-output-headphones>" ]; then
     # Speaker is now sink
     pacmd set-sink-port 0 analog-output-speaker
 
-  elif [ "$output" == "<analog-output-speaker>" ]; then
+  elif [ "$output" = "<analog-output-speaker>" ]; then
     # Headphones is now sink
     pacmd set-sink-port 0 analog-output-headphones
 
@@ -37,9 +37,8 @@ toggle_output () {
 }
 
 get_volume() {
-  local VOL="$(pacmd list-sinks | grep "^\s*volume:" | grep -o "[0-9]*%" \
+  echo "$(pacmd list-sinks | grep "^\s*volume:" | grep -o "[0-9]*%" \
         | head -1 | sed 's/%//g')"
-  echo $VOL
 }
 
 # Toggle mute...
@@ -57,9 +56,6 @@ update_volume() {
 force_unmute() {
   amixer -q -D "$MIXER" sset "$SCONTROL" unmute
 }
-
-# Force pulseaudio to start up
-pulseaudio --start
 
 VOLUME_DELTA=""
 case $BLOCK_BUTTON in

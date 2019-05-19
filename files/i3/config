@@ -291,3 +291,6 @@ gaps left 0
 
 # Startup compton (compositor)
 exec_always compton --config "$HOME""/.config/compton/config"
+
+# Startup pulseaudio
+exec_always pulseaudio --start
