@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
 # Date:   01/03/19  9:14
@@ -16,7 +16,7 @@ SCONTROL="Master"
 # 'speakers' -> 'headphones' -> 'hdmi'
 #    ^                             |
 #     \----------------------------v
-function toggle_output () {
+toggle_output () {
   output=$(pacmd list-sinks | grep "active port:" | awk -F" " ' NR==1 { print $3 } ')
 
   if [ "$output" == "<analog-output-headphones>" ]; then
@@ -36,25 +36,25 @@ function toggle_output () {
   fi
 }
 
-function get_volume() {
+get_volume() {
   local VOL="$(pacmd list-sinks | grep "^\s*volume:" | grep -o "[0-9]*%" \
         | head -1 | sed 's/%//g')"
   echo $VOL
 }
 
 # Toggle mute...
-function toggle_mute() {
+toggle_mute() {
   amixer -q -D "$MIXER" sset "$SCONTROL" toggle
 }
 
 # Change the volume
 # $VOLUME_DELTA is the change in volume
-function update_volume() {
+update_volume() {
   amixer -q -D "$MIXER" sset "$SCONTROL" "$VOLUME_DELTA"
 }
 
 # Forces current output to be unmuted
-function force_unmute() {
+force_unmute() {
   amixer -q -D "$MIXER" sset "$SCONTROL" unmute
 }
 
@@ -89,11 +89,10 @@ esac
 
 MUTED="$(pacmd list-sinks | grep '^\s*muted:' | awk '{print $2}')"
 
-TEXT="$OUTPUT "
 if [ "$MUTED" = "yes" ]; then
-  TEXT+="MUTE"
+  TEXT="$OUTPUT MUTE"
 else
-  TEXT+="$(get_volume)""%"
+  TEXT="$OUTPUT $(get_volume)""%"
 fi
 
 echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"

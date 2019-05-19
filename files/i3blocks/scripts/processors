@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
 
@@ -48,9 +48,9 @@ temp=$(get_temp)
 TEXT="CPU: ""$usage""% (""$temp""°C)"
 
 case $BLOCK_BUTTON in
-  1) notify        ;;& # Left click
-  2) notify        ;;& # Scroll click
-  3) notify        ;;& # Right click
+  1) notify        ;; # Left click
+  2) notify        ;; # Scroll click
+  3) notify        ;; # Right click
 esac
 
 echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $TEXT </span>"

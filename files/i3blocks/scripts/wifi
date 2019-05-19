@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
 
@@ -7,7 +7,7 @@
 BACKGROUND=689d6a
 FOREGROUND=282828
 
-function abort () {
+abort () {
   err_msg="$1"
 #  notify-send --expire-time=10000 "$err_msg"
   echo "<span background='#${BACKGROUND}' foreground='#${FOREGROUND}'> $err_msg </span>"
@@ -19,7 +19,7 @@ function abort () {
 # Exit if no other interface detected
 [ "$(ls /sys/class/net | grep -v "lo" | wc -l)" = "0" ] && abort "Not interface/s detected"
 
-# BUG: use '/sys/class/net' to detect interface
+# XXX BUG: use '/sys/class/net' to detect interface
 interface="$(ip route | awk '/^default/ {print $5}')"
 
 # Exit if no active interface

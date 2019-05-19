@@ -1,5 +1,4 @@
-#!/bin/bash
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
 
@@ -32,14 +31,13 @@ notify () {
 }
 
 case $BLOCK_BUTTON in
-  1) notify        ;;& # Left click
-  2) notify        ;;& # Scroll click
-  3) notify        ;;& # Right click
+  1) notify        ;; # Left click
+  2) notify        ;; # Scroll click
+  3) notify        ;; # Right click
 esac
 
 # Label
-OUTPUT="Mem: "
-OUTPUT+="$(free -h | awk '/^Mem:/ { print $3 " / " $2 }')"
+OUTPUT="Mem: $(free -h | awk '/^Mem:/ { print $3 " / " $2 }')"
 
 echo "<span foreground='#${FOREGROUND}' background='#${BACKGROUND}'> $OUTPUT </span>"
 echo "<span foreground='#${FOREGROUND}' background='#${BACKGROUND}'> $OUTPUT </span>"
