@@ -14,7 +14,7 @@ get_file () {
   local FULL_PATH="$1"
   local OPTIONS="$(ls $FULL_PATH)"
   local HEIGHT="$(echo "$OPTIONS" | wc -l)"
-  local OUTPUT="$(echo -ne "$OPTIONS" | dmenu -i -l $HEIGHT -p "Edit file:" $COLORS)"
+  local OUTPUT="$(echo "$OPTIONS" | dmenu -i -l $HEIGHT -p "Edit file:" $COLORS)"
 
   if [ -z "$OUTPUT" ]; then
     notify-send "Invalid file"

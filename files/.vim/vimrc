@@ -9,6 +9,8 @@
 " ctags shit:
 "https://stackoverflow.com/questions/563616/vim-and-ctags-tips-and-tricks
 
+" Global settings ---------------------- {{{
+
 " Reset all autocmds (useful for sourcing $MYVIMRC" multiple times)
 autocmd!
 
@@ -20,8 +22,6 @@ map <F6> :setlocal spell! spelllang=en_au<CR>
 
 " Toggle the grey bar thing
 map <silent> <F8> :call g:ToggleCC(79)<CR>
-
-" Global settings ---------------------- {{{
 syntax enable
 syntax on
 
@@ -131,6 +131,10 @@ nnoremap P :r !xclip -selection clip -out<CR>
 inoremap <c-u> <esc>mxviwu`xa
 nnoremap <c-u> <esc>mxviwu`x
 
+" save and quit
+inoremap <leader>q <esc>:wq<CR>
+nnoremap <leader>q :wq<CR>
+
 inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x
 
@@ -190,6 +194,7 @@ autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
 autocmd BufNewFile * %substitute/==START==//eg
 " }}}
 
+" Saving buffers ---------------------- {{{
 " Remove any trailing white space
 autocmd BufWritePre * %substitute/\s\+$//e
 
@@ -202,6 +207,7 @@ autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
 
 " Vim jumps to the last position when reopening a file
 "autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" }}}"
 
 " Custom file settings ---------------------- {{{
 autocmd FileType rmd command! R :w | :!clear && Rscript -e "rmarkdown::render('%')" && xdg-open %<.pdf
@@ -241,6 +247,7 @@ inoremap (;<CR> (<CR>);<esc>O<space><space><space><space>
 
 vnoremap <leader>c :call g:ToggleComments()<CR>
 
+"inoremap ( (<esc>:call g:InsertOpenBracket('(', ')')<CR>a
 inoremap { {}<left>
 inoremap [ []<left>
 inoremap ( ()<left>
