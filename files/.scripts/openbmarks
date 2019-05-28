@@ -1,13 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
-# Date:   08/05/19 15:30
-
-# A script which reads google-chrome's bookmarks from:
-#      ~/.config/google-chrome/Default/Bookmarks
-# The bookmarks are in a json file which is passed using
-#   `jq'. Finally, pipe everything into dmenu and grab the
-#   $url and open it in google-chrome
+# Date:   28/05/19 19:40
 
 BLACK="#282828"
 WHITE="#ebdbb2"
@@ -15,36 +9,32 @@ GRAY="#1d2021"
 AQUA="#689d68"
 COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
 
-declare -A bm_dict
+BM_PATH="$HOME""/.config/google-chrome/Default/Bookmarks"
 
-max_len=0
-n_bmarks=0
+max_len="$(jq ".roots.bookmark_bar.children[] | .name" "$BM_PATH" | awk '
+        BEGIN {
+            max_len = 0;
+            FS=" "
+        }
+        {
+            if (length($0) > max_len) {
+                max_len = length($0)
+            }
+        }
+        END {
+            print max_len
+        }
+    ')"
 
-while read -r bm_name; do
-  read -r bm_url
+n_bmarks="$(jq ".roots.bookmark_bar.children[] | .name" $BM_PATH | wc -l)"
 
-  # Clear leading and trailing white space and quotation marks
-  bm_name="$(echo "$bm_name" | sed 's/^"\s*// ; s/\s*"$//')"
-  bm_url="$(echo "$bm_url" | sed 's/^"\s*// ; s/\s*"$//')"
-
-  # Insert into hash table
-  bm_dict["$bm_name"]+="$bm_url"
-
-  curr_len="$(echo -n "$bm_name" | wc -c)"
-  [ "$curr_len" -gt "$max_len" ] && max_len="$curr_len"
-
-  n_bmarks=$((n_bmarks+1))
-
-done <<< "$(jq ".roots.bookmark_bar.children[] | .name, .url" "$HOME""/.config/google-chrome/Default/Bookmarks")"
-
-# NOTE: urls can't have spaces which makes using sed alot easier
-url=$(for name in "${!bm_dict[@]}"
-do
-  printf "%-""$max_len""s" "$name"
-  printf "%s" "  -->  "
-  printf "%s" "${bm_dict[$name]}"
-  printf '\n'
-done | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* --> //')
+url="$(jq ".roots.bookmark_bar.children[] | .name, .url" "$BM_PATH" | sed 's/^"\s*// ; s/\s*"$//' | awk '
+{
+    printf "%-'$max_len's  -->  ", $0
+    getline
+    printf "%s\n", $0
+}
+' | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* -->  //')"
 
 if [ -z "$url" ]; then
   notify-send "Invalid bookmark!"
