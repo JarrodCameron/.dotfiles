@@ -19,9 +19,11 @@ Obligatory screenshot:
 
 ## Install
 
-All that is needed to the clone the repository:
+Clone the repository and distribute the files using `backup.sh`:
 ```{sh}
 git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
+cd ~/.dotfiles
+sh backup.sh
 ```
 
 ## `backup.sh` usage
