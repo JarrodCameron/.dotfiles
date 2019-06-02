@@ -155,33 +155,6 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 #    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
 #fi
 
-# cd and then ls
-cl () {
-  cd "$*" && ls
-}
-
-# Search for files using find
-vf () {
-  local FILES="$( find -name $* 2> /dev/null )"
-  if [ -n "$FILES" ]; then
-    vim -p $FILES
-  fi
-}
-
-# Search using for files matching greps output
-# Open up all files in vim  (tab mode)
-vgrep () {
-  local FILES="$( grep --files-with-matches $* 2> /dev/null )"
-  if [ -n "$FILES" ]; then
-    vim -p $FILES
-  fi
-}
-
-# Opens the pdf in my pdf viewer (evince)
-pdf () {
-  evince $* 2> /dev/null
-}
-
 # Bash with vim keys (god tier bash mode)
 set -o vi
 
@@ -215,6 +188,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
+alias vv="vim ."
 
 # Open up a tar file
 alias untar="tar -xvf"

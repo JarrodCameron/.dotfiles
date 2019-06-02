@@ -9,7 +9,7 @@
 " ctags shit:
 "https://stackoverflow.com/questions/563616/vim-and-ctags-tips-and-tricks
 
-" Global settings ---------------------- {{{
+" Global settings {{{
 
 " Reset all autocmds (useful for sourcing $MYVIMRC" multiple times)
 autocmd!
@@ -286,7 +286,7 @@ endfunction
 function! s:GetComment()
   if &filetype == "vim"
     return "\""
-  elseif &filetype == "c"
+  elseif &filetype == "c" || &filetype == "javascript"
     return "\\/\\/"
   elseif &filetype == "prolog"
     return "%"
