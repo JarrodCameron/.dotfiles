@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+function aos_nc () {
+     echo 'nc -up 26719 192.168.168.2 26719'
+     nc -up 26719 192.168.168.2 26719
+}
+
+function aos_pico () {
+    echo 'picocom -b 115200 /dev/ttyUSB0'
+    picocom -b 115200 /dev/ttyUSB0
+}
+
+function aos_full () {
+    cd ~/Desktop/aos-2019-m0/build
+    ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
+}
+
+while [ -n "$1" ]; do
+
+    if [ "$1" = "nc" ]; then
+        aos_nc
+    elif [ "$1" = "pico" ]; then
+        aos_pico
+    elif [ "$1" = "full" ]; then
+        aos_full
+    else
+        echo "Unknown option: \"$1\"" >&2
+    fi
+
+    shift
+done
+

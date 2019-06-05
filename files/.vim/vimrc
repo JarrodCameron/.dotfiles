@@ -132,8 +132,13 @@ inoremap <c-u> <esc>mxviwu`xa
 nnoremap <c-u> <esc>mxviwu`x
 
 " save and quit
-inoremap <leader>q <esc>:wq<CR>
-nnoremap <leader>q :wq<CR>
+inoremap <leader>q <esc>:q<CR>
+nnoremap <leader>q :q<CR>
+inoremap <leader>wq <esc>:wq<CR>
+nnoremap <leader>wq :wq<CR>
+
+inoremap <leader>w <esc>:w<CR>a
+nnoremap <leader>w :w<CR>
 
 inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x

@@ -30,11 +30,11 @@ n_bmarks="$(jq ".roots.bookmark_bar.children[] | .name" $BM_PATH | wc -l)"
 
 url="$(jq ".roots.bookmark_bar.children[] | .name, .url" "$BM_PATH" | sed 's/^"\s*// ; s/\s*"$//' | awk '
 {
-    printf "%-'$max_len's  -->  ", $0
+    printf "%-'$max_len's-->  ", $0
     getline
     printf "%s\n", $0
 }
-' | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* -->  //')"
+' | sort -d -f | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* -->  //')"
 
 if [ -z "$url" ]; then
   notify-send "Invalid bookmark!"
