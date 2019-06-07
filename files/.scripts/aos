@@ -25,9 +25,9 @@ function aos_refresh () {
     ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
 }
 
-function aos_full () {
-    cd ~/Desktop/aos-2019-m0/build
-    ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
+function aos_cd () {
+    echo "cd $OS_PATH"
+    cd "$OS_PATH"
 }
 
 while [ -n "$1" ]; do
@@ -40,8 +40,8 @@ while [ -n "$1" ]; do
         aos_comp
     elif [ "$1" = "refresh" ]; then
         aos_refresh
-    elif [ "$1" = "full" ]; then
-        aos_full
+    elif [ "$1" = "cd" ]; then
+        aos_cd
     else
         echo "Unknown option: \"$1\"" >&2
     fi
