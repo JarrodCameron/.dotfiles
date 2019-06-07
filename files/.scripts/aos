@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OS_PATH="$HOME""/Desktop/aos-2019-m0/"
+OS_PATH="$HOME""/Desktop/aos-2019-m0"
 
 function aos_nc () {
      echo 'nc -up 26719 192.168.168.2 26719'
@@ -16,9 +16,22 @@ function aos_pico () {
     picocom -b 115200 /dev/ttyUSB0
 }
 
-function aos_full () {
-    cd ~/Desktop/aos-2019-m0/build
+function aos_comp () {
+    echo 'ninja'
+    ninja
+}
+
+function aos_refresh () {
+    echo "cd $OS_PATH""/build"
+    cd "$OS_PATH""/build"
+
+    echo 'ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719'
     ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
+}
+
+function aos_cd () {
+    echo "cd $OS_PATH"
+    cd "$OS_PATH"
 }
 
 while [ -n "$1" ]; do
@@ -27,11 +40,12 @@ while [ -n "$1" ]; do
         aos_nc
     elif [ "$1" = "pico" ]; then
         aos_pico
-    elif [ "$1" = "full" ]; then
-        aos_full
+    elif [ "$1" = "comp" ]; then
+        aos_comp
+    elif [ "$1" = "refresh" ]; then
+        aos_refresh
     elif [ "$1" = "cd" ]; then
         aos_cd
-        echo $OS_PATH
     else
         echo "Unknown option: \"$1\"" >&2
     fi
