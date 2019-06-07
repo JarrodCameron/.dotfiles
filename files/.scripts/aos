@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
+OS_PATH="$HOME""/Desktop/aos-2019-m0/"
+
 function aos_nc () {
      echo 'nc -up 26719 192.168.168.2 26719'
      nc -up 26719 192.168.168.2 26719
+}
+
+function aos_cd () {
+    cd "$OS_PATH"
 }
 
 function aos_pico () {
@@ -23,6 +29,9 @@ while [ -n "$1" ]; do
         aos_pico
     elif [ "$1" = "full" ]; then
         aos_full
+    elif [ "$1" = "cd" ]; then
+        aos_cd
+        echo $OS_PATH
     else
         echo "Unknown option: \"$1\"" >&2
     fi
