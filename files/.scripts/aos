@@ -22,8 +22,6 @@ function aos_comp () {
 }
 
 function aos_refresh () {
-    echo "cd $OS_PATH""/build"
-    cd "$OS_PATH""/build"
 
     echo 'ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719'
     ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719

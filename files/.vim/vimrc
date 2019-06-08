@@ -81,6 +81,9 @@ set list listchars=tab:>-
 " Search recursivly up the directory tree to find tags files (for ctags)
 set tags=./tags;/
 
+" Don't read modeline strings
+set nomodeline
+
 " When using the `find' command search recursively down
 "set path=**
 
