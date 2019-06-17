@@ -6,9 +6,6 @@
 "  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
 
-" ctags shit:
-"https://stackoverflow.com/questions/563616/vim-and-ctags-tips-and-tricks
-
 " Global settings {{{
 
 " Reset all autocmds (useful for sourcing $MYVIMRC" multiple times)
@@ -134,6 +131,9 @@ nnoremap P :r !xclip -selection clip -out<CR>
 inoremap <c-u> <esc>mxviwu`xa
 nnoremap <c-u> <esc>mxviwu`x
 
+" Comments a chunk of text
+vnoremap <leader>c :call g:ToggleComments()<CR>
+
 " save and quit
 inoremap <leader>q <esc>:q<CR>
 nnoremap <leader>q :q<CR>
@@ -202,6 +202,12 @@ autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
 autocmd BufNewFile * %substitute/==START==//eg
 " }}}
 
+" Bonus features (plugins) {{{
+
+source ~/.vim/features/brackets.vim
+
+" }}}
+
 " Saving buffers ---------------------- {{{
 " Remove any trailing white space
 autocmd BufWritePre * %substitute/\s\+$//e
@@ -234,7 +240,7 @@ autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
 autocmd FileType c iabbrev <buffer> \N \n
 autocmd FileType c iabbrev <buffer> \m \n
 autocmd FileType c iabbrev <buffer> struc struct
-autocmd FileType c if filereadable("cscope -R") | execute "cscope add cscope.out" | endif
+"autocmd FileType c if filereadable("cscope.out") | execute "cscope add cscope.out" | endif
 
 autocmd FileType text setlocal spell spelllang=en_au
 
@@ -245,24 +251,24 @@ autocmd FileType vim normal zM
 " }}}
 
 " Brackets stuff ---------------------- {{{
-inoremap {<CR> {<CR>}<esc>O
-inoremap [<CR> [<CR>]<esc>O<space><space><space><space>
-inoremap (<CR> (<CR>)<esc>O<space><space><space><space>
-
-inoremap {;<CR> {<CR>};<esc>O
-inoremap [;<CR> [<CR>];<esc>O<space><space><space><space>
-inoremap (;<CR> (<CR>);<esc>O<space><space><space><space>
-
-vnoremap <leader>c :call g:ToggleComments()<CR>
-
+"inoremap {<CR> {<CR>}<esc>O
+"inoremap [<CR> [<CR>]<esc>O<space><space><space><space>
+"inoremap (<CR> (<CR>)<esc>O<space><space><space><space>
+"
+"inoremap {;<CR> {<CR>};<esc>O
+"inoremap [;<CR> [<CR>];<esc>O<space><space><space><space>
+"inoremap (;<CR> (<CR>);<esc>O<space><space><space><space>
+"
+"vnoremap <leader>c :call g:ToggleComments()<CR>
+"
 "inoremap ( (<esc>:call g:InsertOpenBracket('(', ')')<CR>a
-inoremap { {}<left>
-inoremap [ []<left>
-inoremap ( ()<left>
-
-inoremap } }<esc>:call g:InsertPair("}")<CR>a
-inoremap ] ]<esc>:call g:InsertPair("]")<CR>a
-inoremap ) )<esc>:call g:InsertPair(")")<CR>a
+"inoremap { {}<left>
+"inoremap [ []<left>
+"inoremap ( ()<left>
+"
+"inoremap } }<esc>:call g:InsertPair("}")<CR>a
+"inoremap ] ]<esc>:call g:InsertPair("]")<CR>a
+"inoremap ) )<esc>:call g:InsertPair(")")<CR>a
 " }}}
 
 " Kindergarten spelling skills ---------------------- {{{
@@ -278,6 +284,7 @@ iabbrev si is
 iabbrev nad and
 iabbrev ifle file
 iabbrev im I'm
+iabbrev sel4 seL4_
 " }}}
 
 " vimscript functions  ---------------------- {{{
@@ -328,13 +335,13 @@ function! g:ToggleComments() range
 endfunction
 
 " Insert closing bracket
-function! g:InsertPair(bracket)
-  if col("$") == 1 || col(".") == col("$")-1
-    return
-  endif
-  if getline(".")[col(".")] == a:bracket
-    execute "normal! x"
-  endif
-endfunction
+"function! g:InsertPair(bracket)
+"  if col("$") == 1 || col(".") == col("$")-1
+"    return
+"  endif
+"  if getline(".")[col(".")] == a:bracket
+"    execute "normal! x"
+"  endif
+"endfunction
 
 " }}}

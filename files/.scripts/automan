@@ -18,22 +18,24 @@ GRAY="#1d2021"
 AQUA="#689d68"
 COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
 
-max_len="$(man -k '.' | awk '
-  BEGIN {
-    max_len = 0;
-    FS=" "
-  }
-  {
-    if (length($1) + length ($2) > max_len) {
-      max_len = length($1) + length ($2)
-    }
-  }
-  END {
-    print max_len
-  }
-')"
+#max_len="$(man -k '.' | awk '
+#  BEGIN {
+#    max_len = 0;
+#    FS=" "
+#  }
+#  {
+#    if (length($1) + length ($2) > max_len) {
+#      max_len = length($1) + length ($2)
+#    }
+#  }
+#  END {
+#    print max_len
+#  }
+#')"
+#
+#max_len=$(( max_len+2 ))
 
-max_len=$(( max_len+2 ))
+max_len=48
 
 name="$(man -k '.' | awk '
 BEGIN { FS=" " }

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   13/06/19 17:16
+
+ ctags -R
+ cscope -R
+
+
+

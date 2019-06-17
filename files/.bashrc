@@ -190,6 +190,9 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias vv="vim ."
 
+# Can't change dir's using script so use an alias
+alias aoscd='~/Desktop/aos-2019'
+
 # Open up a tar file
 alias untar="tar -xvf"
 
@@ -202,3 +205,10 @@ if [ -r "$HOME""/.todo" ] && [ -s "$HOME""/.todo" ]; then
   sed '/^$/d' "$HOME""/.todo" | nl -w 1 -b t -s ') '
 fi
 
+function dict () {
+    local regexp='^'"$1"'$'
+    if [ -z "$2" ]; then
+        sed 's/\./'"$2"'/g'
+    fi
+    grep "$regexp" /usr/share/dict/words
+}
