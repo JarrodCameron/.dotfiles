@@ -146,6 +146,9 @@ nnoremap <leader>w :w<CR>
 inoremap <leader>u <esc>mxviwu`xa
 nnoremap <leader>u <esc>mxviwu`x
 
+nnoremap <silent> <C-p> :tabp<CR>
+nnoremap <silent> <C-n> :tabN<CR>
+
 " Find the file, look recursibly
 nnoremap <leader>f :cscope find f<space>
 

@@ -189,6 +189,7 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias vv="vim ."
+alias retag="rm -f tags ; ctags -R"
 
 # Can't change dir's using script so use an alias
 alias aoscd='~/Desktop/aos-2019'
@@ -207,8 +208,8 @@ fi
 
 function dict () {
     local regexp='^'"$1"'$'
-    if [ -z "$2" ]; then
-        sed 's/\./'"$2"'/g'
-    fi
+#    if [ -z "$2" ]; then
+#        sed 's/\./'"$2"'/g'
+#    fi
     grep "$regexp" /usr/share/dict/words
 }
