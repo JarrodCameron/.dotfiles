@@ -103,6 +103,11 @@ set statusline+=(%p " Percentage through file
 set statusline+=%%) " Percent sign
 set statusline+=\   " <space>
 
+" add any database in current directory
+if filereadable("cscope.out")
+    cs add cscope.out
+endif
+
 " }}}
 
 " Function mappings -------------------- {{{
