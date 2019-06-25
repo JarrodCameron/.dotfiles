@@ -6,11 +6,11 @@ backing up process.
 
 Dot files for:
 - `.bashrc`
-- `i3`
+- [`i3`](https://github.com/i3/i3)
 - [`i3blocks`](https://github.com/vivien/i3blocks)
 - `.scripts` (scripts used for automating various tasks)
-- `.tmux.conf`
-- `.vim`
+- [`.tmux.conf`](https://github.com/tmux/tmux)
+- [`.vim`](https://github.com/vim/vim)
 - `.Xresources`
 
 Obligatory screenshot:
