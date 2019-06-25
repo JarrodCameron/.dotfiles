@@ -144,7 +144,7 @@ fi
 
 
 
-function sss () {
+function aos () {
 
     local os_path="$HOME""/Desktop/aos-2019"
 
