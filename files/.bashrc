@@ -142,6 +142,39 @@ fi
 # CUSTOM #
 ##########
 
+
+
+function sss () {
+
+    local os_path="$HOME""/Desktop/aos-2019"
+
+    if [ -z "$1" ]; then
+        echo "Where is my argv[0]?" >&2
+
+    elif [ "$1" = "pico" ]; then
+        echo 'picocom -b 115200 /dev/ttyUSB0'
+        picocom -b 115200 /dev/ttyUSB0
+
+    elif [ "$1" = "refresh" ]; then
+        echo 'ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719'
+        ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
+
+    elif [ "$1" = "ifup" ]; then
+        echo 'sudo ifup enx180f76012290'
+        sudo ifup enx180f76012290
+
+    elif [ "$1" = "ifdown" ]; then
+        echo 'sudo ifdown enx180f76012290'
+        sudo down enx180f76012290
+
+    elif [ "$1" = "cd" ]; then
+        echo "cd $os_path"
+        cd "$os_path"
+    else
+        echo "Unknown option: \"$arg\"" >&2
+    fi
+}
+
 # Export colors used in man pages, less, etc
 export LESS_TERMCAP_mb=$(printf "\e[1;34m")
 export LESS_TERMCAP_md=$(printf "\e[1;34m")
@@ -171,11 +204,13 @@ alias gb="git branch"
 alias gc="git clone"
 alias gitac="git add --all && git commit"
 
+alias r2="radare2"
+alias a2="radare2 -A"
+
 alias csc="cscope -R"
 alias tag="vim -t"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
-alias r2="radare2"
 alias p="python3 -q"
 alias gdb="gdb -q"
 alias rr="ranger"
