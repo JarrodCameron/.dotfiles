@@ -142,36 +142,66 @@ fi
 # CUSTOM #
 ##########
 
-
-
 function aos () {
 
     local os_path="$HOME""/Desktop/aos-2019"
+    local session="seL4"
 
     if [ -z "$1" ]; then
         echo "Where is my argv[0]?" >&2
-
     elif [ "$1" = "pico" ]; then
-        echo 'picocom -b 115200 /dev/ttyUSB0'
         picocom -b 115200 /dev/ttyUSB0
-
+    elif [ "$1" = "comp" ]; then
+        cd "$os_path/build"
+        ninja
     elif [ "$1" = "refresh" ]; then
-        echo 'ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719'
+        cd "$os_path/build"
         ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
-
     elif [ "$1" = "ifup" ]; then
-        echo 'sudo ifup enx180f76012290'
         sudo ifup enx180f76012290
-
     elif [ "$1" = "ifdown" ]; then
-        echo 'sudo ifdown enx180f76012290'
         sudo down enx180f76012290
-
-    elif [ "$1" = "cd" ]; then
-        echo "cd $os_path"
+    elif [ "$1" = "csc" ]; then
         cd "$os_path"
+        ctags -R
+        cscope -R
+    elif [ "$1" = "cd" ]; then
+        cd "$os_path"
+    elif [ "$1" = "init" ]; then
+        # Create session. Don't attach. Set window name
+        tmux new-session -d -s "$session" -n "Compiler"
+        # Create vertical split
+        tmux split-window -h -t "$session"
+        # Move to build directory (right pane)
+        tmux send-keys -t right "clear && cd $os_path/build/" C-m
+        # Move to OS directory (left pane)
+        tmux send-keys -t left "clear && cd $os_path" C-m
+        # New window (editor)
+        tmux new-window -n "Editor" -t "$session"
+        # Move to OS directory
+        tmux send-keys -t "$session" "clear && cd $os_path" C-m
+        # Start up the beast
+        tmux send-keys -t "$session" "ctags -R 2>/dev/null ; cscope -R" C-m
+        # Join the session
+        tmux attach-session -t "$session"
     else
-        echo "Unknown option: \"$arg\"" >&2
+        echo -ne "$BOLD"
+        echo "   /---------------------------------------------/"
+        echo "  /         Advanced Operating Systems          / |"
+        echo " / Syntax: aos <option>                        /  |"
+        echo "/---------------------------------------------/ C |"
+        echo "|                                             | O |"
+        echo "|   aos cd        --> Move into \$OS_PATH      | M |"
+        echo "|   aos comp      --> Compile seL4            | P |"
+        echo "|   aos csc       --> Cscope/ctags            | 9 |"
+        echo "|   aos ifdown    --> Disable interface       | 2 |"
+        echo "|   aos ifup      --> Enable interface        | 4 |"
+        echo "|   aos init      --> Setup tmux connections  | 2 /"
+        echo "|   aos pico      --> Open pico to port       |  /"
+        echo "|   aos refresh   --> Compile + netcat        | /"
+        echo "|                                             |/"
+        echo "\\---------------------------------------------/"
+        echo -ne "$RESET"
     fi
 }
 

@@ -280,15 +280,6 @@ exec_always --no-startup-id nm-applet
 # Prevents mouse to moving to focused windows
 #mouse_warping none
 
-gaps inner 0
-gaps outer 0
-gaps horizontal 0
-gaps vertical 0
-gaps top 0
-gaps right 0
-gaps bottom 0
-gaps left 0
-
 # Startup compton (compositor)
 #exec_always compton --config "$HOME""/.config/compton/config"
 
