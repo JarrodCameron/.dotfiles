@@ -7,7 +7,7 @@ backing up process.
 Dot files for:
 - `.bashrc`
 - `i3`
-- `i3blocks`
+- [`i3blocks`](https://github.com/vivien/i3blocks)
 - `.scripts` (scripts used for automating various tasks)
 - `.tmux.conf`
 - `.vim`
