@@ -168,22 +168,16 @@ function aos () {
     elif [ "$1" = "cd" ]; then
         cd "$os_path"
     elif [ "$1" = "init" ]; then
-        # Create session. Don't attach. Set window name
-        tmux new-session -d -s "$session" -n "Compiler"
-        # Create vertical split
-        tmux split-window -h -t "$session"
-        # Move to build directory (right pane)
-        tmux send-keys -t right "clear && cd $os_path/build/" C-m
-        # Move to OS directory (left pane)
-        tmux send-keys -t left "clear && cd $os_path" C-m
-        # New window (editor)
-        tmux new-window -n "Editor" -t "$session"
-        # Move to OS directory
-        tmux send-keys -t "$session" "clear && cd $os_path" C-m
-        # Start up the beast
-        tmux send-keys -t "$session" "ctags -R 2>/dev/null ; cscope -R" C-m
-        # Join the session
-        tmux attach-session -t "$session"
+        cd "$os_path"
+        tmux new-session -d -s "$session" -n "Compiler"                         # Create session. Don't attach. Set window name
+        tmux split-window -h -t "$session"                                      # Create vertical split
+        tmux resize-pane -L -t "$session" 30                                    # Right side (compilation) is more dominate
+        tmux send-keys -t right "clear && cd $os_path/build/" C-m               # Move to build directory (right pane)
+        tmux send-keys -t left "clear && cd $os_path" C-m                       # Move to OS directory (left pane)
+        tmux new-window -n "Editor" -t "$session"                               # New window (editor)
+        tmux send-keys -t "$session" "clear && cd $os_path" C-m                 # Move to OS directory
+        tmux send-keys -t "$session" "ctags -R 2>/dev/null ; cscope -R" C-m     # Start up the beast
+        tmux attach-session -t "$session"                                       # Join the session
     else
         echo -ne "$BOLD"
         echo "   /---------------------------------------------/"
@@ -257,9 +251,6 @@ alias .....="cd ../../../.."
 alias vv="vim ."
 alias retag="rm -f tags ; ctags -R"
 
-# Can't change dir's using script so use an alias
-alias aoscd='~/Desktop/aos-2019'
-
 # Open up a tar file
 alias untar="tar -xvf"
 
@@ -277,5 +268,5 @@ function dict () {
 #    if [ -z "$2" ]; then
 #        sed 's/\./'"$2"'/g'
 #    fi
-    grep "$regexp" /usr/share/dict/words
+    grep "$regexp" /usr/share/dict/words | grep -v '^[A-Z]' | grep '.'
 }

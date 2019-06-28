@@ -157,6 +157,9 @@ nnoremap <silent> <C-n> :tabN<CR>
 " Find the file, look recursibly
 nnoremap <leader>f :cscope find f<space>
 
+" Find functions calling this function
+nnoremap <leader>C :cscope find c<space>
+
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
 command! -nargs=* Wq  :wq <args>
@@ -175,6 +178,7 @@ if tolower ($TERM) =~ "rxvt" && $USER !=? "z5210220"
   let &t_SR = "\<Esc>[4 q"
   let &t_EI = "\<Esc>[2 q"
 endif
+
 
 " Turn on hlsearch when searching
 " Turn it off in insert mode
