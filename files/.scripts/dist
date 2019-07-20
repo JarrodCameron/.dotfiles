@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+# Author: Jarrod Cameron (z5210220)
+# Date:   06/07/19 22:16
+
+from sys import stdin
+
+d = {}
+good="abcdefghijklmnopqrstuvwxyz"
+
+for line in stdin:
+    for char in line:
+        if char.lower() not in good:
+            continue
+
+        if char.lower() not in d:
+            d[char.lower()] = 1
+        else:
+            d[char.lower()] += 1
+
+for k, v in sorted(d.items()):
+    print(k, "->", v)

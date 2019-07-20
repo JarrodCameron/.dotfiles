@@ -16,6 +16,8 @@
 BOLD="\e[1m"
 ULINE="\e[4m"
 RESET="\e[0m"
+RED="\e[31m"
+GREEN="\e[32m"
 
 function _update_ps1() {
     PS1=$(powerline-shell $?)
@@ -160,7 +162,7 @@ function aos () {
     elif [ "$1" = "ifup" ]; then
         sudo ifup enx180f76012290
     elif [ "$1" = "ifdown" ]; then
-        sudo down enx180f76012290
+        sudo ifdown enx180f76012290
     elif [ "$1" = "csc" ]; then
         cd "$os_path"
         ctags -R
@@ -177,6 +179,8 @@ function aos () {
         tmux new-window -n "Editor" -t "$session"                               # New window (editor)
         tmux send-keys -t "$session" "clear && cd $os_path" C-m                 # Move to OS directory
         tmux send-keys -t "$session" "ctags -R 2>/dev/null ; cscope -R" C-m     # Start up the beast
+        tmux new-window -n "Git" -t "$session"                                  # New window (git)
+        tmux last-window -t "$session"                                          # Move back to `editor'
         tmux attach-session -t "$session"                                       # Join the session
     else
         echo -ne "$BOLD"
@@ -232,6 +236,7 @@ alias r2="radare2"
 alias a2="radare2 -A"
 
 alias csc="cscope -R"
+alias cro="(export CSCOPE_EDITOR=view && cscope -R)"
 alias tag="vim -t"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
@@ -251,6 +256,19 @@ alias .....="cd ../../../.."
 alias vv="vim ."
 alias retag="rm -f tags ; ctags -R"
 
+alias dumbshell='setarch `uname -m` -R /bin/bash'
+
+function aslr () {
+    if [ -z "$1" ]; then
+        echo "Usage: aslr [off]"
+    elif [ "$1" = "off" ]; then
+        echo -e "ASLR is ""$BOLD$RED""OFF""$RESET"
+        setarch `uname -m` -R `which bash`
+    else
+        echo "Usage: aslr [off]"
+    fi
+}
+
 # Open up a tar file
 alias untar="tar -xvf"
 
@@ -258,9 +276,9 @@ alias untar="tar -xvf"
 stty -ixon
 
 # Print out todo list
-if [ -r "$HOME""/.todo" ] && [ -s "$HOME""/.todo" ]; then
+if [ -r "$HOME""/.todo" ] && [ "$(grep -v '^#' "$HOME""/.todo" | wc -l)" != "0" ]; then
   echo -e "$BOLD""To do list:""$RESET"
-  sed '/^$/d' "$HOME""/.todo" | nl -w 1 -b t -s ') '
+  sed '/^$/d' "$HOME""/.todo" | grep -v '^#' | nl -w 1 -b t -s ') '
 fi
 
 function dict () {
@@ -268,5 +286,5 @@ function dict () {
 #    if [ -z "$2" ]; then
 #        sed 's/\./'"$2"'/g'
 #    fi
-    grep "$regexp" /usr/share/dict/words | grep -v '^[A-Z]' | grep '.'
+    grep "$regexp" /usr/share/dict/words | grep '.'
 }

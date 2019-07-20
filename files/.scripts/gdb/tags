@@ -1,0 +1,32 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Colors	scan.py	/^class Colors():$/;"	c
+Help	scan.py	/^class Help():$/;"	c
+Regions	scan.py	/^class Regions():$/;"	c
+Scan	scan.py	/^class Scan(gdb.Command):$/;"	c
+Util	scan.py	/^class Util():$/;"	c
+__blue	scan.py	/^    __blue = '\\x1B[34m'$/;"	v	class:Colors
+__bold	scan.py	/^    __bold = '\\x1B[1m'$/;"	v	class:Colors
+__green	scan.py	/^    __green = '\\x1B[32m'$/;"	v	class:Colors
+__init__	scan.py	/^    def __init__(self):$/;"	m	class:Scan
+__init__	scan.py	/^    def __init__(self, size):$/;"	m	class:Regions
+__red	scan.py	/^    __red = '\\x1B[31m'$/;"	v	class:Colors
+__region_size	scan.py	/^    def __region_size(self):$/;"	m	class:Regions	file:
+__reset	scan.py	/^    __reset = '\\x1B[0m'$/;"	v	class:Colors
+__writeable	scan.py	/^    def __writeable(self, line):$/;"	m	class:Regions	file:
+__yellow	scan.py	/^    __yellow = '\\x1B[33m'$/;"	v	class:Colors
+blue	scan.py	/^    def blue(s):$/;"	m	class:Colors
+bold	scan.py	/^    def bold(s):$/;"	m	class:Colors
+do	scan.py	/^    def do():$/;"	m	class:Help
+green	scan.py	/^    def green(s):$/;"	m	class:Colors
+init	scan.py	/^    def init():$/;"	m	class:Help
+invoke	scan.py	/^    def invoke(self, arg, from_tty):$/;"	m	class:Scan
+list	scan.py	/^    def list(self, length=False):$/;"	m	class:Regions
+red	scan.py	/^    def red(s):$/;"	m	class:Colors
+scan	scan.py	/^    def scan(self, value):$/;"	m	class:Regions
+str_to_args	scan.py	/^    def str_to_args(arg):$/;"	m	class:Util
+yellow	scan.py	/^    def yellow(s):$/;"	m	class:Colors

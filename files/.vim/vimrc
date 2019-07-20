@@ -244,6 +244,8 @@ autocmd FileType rmd iabbrev tbf textbf
 autocmd FileType rmd iabbrev tit textit
 autocmd FileType text setlocal spell spelllang=en_au
 
+autocmd FileType python command! R :w ! :!clear && python %
+
 autocmd FileType html command! R :w | :!google-chrome --new-window %
 autocmd FileType html setlocal cursorcolumn
 
@@ -253,7 +255,7 @@ autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
 autocmd FileType c iabbrev <buffer> \N \n
 autocmd FileType c iabbrev <buffer> \m \n
 autocmd FileType c iabbrev <buffer> struc struct
-"autocmd FileType c if filereadable("cscope.out") | execute "cscope add cscope.out" | endif
+autocmd FileType c command! Dcheck :%s/check();\n//g
 
 autocmd FileType text setlocal spell spelllang=en_au
 

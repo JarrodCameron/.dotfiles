@@ -97,10 +97,10 @@ mode "$resize" {
   bindsym k resize shrink height 2 px
   bindsym l resize grow width 2 px
 
-  bindsym Shift+h resize shrink width 5 px
-  bindsym Shift+j resize grow height 5 px
-  bindsym Shift+k resize shrink height 5 px
-  bindsym Shift+l resize grow width 5 px
+  bindsym Shift+h resize shrink width 20 px
+  bindsym Shift+j resize grow height 20 px
+  bindsym Shift+k resize shrink height 20 px
+  bindsym Shift+l resize grow width 20 px
 
   bindsym q      mode "default"
   bindsym Escape mode "default"
@@ -285,3 +285,5 @@ exec_always --no-startup-id nm-applet
 
 # Startup pulseaudio
 exec_always pulseaudio --start
+
+gaps inner 2
