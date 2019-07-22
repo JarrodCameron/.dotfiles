@@ -10,6 +10,17 @@ import gdb
 #get mappings
 # https://stackoverflow.com/questions/5691193/gdb-listing-all-mapped-memory-regions-for-a-crashed-process
 
+### Code to get the offset into the elf file ###
+#from elftools.elf.elffile import ELFFile
+#
+#def get_entry(file_name):
+#    with open(file_name, 'rb') as f:
+#        entry = ELFFile(f).header['e_entry']
+#        print(hex(entry))
+#
+#get_entry('test')
+
+
 # TODO
 # - Support values of base 10, 16, 8, 2
 # - Use a dictionary for the regions (not a tuple)
@@ -72,6 +83,48 @@ class Help():
         print('[*] Usage: scan watch')
         print('[*] Set a watch point for all the selected addresses')
 
+def Handler():
+    region = None
+
+    # Initialise breakpoint handler
+    def init_breakpoint(reg):
+        if reg == None or self.reg != None:
+            Help.watch()
+            return
+        gdb.event.stop.connect(Handler.breakpoint_event)
+        region = reg
+        region.watch_points = []
+        region.spotters = []
+        region.num_spotted = 0
+        for addr in region.addrs:
+            wp = Breakpoint(
+                'watch *' + hex(addr),
+                type = gdb.BP_HARDWARE_WATCHPOINT,
+                internal = True,
+                temporary = False
+            )
+            region.watch_points.append(wp)
+
+    # Stop the breakpoint handler
+    def kill_breakpoint():
+        if region == None:
+            Help.watch()
+            return
+        gdb.events.stop.disconnect(Handler.breakpoint_event)
+        for wp in region.watch_points:
+            wp.delete()
+        region = None
+
+    def breakpoint_event(event):
+        one_of_ours = False
+        if isinstance(event, gdb.BreakpointEvent):
+            for b in event.breakpoints:
+                # TODO: Check if breakpoint is in the list
+                # and if it is then do some book keeping
+                print(b)
+        if one_of_ours = True:
+            gdb.execute('continue')
+
 class Regions():
     # We scan the linux process file since gdb doesn't give us the permsissions of each region
     def __init__(self, size):
@@ -116,34 +169,18 @@ class Regions():
             for a in self.addrs:
                 print(hex(a))
 
-    def memory_changed_handler(event):
-        print('We are in the handler')
-        #assert (isinstance(event, gdb.MemoryCahngedEvent))
-        self.mem_acc += 1
-        addr = int(event.address, 16)
-        print("Addr -> {}".format(event.address))
-        if addr in self.addrs:
-            print("WE HAVE BEEN ACCESSED")
-
     def watch(self, state):
         if len(self.addrs) == 0:
             print(f'{Colors.green("[*]")} There are no addresses to watch.')
             return
 
-        print(state)
-        print(state)
-        print(state)
-        print(self.mem_acc)
-        print(self.mem_acc)
-        print(self.mem_acc)
-
-        self.mem_acc = 0
-        gdb.events.memory_changed.connect(self.memory_changed_handler)
-#
-#        for addr in self.addrs:
-#            cmd = 'watch *' + hex(addr)
-#            gdb.execute(cmd, to_string=False)
-#        print(f'{Colors.green("[*]")} {len(self.addrs)} watchpoint(s) added.')
+        if state == 'start':
+            Handler.init_breakpoint(self)
+        elif state == 'stop':
+            Handler.kill_breakpoint()
+        else:
+            print("Shouldn't get here")
+            assert(0)
 
     def __writeable(self, line):
         perms = [' rw-p ', ' rw-s ', ' rwxp ', ' rwxs ']

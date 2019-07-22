@@ -22,11 +22,16 @@ __yellow	scan.py	/^    __yellow = '\\x1B[33m'$/;"	v	class:Colors
 blue	scan.py	/^    def blue(s):$/;"	m	class:Colors
 bold	scan.py	/^    def bold(s):$/;"	m	class:Colors
 do	scan.py	/^    def do():$/;"	m	class:Help
+full	scan.py	/^    def full():$/;"	m	class:Help
 green	scan.py	/^    def green(s):$/;"	m	class:Colors
 init	scan.py	/^    def init():$/;"	m	class:Help
 invoke	scan.py	/^    def invoke(self, arg, from_tty):$/;"	m	class:Scan
 list	scan.py	/^    def list(self, length=False):$/;"	m	class:Regions
+ls	scan.py	/^    def ls():$/;"	m	class:Help
+memory_changed_handler	scan.py	/^    def memory_changed_handler(event):$/;"	m	class:Regions
 red	scan.py	/^    def red(s):$/;"	m	class:Colors
 scan	scan.py	/^    def scan(self, value):$/;"	m	class:Regions
 str_to_args	scan.py	/^    def str_to_args(arg):$/;"	m	class:Util
+watch	scan.py	/^    def watch():$/;"	m	class:Help
+watch	scan.py	/^    def watch(self, state):$/;"	m	class:Regions
 yellow	scan.py	/^    def yellow(s):$/;"	m	class:Colors
