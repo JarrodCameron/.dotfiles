@@ -3,7 +3,10 @@
 # Date:   13/07/19 15:28
 
 import sys
+import os
 import gdb
+import shutil
+from elftools.elf.elffile import ELFFile
 
 #dump to file
 # https://stackoverflow.com/questions/16095948/dump-memory-save-formatted-output-into-a-file
@@ -28,6 +31,9 @@ import gdb
 # - Add colors to errors
 # - Does the watch points work with non 32 bit vals?
 # - When the watch is done we should list offset into elf file
+# - Why does the breakpoint get triggered when the program finishes?
+
+ASM_NOP = b'\x90'
 
 class Colors():
     __red = '\x1B[31m'
@@ -65,6 +71,7 @@ class Help():
         print('[*]')
         Help.watch()
         print('[*]')
+        Help.offend()
 
     def init():
         print('[*] Usage: scan init <size>')
@@ -82,48 +89,70 @@ class Help():
     def watch():
         print('[*] Usage: scan watch')
         print('[*] Set a watch point for all the selected addresses')
+    def offend():
+        print('[*] Usage: scan offend <ls|elf|patch>')
+        print('[*] An "offending" address is one that changes the specified values')
+        print('[*] ls -> List all the instructions in the virtual address space')
+        print('[*] elf -> List all the offsets within the elf file')
+        print('[*] patch -> Patch instructions with nop\'s')
 
-def Handler():
-    region = None
 
-    # Initialise breakpoint handler
-    def init_breakpoint(reg):
-        if reg == None or self.reg != None:
-            Help.watch()
-            return
-        gdb.event.stop.connect(Handler.breakpoint_event)
-        region = reg
-        region.watch_points = []
-        region.spotters = []
-        region.num_spotted = 0
-        for addr in region.addrs:
-            wp = Breakpoint(
-                'watch *' + hex(addr),
-                type = gdb.BP_HARDWARE_WATCHPOINT,
-                internal = True,
-                temporary = False
+class ScanWatchpoint(gdb.Breakpoint):
+
+    def __init__(self, region, loc, bp_type=gdb.BP_WATCHPOINT, internal=True, temp=False):
+        super(ScanWatchpoint, self).__init__(
+            loc,                # The location of out watchpoint
+            type=bp_type,       # The type of breakpoint
+            internal=internal,  # Hide the breakpoint from the user
+            temporary=temp,     # Should/shouldn't stop after the first hit
+        )
+        self.region = region
+
+        # The unique address that modify our `loc'
+        # These will all be `store' type instructions
+        self.offenders = []
+
+        # The number of time the breakpoint has been `hit'
+        self.hits = 0
+
+    def stop(self):
+        dump = gdb.execute('x/128i $rip-128', to_string=True)
+        for index, line in enumerate(dump.splitlines()):
+            if len(line) > 2 and '=>' == line[0:2]:
+                # Location of the `store' instruction in memory
+                offender = int(dump.splitlines()[index-1].split()[0], 16)
+                self.hits += 1
+                if offender not in self.offenders:
+                    self.offenders.append(offender)
+                    break
+
+        # Continue execution
+        return False
+
+class Handler():
+
+    def __init__(self, reg):
+        self.region = reg
+        self.region.wp = []
+        for addr in self.region.addrs:
+            self.region.wp.append(
+                ScanWatchpoint(region=reg, loc='*(int*)' + hex(addr))
             )
-            region.watch_points.append(wp)
+        print(Colors.green('[*]') + ' Initialised {} watchpoints'.format(len(self.region.wp)))
 
-    # Stop the breakpoint handler
-    def kill_breakpoint():
-        if region == None:
-            Help.watch()
-            return
-        gdb.events.stop.disconnect(Handler.breakpoint_event)
-        for wp in region.watch_points:
+    def destroy(self):
+        num_hits = 0
+        offenders = []
+        for wp in self.region.wp:
+            num_hits += wp.hits
+            offenders += wp.offenders
             wp.delete()
-        region = None
+        # Remove duplicates
+        self.region.offenders = list(set(offenders))
 
-    def breakpoint_event(event):
-        one_of_ours = False
-        if isinstance(event, gdb.BreakpointEvent):
-            for b in event.breakpoints:
-                # TODO: Check if breakpoint is in the list
-                # and if it is then do some book keeping
-                print(b)
-        if one_of_ours = True:
-            gdb.execute('continue')
+        print(Colors.green('[*]') + ' There were {} hits'.format(num_hits))
+        print(Colors.green('[*]') + ' There were {} offending instructions'.format(len(self.region.offenders)))
+        return self.region.offenders
 
 class Regions():
     # We scan the linux process file since gdb doesn't give us the permsissions of each region
@@ -146,6 +175,7 @@ class Regions():
             Help.init()
             return None
 
+        self.handler = None
         self.addrs = []
         self.write_regions = []
         self.pid = gdb.execute('info proc mappings', to_string=True).split()[1]
@@ -170,14 +200,15 @@ class Regions():
                 print(hex(a))
 
     def watch(self, state):
+
         if len(self.addrs) == 0:
             print(f'{Colors.green("[*]")} There are no addresses to watch.')
             return
-
         if state == 'start':
-            Handler.init_breakpoint(self)
+            #Handler.init_breakpoint(self)
+            self.handler = Handler(self)
         elif state == 'stop':
-            Handler.kill_breakpoint()
+            self.handler.destroy()
         else:
             print("Shouldn't get here")
             assert(0)
@@ -242,6 +273,69 @@ class Regions():
         # Remove any duplicates
         self.addrs = list(sorted(set(li)))
 
+    def __elf_offenders(self):
+        elf_offenders = []
+        ventry = int(gdb.execute('info file', to_string=True).splitlines()[6].split()[2], 16)
+        file_name = gdb.execute('info file', to_string=True).splitlines()[0][14:-2]
+        with open(file_name, 'rb') as f:
+            # The physical entry in the ELF file
+            pentry = ELFFile(f).header['e_entry']
+
+        # We exploit the fact ALSR is disabled by default
+        for o in self.offenders:
+            elf_offenders.append(pentry + o - ventry)
+        return elf_offenders
+
+    # Return the length of the instruction at the virtual
+    # location `vins'
+    def __ins_len(self, vins):
+        addr1 = int(gdb.execute('x/2i ' + str(vins), to_string=True).splitlines()[0].split()[0], 16)
+        line2 = gdb.execute('x/2i ' + str(vins), to_string=True).splitlines()[1].split()
+        if line2[0] == '=>':
+            addr2 = int(line2[1], 16)
+        else:
+            addr2 = int(line2[0], 16)
+        return abs(addr2 - addr1)
+
+    def offend(self, arg):
+        if arg == 'ls':
+            for o in self.offenders:
+                print(gdb.execute('x/i ' + hex(o), to_string=True).split()[0])
+        elif arg == 'elf':
+            self.elf_offenders = self.__elf_offenders()
+
+            for o in self.elf_offenders:
+                print(hex(o))
+
+        elif arg == 'patch':
+
+            file_name = gdb.execute('info file', to_string=True).splitlines()[0][14:-2]
+
+            file_name_pat = file_name + '_pat'
+            shutil.copy(file_name, file_name_pat)
+            print(Colors.green('[*]') + ' Created new file:')
+            print(Colors.green('[*]') + '     {}'.format(file_name_pat))
+
+            # We use raw syscalls since python prints may have
+            #   unknwon side effects
+            fd = os.open(file_name_pat, os.O_WRONLY)
+
+            # Get the offsets in the elf file
+            self.elf_offenders = self.__elf_offenders()
+
+            for i in range(len(self.elf_offenders)):
+                ins_len = self.__ins_len(self.offenders[i])
+                eo = self.elf_offenders[i]
+
+                os.lseek(fd, eo, os.SEEK_SET)
+                os.write(fd, ASM_NOP * ins_len)
+
+                print(Colors.green('[*]') + ' @ {}'.format(eo))
+
+            os.close(fd)
+
+            print(Colors.green('[*]') + ' {} instructions nop\'d out'.format(len(self.elf_offenders)))
+
 
 class Scan(gdb.Command):
     def __init__(self):
@@ -278,18 +372,31 @@ class Scan(gdb.Command):
         elif argv[0] in ['watch']:
             if self.region == None:
                 Help.watch()
-            if len(argv) == 2 and argv[1].lower() in ['start', 'stop']:
+            elif len(argv) == 2 and argv[1].lower() in ['start', 'stop']:
                 self.region.watch(argv[1].lower())
             else:
                 Help.watch()
+        elif argv[0] in ['offend', 'o']:
+            if self.region.offenders == []:
+                print(Colors.red('[*]') + ' Have you run `scan watch start/stop`?')
+                Help.offend()
+            elif argv[1].lower() in ['ls', 'elf', 'patch']:
+                # TODO ls
+                # TODO elf
+                # TODO patch
+                self.region.offend(argv[1].lower())
+            else:
+                Help.offend()
         elif argv[0] in ['test']:
-            # TODO: This should be used to do entry point stuff
-            print('We are in test')
-            try:
-                gdb.execute('continue')
-            except gdb.error as e:
-                print('a' * 10000)
-                print(str(e))
+            # The entry point from where the program is running from
+            ventry = int(gdb.execute('info file', to_string=True).splitlines()[6].split()[2], 16)
+            file_name = gdb.execute('info file', to_string=True).splitlines()[0][14:-2]
+            with open(file_name, 'rb') as f:
+                # The physical entry in the ELF file
+                pentry = ELFFile(f).header['e_entry']
+            # Next we need to x/i minus the ventry to get the offset
+            # The offset into the elf file is the `pentry + offset` (which was was just calculatored)
+
         else:
             Help.full()
 Scan()

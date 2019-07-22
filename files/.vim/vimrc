@@ -244,6 +244,7 @@ autocmd FileType rmd iabbrev tbf textbf
 autocmd FileType rmd iabbrev tit textit
 autocmd FileType text setlocal spell spelllang=en_au
 
+"autocmd FileType python inoremap <leader>s ?^class
 autocmd FileType python command! R :w ! :!clear && python %
 
 autocmd FileType html command! R :w | :!google-chrome --new-window %
