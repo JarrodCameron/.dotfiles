@@ -1,0 +1,7 @@
+#!/bin/sh
+
+wm_pid=$(xprop | grep _NET_WM_PID | sed 's/.* = //g')
+bin_pid=$(pstree $wm_pid -p | head -n 1 | sed 's/^.*(//g ; s/)//g')
+gdb -q -p $bin_pid
+
+

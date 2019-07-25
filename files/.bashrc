@@ -255,6 +255,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias vv="vim ."
 alias retag="rm -f tags ; ctags -R"
+alias q="exit"
 
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 
@@ -280,6 +281,10 @@ if [ -r "$HOME""/.todo" ] && [ "$(grep -v '^#' "$HOME""/.todo" | wc -l)" != "0" 
   echo -e "$BOLD""To do list:""$RESET"
   sed '/^$/d' "$HOME""/.todo" | grep -v '^#' | nl -w 1 -b t -s ') '
 fi
+
+function rfind () {
+    find -name '*'$1'*'
+}
 
 function dict () {
     local regexp='^'"$1"'$'

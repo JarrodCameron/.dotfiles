@@ -8,51 +8,26 @@ import gdb
 import shutil
 from elftools.elf.elffile import ELFFile
 
-#dump to file
-# https://stackoverflow.com/questions/16095948/dump-memory-save-formatted-output-into-a-file
-#get mappings
-# https://stackoverflow.com/questions/5691193/gdb-listing-all-mapped-memory-regions-for-a-crashed-process
-
-### Code to get the offset into the elf file ###
-#from elftools.elf.elffile import ELFFile
-#
-#def get_entry(file_name):
-#    with open(file_name, 'rb') as f:
-#        entry = ELFFile(f).header['e_entry']
-#        print(hex(entry))
-#
-#get_entry('test')
-
-
 # TODO
 # - Support values of base 10, 16, 8, 2
 # - Use a dictionary for the regions (not a tuple)
-# - Add colors to help
-# - Add colors to errors
 # - Does the watch points work with non 32 bit vals?
-# - When the watch is done we should list offset into elf file
-# - Why does the breakpoint get triggered when the program finishes?
 
 ASM_NOP = b'\x90'
 
-class Colors():
+class log():
     __red = '\x1B[31m'
     __green = '\x1B[32m'
     __yellow = '\x1B[33m'
     __blue = '\x1B[34m'
     __reset = '\x1B[0m'
     __bold = '\x1B[1m'
-
-    def red(s):
-        return Colors.__red    + str(s) + Colors.__reset
-    def green(s):
-        return Colors.__green  + str(s) + Colors.__reset
-    def yellow(s):
-        return Colors.__yellow + str(s) + Colors.__reset
-    def blue(s):
-        return Colors.__blue   + str(s) + Colors.__reset
-    def bold(s):
-        return Colors.__bold   + str(s) + Colors.__reset
+    def green(s=''):
+        print(log.__reset + log.__green + '[*] '  + log.__reset + s + log.__reset)
+    def red(s=''):
+        print(log.__reset + log.__red + '[*] '    + log.__reset + s + log.__reset)
+    def yellow(s=''):
+        print(log.__reset + log.__yellow + '[*] ' + log.__reset + s + log.__reset)
 
 class Util():
     def str_to_args(arg):
@@ -64,37 +39,37 @@ class Util():
 class Help():
     def full():
         Help.init()
-        print('[*]')
+        log.green()
         Help.do()
-        print('[*]')
+        log.green()
         Help.ls()
-        print('[*]')
+        log.green()
         Help.watch()
-        print('[*]')
+        log.green()
         Help.offend()
 
     def init():
-        print('[*] Usage: scan init <size>')
-        print('[*] size -> Size of the value in bits: b(8), h(16), w(32), or g(64)')
+        log.green('Usage: scan init <size>')
+        log.green('size -> Size of the value in bits: b(8), h(16), w(32), or g(64)')
     def do():
-        print('[*] Usage: scan do <value>')
-        print('[*] value -> The value to look for in the address space')
-        print('[*]          Thie size was given from `scan init\'')
-        print('[*] The first time, all RW and RWX pages are scanned.')
-        print('[*] Sequential calls only check values from the previous `scan do\'')
+        log.green('Usage: scan do <value>')
+        log.green('value -> The value to look for in the address space')
+        log.green('         Thie size was given from `scan init\'')
+        log.green('The first time, all RW and RWX pages are scanned.')
+        log.green('Sequential calls only check values from the previous `scan do\'')
     def ls():
-        print('[*] Usage: scan ls [length]')
-        print('[*] Print all the addresses from the last `scan do\'')
-        print('[*] length -> Print the number of matches')
+        log.green('Usage: scan ls [length]')
+        log.green('Print all the addresses from the last `scan do\'')
+        log.green('length -> Print the number of matches')
     def watch():
-        print('[*] Usage: scan watch')
-        print('[*] Set a watch point for all the selected addresses')
+        log.green('Usage: scan watch')
+        log.green('Set a watch point for all the selected addresses')
     def offend():
-        print('[*] Usage: scan offend <ls|elf|patch>')
-        print('[*] An "offending" address is one that changes the specified values')
-        print('[*] ls -> List all the instructions in the virtual address space')
-        print('[*] elf -> List all the offsets within the elf file')
-        print('[*] patch -> Patch instructions with nop\'s')
+        log.green('Usage: scan offend <ls|elf|patch>')
+        log.green('An "offending" address is one that changes the specified values')
+        log.green('ls -> List all the instructions in the virtual address space')
+        log.green('elf -> List all the offsets within the elf file')
+        log.green('patch -> Patch instructions with nop\'s')
 
 
 class ScanWatchpoint(gdb.Breakpoint):
@@ -120,7 +95,11 @@ class ScanWatchpoint(gdb.Breakpoint):
         for index, line in enumerate(dump.splitlines()):
             if len(line) > 2 and '=>' == line[0:2]:
                 # Location of the `store' instruction in memory
-                offender = int(dump.splitlines()[index-1].split()[0], 16)
+                offen_addr = dump.splitlines()[index-1].split()[0]
+                if offen_addr[-1] == ':':
+                    offender = int(offen_addr[:-1], 16)
+                else:
+                    offender = int(offen_addr, 16)
                 self.hits += 1
                 if offender not in self.offenders:
                     self.offenders.append(offender)
@@ -138,7 +117,7 @@ class Handler():
             self.region.wp.append(
                 ScanWatchpoint(region=reg, loc='*(int*)' + hex(addr))
             )
-        print(Colors.green('[*]') + ' Initialised {} watchpoints'.format(len(self.region.wp)))
+        log.green('Initialised {} watchpoints'.format(len(self.region.wp)))
 
     def destroy(self):
         num_hits = 0
@@ -150,8 +129,8 @@ class Handler():
         # Remove duplicates
         self.region.offenders = list(set(offenders))
 
-        print(Colors.green('[*]') + ' There were {} hits'.format(num_hits))
-        print(Colors.green('[*]') + ' There were {} offending instructions'.format(len(self.region.offenders)))
+        log.green('There were {} hits'.format(num_hits))
+        log.green('There were {} offending instructions'.format(len(self.region.offenders)))
         return self.region.offenders
 
 class Regions():
@@ -171,7 +150,7 @@ class Regions():
             self.sizeof = 64
             self.query = 'g'
         else:
-            print('[*] ERROR: Unknown size \'{}\''.format(size))
+            log.red('ERROR: Unknown size \'{}\''.format(size))
             Help.init()
             return None
 
@@ -188,9 +167,9 @@ class Regions():
                 length = int(line.replace('-', ' ').split()[1], 16) - base
                 self.write_regions.append((base, length))
 
-        print('[*] PID: {}'.format(self.pid))
-        print('[*] Found {} writeable regions'.format(len(self.write_regions)))
-        print('[*] Size of regions is {} bytes'.format(hex(self.__region_size())))
+        log.green('PID: {}'.format(self.pid))
+        log.green('Found {} writeable regions'.format(len(self.write_regions)))
+        log.green('Size of regions is {} bytes'.format(hex(self.__region_size())))
 
     def list(self, length=False):
         if length == True:
@@ -202,7 +181,7 @@ class Regions():
     def watch(self, state):
 
         if len(self.addrs) == 0:
-            print(f'{Colors.green("[*]")} There are no addresses to watch.')
+            log.yellow('There are no addresses to watch.')
             return
         if state == 'start':
             #Handler.init_breakpoint(self)
@@ -231,7 +210,7 @@ class Regions():
         try:
             value = int(value)
         except ValueError:
-            print('[*] ERROR: Invalid value \'{}\''.format(value))
+            log.red('ERROR: Invalid value \'{}\''.format(value))
             Help.do()
             return -1
 
@@ -255,7 +234,7 @@ class Regions():
                     addr = s.split()[0]
                     if addr[0:2] == '0x':
                         li.append(int(addr, 16))
-            print('[*] Found: {}'.format(len(li)))
+            log.green('Found: {}'.format(len(li)))
         else:
             # This is atleast the second time the function is being called
             for addr in self.addrs:
@@ -268,7 +247,11 @@ class Regions():
                     # This address in memory is longer mapped in
                     pass
 
-            print('[*] Found: {} -> {}'.format(len(self.addrs), len(li)))
+            out = 'Found: {} -> {}'.format(len(self.addrs), len(li))
+            if len(li) < len(self.addrs):
+                log.green(out)
+            else:
+                log.yellow(out)
 
         # Remove any duplicates
         self.addrs = list(sorted(set(li)))
@@ -289,18 +272,29 @@ class Regions():
     # Return the length of the instruction at the virtual
     # location `vins'
     def __ins_len(self, vins):
-        addr1 = int(gdb.execute('x/2i ' + str(vins), to_string=True).splitlines()[0].split()[0], 16)
+        addr1 = gdb.execute('x/2i ' + str(vins), to_string=True).splitlines()[0].split()[0]
+        if addr1[-1] == ':':
+            addr1 = int(addr1[:-1], 16)
+        else:
+            addr1 = int(addr1, 16)
         line2 = gdb.execute('x/2i ' + str(vins), to_string=True).splitlines()[1].split()
         if line2[0] == '=>':
-            addr2 = int(line2[1], 16)
+            if line2[1][-1] == ':':
+                addr2 = int(line2[1][:-1], 16)
+            else:
+                addr2 = int(line2[1], 16)
         else:
-            addr2 = int(line2[0], 16)
+            if line2[0][-1] == ':':
+                addr2 = int(line2[0][:-1], 16)
+            else:
+                addr2 = int(line2[0], 16)
         return abs(addr2 - addr1)
 
     def offend(self, arg):
+
         if arg == 'ls':
             for o in self.offenders:
-                print(gdb.execute('x/i ' + hex(o), to_string=True).split()[0])
+                gdb.execute('x/i ' + hex(o))
         elif arg == 'elf':
             self.elf_offenders = self.__elf_offenders()
 
@@ -313,8 +307,8 @@ class Regions():
 
             file_name_pat = file_name + '_pat'
             shutil.copy(file_name, file_name_pat)
-            print(Colors.green('[*]') + ' Created new file:')
-            print(Colors.green('[*]') + '     {}'.format(file_name_pat))
+            log.green(' Created new file:')
+            log.green('     {}'.format(file_name_pat))
 
             # We use raw syscalls since python prints may have
             #   unknwon side effects
@@ -330,11 +324,11 @@ class Regions():
                 os.lseek(fd, eo, os.SEEK_SET)
                 os.write(fd, ASM_NOP * ins_len)
 
-                print(Colors.green('[*]') + ' @ {}'.format(eo))
+                log.green(' @ {}'.format(hex(eo)))
 
             os.close(fd)
 
-            print(Colors.green('[*]') + ' {} instructions nop\'d out'.format(len(self.elf_offenders)))
+            log.green('{} instructions nop\'d out'.format(len(self.elf_offenders)))
 
 
 class Scan(gdb.Command):
@@ -356,7 +350,7 @@ class Scan(gdb.Command):
                 Help.do()
                 return
             if self.region == None:
-                print('[*] Did you forget to init?')
+                log.yellow('Did you forget to init?')
                 return
             self.region.scan(argv[1])
         elif argv[0] in ['ls']:
@@ -378,25 +372,12 @@ class Scan(gdb.Command):
                 Help.watch()
         elif argv[0] in ['offend', 'o']:
             if self.region.offenders == []:
-                print(Colors.red('[*]') + ' Have you run `scan watch start/stop`?')
+                log.red('Have you run `scan watch start/stop`?')
                 Help.offend()
             elif argv[1].lower() in ['ls', 'elf', 'patch']:
-                # TODO ls
-                # TODO elf
-                # TODO patch
                 self.region.offend(argv[1].lower())
             else:
                 Help.offend()
-        elif argv[0] in ['test']:
-            # The entry point from where the program is running from
-            ventry = int(gdb.execute('info file', to_string=True).splitlines()[6].split()[2], 16)
-            file_name = gdb.execute('info file', to_string=True).splitlines()[0][14:-2]
-            with open(file_name, 'rb') as f:
-                # The physical entry in the ELF file
-                pentry = ELFFile(f).header['e_entry']
-            # Next we need to x/i minus the ventry to get the offset
-            # The offset into the elf file is the `pentry + offset` (which was was just calculatored)
-
         else:
             Help.full()
 Scan()
