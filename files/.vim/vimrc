@@ -26,7 +26,8 @@ set t_Co=256
 set background=dark
 colorscheme gruvbox
 
-set shiftwidth=2
+"set shiftwidth=2
+set shiftwidth=4
 set numberwidth=4
 set smartindent
 set autoindent
@@ -245,7 +246,7 @@ autocmd FileType rmd iabbrev tit textit
 autocmd FileType text setlocal spell spelllang=en_au
 
 "autocmd FileType python inoremap <leader>s ?^class
-autocmd FileType python command! R :w ! :!clear && python %
+autocmd FileType python command! R :w | :!clear && python %
 
 autocmd FileType html command! R :w | :!google-chrome --new-window %
 autocmd FileType html setlocal cursorcolumn
@@ -257,6 +258,7 @@ autocmd FileType c iabbrev <buffer> \N \n
 autocmd FileType c iabbrev <buffer> \m \n
 autocmd FileType c iabbrev <buffer> struc struct
 autocmd FileType c command! Dcheck :%s/check();\n//g
+autocmd FileType c inoremap <leader>dc debug_check();<CR>
 
 autocmd FileType text setlocal spell spelllang=en_au
 
@@ -264,27 +266,6 @@ autocmd FileType make setlocal noexpandtab
 
 autocmd FileType vim setlocal foldmethod=marker
 autocmd FileType vim normal zM
-" }}}
-
-" Brackets stuff ---------------------- {{{
-"inoremap {<CR> {<CR>}<esc>O
-"inoremap [<CR> [<CR>]<esc>O<space><space><space><space>
-"inoremap (<CR> (<CR>)<esc>O<space><space><space><space>
-"
-"inoremap {;<CR> {<CR>};<esc>O
-"inoremap [;<CR> [<CR>];<esc>O<space><space><space><space>
-"inoremap (;<CR> (<CR>);<esc>O<space><space><space><space>
-"
-"vnoremap <leader>c :call g:ToggleComments()<CR>
-"
-"inoremap ( (<esc>:call g:InsertOpenBracket('(', ')')<CR>a
-"inoremap { {}<left>
-"inoremap [ []<left>
-"inoremap ( ()<left>
-"
-"inoremap } }<esc>:call g:InsertPair("}")<CR>a
-"inoremap ] ]<esc>:call g:InsertPair("]")<CR>a
-"inoremap ) )<esc>:call g:InsertPair(")")<CR>a
 " }}}
 
 " Kindergarten spelling skills ---------------------- {{{
@@ -349,15 +330,5 @@ function! g:ToggleComments() range
     execute l:cmd
   endif
 endfunction
-
-" Insert closing bracket
-"function! g:InsertPair(bracket)
-"  if col("$") == 1 || col(".") == col("$")-1
-"    return
-"  endif
-"  if getline(".")[col(".")] == a:bracket
-"    execute "normal! x"
-"  endif
-"endfunction
 
 " }}}

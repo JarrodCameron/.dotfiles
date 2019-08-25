@@ -178,7 +178,7 @@ function aos () {
         tmux send-keys -t left "clear && cd $os_path" C-m                       # Move to OS directory (left pane)
         tmux new-window -n "Editor" -t "$session"                               # New window (editor)
         tmux send-keys -t "$session" "clear && cd $os_path" C-m                 # Move to OS directory
-        tmux send-keys -t "$session" "ctags -R 2>/dev/null ; cscope -R" C-m     # Start up the beast
+        tmux send-keys -t "$session" "rm -rf tags && ctags -R 2>/dev/null ; cscope -R" C-m     # Start up the beast
         tmux new-window -n "Git" -t "$session"                                  # New window (git)
         tmux last-window -t "$session"                                          # Move back to `editor'
         tmux attach-session -t "$session"                                       # Join the session
@@ -241,6 +241,7 @@ alias tag="vim -t"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias p="python3 -q"
+alias p2="python"
 alias gdb="gdb -q"
 alias rr="ranger"
 alias bim="vim"
@@ -256,6 +257,8 @@ alias .....="cd ../../../.."
 alias vv="vim ."
 alias retag="rm -f tags ; ctags -R"
 alias q="exit"
+alias mkae="make"
+alias mak="make"
 
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 

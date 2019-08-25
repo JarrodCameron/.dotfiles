@@ -1,48 +1,50 @@
-" Insert closing bracket
-function! g:InsertPair(bracket)
-  if col("$") == 1 || col(".") == col("$")-1
-    return
-  endif
-  if getline(".")[col(".")] == a:bracket
-    execute "normal! x"
-  endif
+function! s:insertopen(open, close)
+    let l:curr = getline('.')[col('.')-1]
+    if l:curr == a:open
+        return "\<right>"
+    elseif index(['(', '[', '{'], l:curr) < 0
+        return a:open . a:close . "\<left>"
+    else
+        return a:open
+    endif
 endfunction
 
-" Inserts an open bracket
-"function! g:InsertOpenBracket(bopen, bclose)
-"    if col('$') == 2 || col('.') == col('$') - 1
-"        execute 'normal! a' . a:bclose
-"    elseif getline('.')[col('.')] == a:bopen
-"        execute 'normal! xl'
-"    endif
-"    execute 'startinsert'
-"endfunction
-"
-" Inserts a closing bracket
-"function! g:InsertClosedBracket(bopen, bclose)
-"    if col('$') == 2 || col('.') == col('$') - 1
-"        execute 'normal! a' . a:bclose
-"    elseif getline('.')[col('.')] == a:bopen
-"        execute 'normal! xl'
-"    endif
-"    execute 'startinsert'
-"endfunction
+function! s:insertclose(close)
+    if getline('.')[col('.')-1] == a:close
+        return "\<right>"
+    else
+        return a:close
+    endif
+endfunction
 
-inoremap {<CR> {<CR>}<esc>O
-inoremap [<CR> [<CR>]<esc>O<space><space><space><space>
-inoremap (<CR> (<CR>)<esc>O<space><space><space><space>
+function! s:insertquote(quote)
+    if getline('.')[col('.')-1] == a:quote
+        return "\<right>"
+    else
+        return a:quote . a:quote . "\<left>"
+    endif
+endfunction
 
-inoremap {;<CR> {<CR>};<esc>O
-inoremap [;<CR> [<CR>];<esc>O<space><space><space><space>
-inoremap (;<CR> (<CR>);<esc>O<space><space><space><space>
+function! s:removepair()
+    let l:pairs = ['()', '[]', '{}', '""', "''"]
+    let l:line = getline('.')
+    let l:col = col('.')
+    if index(l:pairs, l:line[l:col-2 : l:col-1]) < 0
+        return "\<bs>"
+    else
+        return "\<bs>\<del>"
+    endif
+endfunction
 
-"inoremap ( (<esc>:call g:InsertOpenBracket('(', ')')<CR>
-"inoremap ) )<esc>:call g:InsertClosedBracket('(', ')')<CR>
+inoremap <expr> ( <SID>insertopen('(', ')')
+inoremap <expr> [ <SID>insertopen('[', ']')
+inoremap <expr> { <SID>insertopen('{', '}')
 
-inoremap { {}<left>
-inoremap [ []<left>
-inoremap ( ()<left>
+inoremap <expr> ) <SID>insertclose(')')
+inoremap <expr> ] <SID>insertclose(']')
+inoremap <expr> } <SID>insertclose('}')
 
-inoremap } }<esc>:call g:InsertPair("}")<CR>a
-inoremap ] ]<esc>:call g:InsertPair("]")<CR>a
-inoremap ) )<esc>:call g:InsertPair(")")<CR>a
+inoremap <expr> " <SID>insertquote('"')
+inoremap <expr> ' <SID>insertquote("'")
+
+inoremap <expr> <bs> <SID>removepair()

@@ -1,6 +1,16 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Author: ==NAME==
 # Date:   ==DATE==
 
-==START==
+from pwn import *
+
+def main():
+    ==START==
+    pass
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
 

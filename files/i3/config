@@ -114,7 +114,8 @@ bindsym $mod+Shift+Return exec bash "$HOME"/.scripts/samedir
 #bindsym $mod+a
 #bindsym $mod+Shift+a
 
-bindsym $mod+b exec --no-startup-id ~/.scripts/openbmarks
+#bindsym $mod+b exec --no-startup-id ~/.scripts/openbmarks
+bindsym $mod+b exec --no-startup-id ~/.scripts/bookmarks
 #bindsym $mod+Shift+b
 
 bindsym $mod+c       exec google-chrome

@@ -28,6 +28,16 @@ max_len="$(jq ".roots.bookmark_bar.children[] | .name" "$BM_PATH" | awk '
 
 n_bmarks="$(jq ".roots.bookmark_bar.children[] | .name" $BM_PATH | wc -l)"
 
+jq ".roots.bookmark_bar.children[] | .name, .url" "$BM_PATH" | sed 's/^"\s*// ; s/\s*"$//' | awk '
+{
+    printf "%s\n", $0
+    getline
+    printf "%s\n", $0
+}
+'
+
+exit 0
+
 url="$(jq ".roots.bookmark_bar.children[] | .name, .url" "$BM_PATH" | sed 's/^"\s*// ; s/\s*"$//' | awk '
 {
     printf "%-'$max_len's-->  ", $0
