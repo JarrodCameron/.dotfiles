@@ -15,6 +15,7 @@
 # | urlN     |
 # +----------+
 # TODO: Add book marks to file
+# TODO: Remove
 
 BLACK="#282828"
 WHITE="#ebdbb2"
@@ -44,17 +45,56 @@ max_len="$(awk '\
 ' "$SECRET_FILE")"
 
 n_bmarks="$(echo `awk 'END{print NR}' "$SECRET_FILE"` ' / 2' | bc)"
+n_lines="$(echo "$n_bmarks + 2" | bc)"
 
-url="$(awk '\
+url="$( (awk '\
     {
         name=$0;
         getline;
         url=$1;
         printf "%-'$max_len's--> %s\n", name, url;
     }
-\' "$SECRET_FILE" | sort -d -f | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* --> //')"
+\' "$SECRET_FILE" | sort -d -f ; echo "[Update]\n[Remove]" ) | dmenu -i -l "$n_lines" -p "Open bookmark:" $COLORS | sed 's/^.* --> //')"
 
-if [ ! -z "$url" ]
-then
-    firefox -private -new-window "$url"
+if [ -z "$url" ]; then
+    # pass
+    exit 0
+elif [ "$url" = "[Update]" ]; then
+    bm_name="$(dmenu -p "Bookmark name:" $COLORS < /dev/null)"
+    bm_url="$(dmenu -p "Bookmark url:" $COLORS < /dev/null)"
+    if [ -n "$bm_name" ] && [ -n "$bm_url" ]; then
+        echo "$bm_name" >> "$SECRET_FILE"
+        echo "$bm_url" >> "$SECRET_FILE"
+    fi
+elif [ "$url" = "[Remove]" ]; then
+    del="$(awk '\
+        {
+            name=$0;
+            getline;
+            url=$1;
+            printf "%-'$max_len's--> %s\n", name, url;
+        }
+    \' "$SECRET_FILE" | sort -d -f | dmenu -i -l "$n_bmarks" -p "Remove bookmark:" $COLORS | sed 's/^.* --> //')"
+    sponge="$(mktemp)"
+
+    awk '\
+    {
+        name=$0
+        getline
+        url=$1
+        if (url != "'$del'") {
+            printf "%s\n", name
+            printf "%s\n", url
+        }
+    }
+    \' "$SECRET_FILE" > "$sponge"
+
+    mv "$sponge" "$SECRET_FILE"
+
+    rm -f "$sponge"
 fi
+
+#if [ ! -z "$url" ]
+#then
+#    firefox -new-window "$url"
+#fi

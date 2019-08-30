@@ -118,8 +118,8 @@ bindsym $mod+Shift+Return exec bash "$HOME"/.scripts/samedir
 bindsym $mod+b exec --no-startup-id ~/.scripts/bookmarks
 #bindsym $mod+Shift+b
 
-bindsym $mod+c       exec google-chrome
-bindsym $mod+Shift+c exec google-chrome --incognito
+bindsym $mod+c       exec firefox
+bindsym $mod+Shift+c exec firefox -private
 
 bindsym $mod+d       exec dmenu_run -l 10 -i -nb $bg -nf $white -sf $darkgray -sb $aqua
 bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
@@ -154,7 +154,7 @@ bindsym $mod+Shift+m exec --no-startup-id ~/.scripts/screen
 bindsym $mod+n exec feh --bg-scale $(ls ~/Pictures/wallpapers/*.png | shuf | head -n 1)
 #bindsym $mod+Shift+n
 
-bindsym $mod+o exec google-chrome --new-window https://www.office.com/
+bindsym $mod+o exec firefox -new-window https://www.office.com/
 #bindsym $mod+Shift+o
 
 bindsym $mod+p exec urxvt -name "dropdown_calculator" -e python3 -q
@@ -178,13 +178,13 @@ bindsym $mod+s exec urxvt -name "dropdown_explorer" -e ranger
 bindsym $mod+v split vertical
 bindsym $mod+Shift+v split horizontal
 
-bindsym $mod+w exec google-chrome --new-window https://webcms3.cse.unsw.edu.au/
+#bindsym $mod+w
 #bindsym $mod+Shift+w
 
 #bindsym $mod+x
 bindsym $mod+Shift+x exec i3lock -i ~/Pictures/wallpapers/wallpaper054.png
 
-bindsym $mod+y exec google-chrome --new-window https://www.youtube.com/
+bindsym $mod+y exec firefox -new-window https://www.youtube.com/
 #bindsym $mod+Shift+y
 
 #bindsym $mod+z

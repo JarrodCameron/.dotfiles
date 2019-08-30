@@ -288,11 +288,3 @@ fi
 function rfind () {
     find -name '*'$1'*'
 }
-
-function dict () {
-    local regexp='^'"$1"'$'
-#    if [ -z "$2" ]; then
-#        sed 's/\./'"$2"'/g'
-#    fi
-    grep "$regexp" /usr/share/dict/words | grep '.'
-}

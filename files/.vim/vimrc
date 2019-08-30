@@ -64,9 +64,6 @@ set cursorline
 " Ignoring case when searching
 "set ignorecase
 
-" Force statusline to always be displayed
-set laststatus=2
-
 " How to fold stuff
 set foldmethod=syntax
 
@@ -88,21 +85,6 @@ set nomodeline
 " ???
 set backspace=indent,eol,start
 set backspace=2
-
-" Make the status line
-set statusline=%r   " Is modifiable
-set statusline+=\   " <space>
-set statusline+=%f  " File name
-set statusline+=\   " <space>
-set statusline+=%y  " File type
-set statusline+=%=  " Switch to right side
-set statusline+=%l  " Current line
-set statusline+=/   " Seperator
-set statusline+=%L  " Total lines
-set statusline+=\   " <space>
-set statusline+=(%p " Percentage through file
-set statusline+=%%) " Percent sign
-set statusline+=\   " <space>
 
 " add any database in current directory
 if filereadable("cscope.out")
@@ -219,6 +201,7 @@ autocmd BufNewFile * %substitute/==START==//eg
 
 source ~/.vim/features/brackets.vim
 source ~/.vim/features/smarttabs.vim
+source ~/.vim/features/statusline.vim
 
 " }}}
 
