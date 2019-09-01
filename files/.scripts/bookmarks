@@ -14,8 +14,6 @@
 # | nameN    |
 # | urlN     |
 # +----------+
-# TODO: Add book marks to file
-# TODO: Remove
 
 BLACK="#282828"
 WHITE="#ebdbb2"
@@ -92,9 +90,6 @@ elif [ "$url" = "[Remove]" ]; then
     mv "$sponge" "$SECRET_FILE"
 
     rm -f "$sponge"
+else
+    firefox -new-window "$url"
 fi
-
-#if [ ! -z "$url" ]
-#then
-#    firefox -new-window "$url"
-#fi
