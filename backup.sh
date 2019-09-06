@@ -8,7 +8,9 @@ RESET="\e[0m"
 
 # Path to the .dotfiles
 # If changed don't forget to update restore.sh
-DOTFILES_SRC="${HOME}""/.dotfiles/files/"
+DOTFILES_HOME="${HOME}""/.dotfiles/"
+DOTFILES_SRC="${DOTFILES_HOME}""/files/"
+DOTFILES_SUCK="${DOTFILES_HOME}""/suckless/"
 
 back_up () {
   local path="$1"
@@ -37,3 +39,14 @@ back_up "${HOME}""/.Xresources"
 back_up "${HOME}""/.tmux.conf"
 back_up "${HOME}""/.vim"
 back_up "${HOME}""/Pictures/wallpapers"
+
+if [ -d "${DOTFILES_HOME}/suckless/dwm" ]; then
+    echo "${GREEN}""git-diff dwm backed up""${RESET}"
+    git -C "${DOTFILES_HOME}/suckless/dwm/" diff > "${DOTFILES_SRC}/dwm.diff"
+fi
+
+if [ -d "${DOTFILES_HOME}/suckless/st" ]; then
+    echo "${GREEN}""git-diff st backed up""${RESET}"
+    git -C "${DOTFILES_HOME}/suckless/st/" diff > "${DOTFILES_SRC}/st.diff"
+fi
+

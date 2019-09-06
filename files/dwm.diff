@@ -1,0 +1,136 @@
+diff --git a/config.def.h b/config.def.h
+index 1c0b587..bb975bc 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -1,5 +1,12 @@
+ /* See LICENSE file for copyright and license details. */
+ 
++/* To restart everything run the command in a terminal:
++ *   killall xinit
++ * The ~/.xinitrc file should respawn dwm
++ */
++
++#define HOME_PATH "/home/jc/"
++
+ /* appearance */
+ static const unsigned int borderpx  = 1;        /* border pixel of windows */
+ static const unsigned int snap      = 32;       /* snap pixel */
+@@ -44,7 +51,7 @@ static const Layout layouts[] = {
+ };
+ 
+ /* key definitions */
+-#define MODKEY Mod1Mask
++#define MODKEY Mod4Mask
+ #define TAGKEYS(KEY,TAG) \
+ 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
+ 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+@@ -58,11 +65,14 @@ static const Layout layouts[] = {
+ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+ static const char *termcmd[]  = { "st", NULL };
++static const char *lowervol[] = { "pactl", "set-sink-volume", "0", "-5%", NULL };
++static const char *raisevol[] = { "pactl", "set-sink-volume", "0", "+5%", NULL };
++static const char *togglevol[] = { "pactl", "set-sink-mute", "0", "toggle", NULL };
+ 
+ static Key keys[] = {
+ 	/* modifier                     key        function        argument */
+ 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
++	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+ 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+ 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+ 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+@@ -70,7 +80,7 @@ static Key keys[] = {
+ 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+ 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+ 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
+-	{ MODKEY,                       XK_Return, zoom,           {0} },
++	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+ 	{ MODKEY,                       XK_Tab,    view,           {0} },
+ 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+ 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+@@ -84,6 +94,10 @@ static Key keys[] = {
+ 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
+ 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
+ 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
++	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
++	{0,               XF86XK_AudioLowerVolume, spawn,          {.v = lowervol } },
++	{0,               XF86XK_AudioRaiseVolume, spawn,          {.v = raisevol } },
++	{0,                      XF86XK_AudioMute, spawn,          {.v = togglevol } },
+ 	TAGKEYS(                        XK_1,                      0)
+ 	TAGKEYS(                        XK_2,                      1)
+ 	TAGKEYS(                        XK_3,                      2)
+@@ -93,7 +107,6 @@ static Key keys[] = {
+ 	TAGKEYS(                        XK_7,                      6)
+ 	TAGKEYS(                        XK_8,                      7)
+ 	TAGKEYS(                        XK_9,                      8)
+-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+ };
+ 
+ /* button definitions */
+@@ -113,3 +126,38 @@ static Button buttons[] = {
+ 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
+ };
+ 
++
++// Bindings todo
++//bindsym $mod+Shift+Return exec bash "$HOME"/.scripts/samedir
++//bindsym $mod+b exec --no-startup-id ~/.scripts/bookmarks
++//bindsym $mod+c       exec firefox
++//bindsym $mod+Shift+c exec firefox -private
++//bindsym $mod+d       exec dmenu_run -l 10 -i -nb $bg -nf $white -sf $darkgray -sb $aqua
++//bindsym $mod+Shift+d exec --no-startup-id i3-dmenu-desktop
++//bindsym $mod+e       exec --no-startup-id ~/.scripts/editconfig
++//bindsym $mod+Shift+e exec --no-startup-id ~/.scripts/manuals
++//bindsym $mod+f fullscreen toggle
++//bindsym $mod+h focus left
++//bindsym $mod+Shift+h move left
++//bindsym $mod+j focus down
++//bindsym $mod+Shift+j move down
++//bindsym $mod+k focus up
++//bindsym $mod+Shift+k move up
++//bindsym $mod+l focus right
++//bindsym $mod+Shift+l move right
++//bindsym $mod+m exec --no-startup-id ~/.scripts/automan
++//bindsym $mod+Shift+m exec --no-startup-id ~/.scripts/screen
++//bindsym $mod+n exec feh --bg-scale $(ls ~/Pictures/wallpapers/*.png | shuf | head -n 1)
++//bindsym $mod+o exec firefox -new-window https://www.office.com/
++//bindsym $mod+p exec urxvt -name "dropdown_calculator" -e python3 -q
++//bindsym $mod+Shift+p exec pavucontrol
++//bindsym $mod+Shift+q kill
++//bindsym $mod+r mode "$resize"
++//bindsym $mod+Shift+r restart
++//bindsym $mod+s exec urxvt -name "dropdown_explorer" -e ranger
++//bindsym $mod+v split vertical
++//bindsym $mod+Shift+v split horizontal
++//bindsym $mod+Shift+x exec i3lock -i ~/Pictures/wallpapers/wallpaper054.png
++//bindsym $mod+y exec firefox -new-window https://www.youtube.com/
++//bindsym $mod+space focus mode_toggle
++//bindsym $mod+Shift+space floating toggle
+diff --git a/config.mk b/config.mk
+index 6d36cb7..921a64a 100644
+--- a/config.mk
++++ b/config.mk
+@@ -7,8 +7,8 @@ VERSION = 6.2
+ PREFIX = /usr/local
+ MANPREFIX = ${PREFIX}/share/man
+ 
+-X11INC = /usr/X11R6/include
+-X11LIB = /usr/X11R6/lib
++X11INC = /usr/include/X11R6
++X11LIB = /usr/lib/X11R6
+ 
+ # Xinerama, comment if you don't want it
+ XINERAMALIBS  = -lXinerama
+diff --git a/dwm.c b/dwm.c
+index 4465af1..c5307c0 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -40,6 +40,7 @@
+ #include <X11/extensions/Xinerama.h>
+ #endif /* XINERAMA */
+ #include <X11/Xft/Xft.h>
++#include <X11/XF86keysym.h>
+ 
+ #include "drw.h"
+ #include "util.h"

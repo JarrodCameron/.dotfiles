@@ -8,7 +8,9 @@ RESET="\e[0m"
 
 # Path to the .dotfiles
 # If changed don't forget to update backup.sh
-DOTFILES_SRC="${HOME}""/.dotfiles/files/"
+DOTFILES_HOME="${HOME}""/.dotfiles/"
+DOTFILES_SRC="${DOTFILES_HOME}""/files/"
+DOTFILES_SUCK="${DOTFILES_HOME}""/suckless/"
 
 # All the files are int $DOTFILES_SRC
 # They are 'restored' by being pointed to with symlinks
@@ -57,6 +59,29 @@ restore "i3blocks"    "${HOME}""/.config/i3blocks"
 restore ".Xresources" "${HOME}""/.Xresources"
 restore ".tmux.conf"  "${HOME}""/.tmux.conf"
 restore ".vim"        "${HOME}""/.vim"
-restore "wallpapers"  "${HOME}""/Pictures/wallpapers"
+#restore "wallpapers"  "${HOME}""/Pictures/wallpapers"
 
+if [ ! -d "${DOTFILES_SUCK}" ]; then
+  mkdir "${DOTFILES_SUCK}"
+  echo "${BOLD}""Creating directory in "'$DOTFILES_SUCK'"${RESET}"
+fi
 
+if [ -r "${DOTFILES_SRC}/dwm.diff" ]; then
+    if [ -d "${DOTFILES_SUCK}" ]; then
+        git -C "${DOTFILES_SUCK}/dwm" reset --hard >/dev/null
+    else
+        git clone git://git.suckless.org/dwm "${DOTFILES_SUCK}/dwm"
+    fi
+    echo "${GREEN}""dwm restored and patched""${RESET}"
+    git -C "${DOTFILES_SUCK}/dwm" apply "${DOTFILES_SRC}/dwm.diff"
+fi
+
+if [ -r "${DOTFILES_SRC}/st.diff" ]; then
+    if [ -d "${DOTFILES_SUCK}" ]; then
+        git -C "${DOTFILES_SUCK}/st" reset --hard >/dev/null
+    else
+        git clone https://git.suckless.org/st "${DOTFILES_SUCK}/st"
+    fi
+    echo "${GREEN}""st restored and patched""${RESET}"
+    git -C "${DOTFILES_SUCK}/st" apply "${DOTFILES_SRC}/st.diff"
+fi
