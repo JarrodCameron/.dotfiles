@@ -24,7 +24,7 @@ get_file () {
   echo $OUTPUT
 }
 
-options=".vimrc\ni3-gaps\ni3blocks\n.bashrc\n.Xresources\n.gdbinit\ncompton\ntodo\nhome_scripts ->\ni3blocks_scripts ->"
+options=".vimrc\ni3-gaps\ni3blocks\n.bashrc\n.Xresources\n.gdbinit\ncompton\ntodo\nsuckless ->\nhome_scripts ->\ni3blocks_scripts ->"
 
 height="$(echo $options | wc -l)"
 output=$(echo "$options" | dmenu -i -l $height -p "Edit file:" $COLORS)
@@ -33,6 +33,7 @@ FULL_PATH=""
 case "$output" in
   "home_scripts ->")     FULL_PATH="$HOME""/.scripts/" ;;
   "i3blocks_scripts ->") FULL_PATH="$HOME""/.config/i3blocks/scripts/" ;;
+  "suckless ->")         FULL_PATH="$HOME""/.dotfiles/suckless/" ;;
 esac
 
 cmd=""
@@ -45,6 +46,7 @@ case "$output" in
   "compton")     cmd="$EDITOR "$HOME"/.config/compton/config"                 ;;
   "todo")        cmd="$EDITOR "$HOME"/.todo"                                  ;;
   ".gdbinit")    cmd="$EDITOR "$HOME"/.gdbinit"                               ;;
+  "suckless ->")         cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   *)             exit 1 ;;
