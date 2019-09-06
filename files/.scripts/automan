@@ -51,4 +51,4 @@ BEGIN { FS=" " }
 
 cmd="man $name"
 
-urxvt -name "dropdown_manual" -e $cmd
+st -name "dropdown_manual" -e $cmd

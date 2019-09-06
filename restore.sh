@@ -67,8 +67,8 @@ if [ ! -d "${DOTFILES_SUCK}" ]; then
 fi
 
 if [ -r "${DOTFILES_SRC}/dwm.diff" ]; then
-    if [ -d "${DOTFILES_SUCK}" ]; then
-        git -C "${DOTFILES_SUCK}/dwm" reset --hard >/dev/null
+    if [ -d "${DOTFILES_SUCK}/dwm" ]; then
+        git -C "${DOTFILES_SUCK}/dwm" reset --hard 2>/dev/null
     else
         git clone git://git.suckless.org/dwm "${DOTFILES_SUCK}/dwm"
     fi
@@ -77,8 +77,8 @@ if [ -r "${DOTFILES_SRC}/dwm.diff" ]; then
 fi
 
 if [ -r "${DOTFILES_SRC}/st.diff" ]; then
-    if [ -d "${DOTFILES_SUCK}" ]; then
-        git -C "${DOTFILES_SUCK}/st" reset --hard >/dev/null
+    if [ -d "${DOTFILES_SUCK}/st" ]; then
+        git -C "${DOTFILES_SUCK}/st" reset --hard 2>/dev/null
     else
         git clone https://git.suckless.org/st "${DOTFILES_SUCK}/st"
     fi

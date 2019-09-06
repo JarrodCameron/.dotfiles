@@ -222,7 +222,7 @@ set -o vi
 ## `export' sets global variables
 export PATH="$PATH"":""$HOME""/.scripts/"
 export EDITOR="$(which vim)"
-export TERMINAL="$(which urxvt)"
+export TERMINAL="$(which st)"
 
 # Copy
 alias copy="xclip -selection clip 2> /dev/null"

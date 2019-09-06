@@ -47,7 +47,6 @@ url="$(jq ".roots.bookmark_bar.children[] | .name, .url" "$BM_PATH" | sed 's/^"\
 ' | sort -d -f | dmenu -i -l "$n_bmarks" -p "Open bookmark:" $COLORS | sed 's/^.* -->  //')"
 
 if [ -z "$url" ]; then
-  notify-send "Invalid bookmark!"
   exit 1
 fi
 

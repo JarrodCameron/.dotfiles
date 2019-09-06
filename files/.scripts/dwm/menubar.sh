@@ -19,11 +19,11 @@ get_date () {
 while [ "1" ]
 do
 
-    title=""
-
-    title+=$(get_date)
+    title="$(get_date)"
 
     xsetroot -name "$title"
+
+    echo $title
 
     sleep 1
     count=$((count+1))

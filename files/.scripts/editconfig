@@ -3,6 +3,7 @@
 # Author: Jarrod Cameron (z5210220)
 
 [ -z "$EDITOR" ] && EDITOR="$(which vim)"
+[ -z "$TERMINAL" ] && TERMINAL="$(which st)"
 
 BLACK="#282828"
 WHITE="#ebdbb2"
@@ -17,7 +18,6 @@ get_file () {
   local OUTPUT="$(echo "$OPTIONS" | dmenu -i -l $HEIGHT -p "Edit file:" $COLORS)"
 
   if [ -z "$OUTPUT" ]; then
-    notify-send "Invalid file"
     exit 1
   fi
 
@@ -47,8 +47,7 @@ case "$output" in
   ".gdbinit")    cmd="$EDITOR "$HOME"/.gdbinit"                               ;;
   "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
-  *)             notify-send "Invalid config!" ; exit 1 ;;
+  *)             exit 1 ;;
 esac
 
-#urxvt -name "dropdown_editor" -e $cmd
-urxvt -e $cmd
+$TERMINAL -e $cmd
