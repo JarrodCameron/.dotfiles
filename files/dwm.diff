@@ -157,7 +157,7 @@ index 6d36cb7..921a64a 100644
  # Xinerama, comment if you don't want it
  XINERAMALIBS  = -lXinerama
 diff --git a/dwm.c b/dwm.c
-index 4465af1..c5307c0 100644
+index 4465af1..92412fd 100644
 --- a/dwm.c
 +++ b/dwm.c
 @@ -40,6 +40,7 @@
@@ -168,3 +168,16 @@ index 4465af1..c5307c0 100644
  
  #include "drw.h"
  #include "util.h"
+@@ -1987,9 +1988,11 @@ updatesizehints(Client *c)
+ void
+ updatestatus(void)
+ {
++    Monitor *m;
+ 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
+ 		strcpy(stext, "dwm-"VERSION);
+-	drawbar(selmon);
++    for (m = mons; m != NULL; m = m->next)
++        drawbar(m);
+ }
+ 
+ void
