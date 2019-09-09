@@ -59,7 +59,7 @@ restore "i3blocks"    "${HOME}""/.config/i3blocks"
 restore ".Xresources" "${HOME}""/.Xresources"
 restore ".tmux.conf"  "${HOME}""/.tmux.conf"
 restore ".vim"        "${HOME}""/.vim"
-#restore "wallpapers"  "${HOME}""/Pictures/wallpapers"
+restore "radare2rc"   "${HOME}""/.config/radare2/radare2rc"
 
 if [ ! -d "${DOTFILES_SUCK}" ]; then
   mkdir "${DOTFILES_SUCK}"

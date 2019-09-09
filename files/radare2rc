@@ -1,0 +1,14 @@
+# 24bit true color
+#e scr.color=3
+
+# Good syntax only
+e asm.syntax=intel
+
+# vi prompt
+e scr.prompt.vi=true
+
+# No fortunes
+e cfg.fortunes=false
+
+# Theme
+eco twilight

@@ -38,7 +38,7 @@ back_up "${HOME}""/.config/i3blocks"
 back_up "${HOME}""/.Xresources"
 back_up "${HOME}""/.tmux.conf"
 back_up "${HOME}""/.vim"
-back_up "${HOME}""/Pictures/wallpapers"
+back_up "${HOME}""/.config/radare2/radare2rc"
 
 if [ -d "${DOTFILES_HOME}/suckless/dwm" ]; then
     echo "${GREEN}""git-diff dwm backed up""${RESET}"
