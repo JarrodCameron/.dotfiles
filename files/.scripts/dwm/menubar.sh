@@ -3,9 +3,8 @@
 # Author: Jarrod Cameron (z5210220)
 # Date:   04/09/19  7:56
 
-# TODO:
-# - memort
-# - processors
+SEPERATOR="|"
+#SEPERATOR=""
 
 NET_PREV_UP="0"
 NET_PREV_DOWN="0"
@@ -101,6 +100,36 @@ get_velo () {
     printf "Up: %s, Down: %s" "$rate_up" "$rate_down"
 }
 
+get_cpu () {
+    local ncpu=0
+    local mean=0
+
+    for cpu in $(find /sys/devices/system/cpu/ -maxdepth 1 -name 'cpu[0-9]*')
+    do
+        local max="$(cat "$cpu"/cpufreq/scaling_max_freq)"
+        local cur="$(cat "$cpu"/cpufreq/scaling_cur_freq)"
+        mean="$((100*cur/max+mean))"
+        ncpu="$((ncpu+1))"
+    done
+
+    mean="$((mean/ncpu))"
+    printf "CPU: %%%s" "$mean"
+}
+
+get_mem () {
+
+    local totalkb="$(cat /proc/meminfo | awk '/^MemTotal:/ {print $2}')"
+    local freekb="$(cat /proc/meminfo | awk '/^MemAvailable:/ {print $2}')"
+    local usedkb="$((totalkb-freekb))"
+
+    echo "$usedkb $totalkb" | awk -F" " '
+    {
+        used=$1 / 1024 / 1024
+        total=$2 / 1024 / 1024
+        printf "Mem: %.2fGB / %.2fGB", used, total
+    }'
+}
+
 # Start pa if not already on
 #pulseaudio --start
 
@@ -112,16 +141,15 @@ do
     update_nets
 
     title="$(get_date)"
-    title="$(get_vol)"" | $title"
-    title="$(get_bat)"" | $title"
-    title="$(get_wifi)"" | $title"
-    title="$(get_velo)"" | $title"
+    title="$(get_vol) $SEPERATOR $title"
+    title="$(get_bat) $SEPERATOR $title"
+    title="$(get_wifi) $SEPERATOR $title"
+    title="$(get_velo) $SEPERATOR $title"
+    title="$(get_cpu) $SEPERATOR $title"
+    title="$(get_mem) $SEPERATOR $title"
 
     xsetroot -name "$title"
 
     sleep 1
     count=$((count+1))
 done
-
-
-

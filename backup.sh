@@ -41,12 +41,25 @@ back_up "${HOME}""/.vim"
 back_up "${HOME}""/.config/radare2/radare2rc"
 
 if [ -d "${DOTFILES_HOME}/suckless/dwm" ]; then
+    if [ -r "${DOTFILES_HOME}/suckless/dwm/config.h" ]; then
+        lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dwm/config.def.h")"
+        lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dwm/config.h")"
+        if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
+            cp "${DOTFILES_HOME}/suckless/dwm/config.def.h" "${DOTFILES_HOME}/suckless/dwm/config.h"
+        fi
+    fi
     echo "${GREEN}""git-diff dwm backed up""${RESET}"
     git -C "${DOTFILES_HOME}/suckless/dwm/" diff > "${DOTFILES_SRC}/dwm.diff"
 fi
 
 if [ -d "${DOTFILES_HOME}/suckless/st" ]; then
+    if [ -r "${DOTFILES_HOME}/suckless/st/config.h" ]; then
+        lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/st/config.def.h")"
+        lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/st/config.h")"
+        if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
+            cp "${DOTFILES_HOME}/suckless/st/config.def.h" "${DOTFILES_HOME}/suckless/st/config.h"
+        fi
+    fi
     echo "${GREEN}""git-diff st backed up""${RESET}"
     git -C "${DOTFILES_HOME}/suckless/st/" diff > "${DOTFILES_SRC}/st.diff"
 fi
-
