@@ -45,7 +45,7 @@ if [ -d "${DOTFILES_HOME}/suckless/dwm" ]; then
         lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dwm/config.def.h")"
         lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dwm/config.h")"
         if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
-            cp "${DOTFILES_HOME}/suckless/dwm/config.def.h" "${DOTFILES_HOME}/suckless/dwm/config.h"
+            cp "${DOTFILES_HOME}/suckless/dwm/config.h" "${DOTFILES_HOME}/suckless/dwm/config.def.h"
         fi
     fi
     echo "${GREEN}""git-diff dwm backed up""${RESET}"
@@ -57,7 +57,7 @@ if [ -d "${DOTFILES_HOME}/suckless/st" ]; then
         lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/st/config.def.h")"
         lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/st/config.h")"
         if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
-            cp "${DOTFILES_HOME}/suckless/st/config.def.h" "${DOTFILES_HOME}/suckless/st/config.h"
+            cp "${DOTFILES_HOME}/suckless/st/config.h" "${DOTFILES_HOME}/suckless/st/config.def.h"
         fi
     fi
     echo "${GREEN}""git-diff st backed up""${RESET}"
