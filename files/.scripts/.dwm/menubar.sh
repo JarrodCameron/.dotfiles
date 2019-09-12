@@ -6,11 +6,18 @@
 SEPERATOR="|"
 #SEPERATOR=""
 
+# Used for networking stats
 NET_PREV_UP="0"
 NET_PREV_DOWN="0"
 NET_CURR_UP="0"
 NET_CURR_DOWN="0"
 INTERFACE=""
+
+# Used for cpu stats
+PREV_CPU_USED="0"
+PREV_CPU_TOTAL="0"
+CURR_CPU_USED="0"
+CURR_CPU_TOTAL="0"
 
 # Update variables associated with networking
 update_nets () {
@@ -34,6 +41,23 @@ update_nets () {
 
     NET_CURR_UP="$(cat /proc/net/dev | awk '/^'$INTERFACE':/ {print $10}')"
     NET_CURR_DOWN="$(cat /proc/net/dev | awk '/^'$INTERFACE':/ {print $2}')"
+}
+
+# Update variables associated with cpu
+update_cpu () {
+    PREV_CPU_USED=$CURR_CPU_USED
+    PREV_CPU_TOTAL=$CURR_CPU_TOTAL
+
+    CURR_CPU_USED="$(grep '^cpu ' /proc/stat | awk '\
+    {
+        printf "%d", $2 + $4
+    }')"
+
+    CURR_CPU_TOTAL="$(grep '^cpu ' /proc/stat | awk '\
+    {
+        printf "%d", $2 + $4 + $5
+    }')"
+
 }
 
 get_date () {
@@ -101,19 +125,12 @@ get_velo () {
 }
 
 get_cpu () {
-    local ncpu=0
-    local mean=0
-
-    for cpu in $(find /sys/devices/system/cpu/ -maxdepth 1 -name 'cpu[0-9]*')
-    do
-        local max="$(cat "$cpu"/cpufreq/scaling_max_freq)"
-        local cur="$(cat "$cpu"/cpufreq/scaling_cur_freq)"
-        mean="$((100*cur/max+mean))"
-        ncpu="$((ncpu+1))"
-    done
-
-    mean="$((mean/ncpu))"
-    printf "CPU: %%%s" "$mean"
+    echo $CURR_CPU_USED $CURR_CPU_TOTAL $PREV_CPU_USED $PREV_CPU_TOTAL | awk '\
+    {
+        used = $1 - $3
+        total = $2 - $4
+        printf "CPU: %.2f%%", 100*used/total
+    }'
 }
 
 get_mem () {
@@ -137,8 +154,9 @@ count=0
 while [ "1" ]
 do
 
-    # Update networking info outside of $(...) since $(...) spawns a subshell
+    # Update networking/cpu info outside of $(...) since $(...) spawns a subshell
     update_nets
+    update_cpu
 
     title="$(get_date)"
     title="$(get_vol) $SEPERATOR $title"
