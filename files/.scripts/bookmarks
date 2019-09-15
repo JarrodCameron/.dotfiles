@@ -24,6 +24,9 @@ COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
 SECRET_DIR="$HOME""/.dotfiles/secret"
 SECRET_FILE="$SECRET_DIR""/bookmarks.txt"
 
+mkdir -p "$SECRET_DIR"
+touch "$SECRET_FILE"
+
 max_len="$(awk '\
     BEGIN {
         max_len = 0;

@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 # Colors
-RED="\e[31m"
-GREEN="\e[32m"
-BOLD="\e[1m"
-RESET="\e[0m"
+RED="$(echo -e "\e[31m")"
+GREEN="$(echo -e "\e[32m")"
+BOLD="$(echo -e "\e[1m")"
+RESET="$(echo -e "\e[0m")"
 
 # Path to the .dotfiles
 # If changed don't forget to update restore.sh
@@ -50,6 +50,18 @@ if [ -d "${DOTFILES_HOME}/suckless/dwm" ]; then
     fi
     echo "${GREEN}""git-diff dwm backed up""${RESET}"
     git -C "${DOTFILES_HOME}/suckless/dwm/" diff > "${DOTFILES_SRC}/dwm.diff"
+fi
+
+if [ -d "${DOTFILES_HOME}/suckless/dmenu" ]; then
+    if [ -r "${DOTFILES_HOME}/suckless/dmenu/config.h" ]; then
+        lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dmenu/config.def.h")"
+        lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dmenu/config.h")"
+        if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
+            cp "${DOTFILES_HOME}/suckless/dmenu/config.h" "${DOTFILES_HOME}/suckless/dmenu/config.def.h"
+        fi
+    fi
+    echo "${GREEN}""git-diff dmenu backed up""${RESET}"
+    git -C "${DOTFILES_HOME}/suckless/dmenu/" diff > "${DOTFILES_SRC}/dmenu.diff"
 fi
 
 if [ -d "${DOTFILES_HOME}/suckless/st" ]; then

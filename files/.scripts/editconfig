@@ -24,7 +24,7 @@ get_file () {
   echo $OUTPUT
 }
 
-options=".vimrc\ni3-gaps\ni3blocks\n.bashrc\n.Xresources\n.gdbinit\ncompton\ntodo\nsuckless ->\nhome_scripts ->\ni3blocks_scripts ->"
+options=".vimrc\ni3-gaps\ni3blocks\n.bashrc\n.Xresources\n.gdbinit\ncompton\ntodo\nradare2rc\nsuckless ->\nhome_scripts ->\ni3blocks_scripts ->"
 
 height="$(echo $options | wc -l)"
 output=$(echo "$options" | dmenu -i -l $height -p "Edit file:" $COLORS)
@@ -46,6 +46,7 @@ case "$output" in
   "compton")     cmd="$EDITOR "$HOME"/.config/compton/config"                 ;;
   "todo")        cmd="$EDITOR "$HOME"/.todo"                                  ;;
   ".gdbinit")    cmd="$EDITOR "$HOME"/.gdbinit"                               ;;
+  "radare2rc")   cmd="$EDITOR "$HOME"/.config/radare2/radare2rc"              ;;
   "suckless ->")         cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
   "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;

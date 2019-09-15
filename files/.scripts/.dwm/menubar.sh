@@ -73,7 +73,7 @@ get_vol () {
     left=${left%?}
     right=${right%?}
 
-    printf "Vol: %s" "$(echo "($left + $right) / 2" | bc )"
+    printf "Vol: %s%%" "$(echo "($left + $right) / 2" | bc )"
 }
 
 get_bat () {

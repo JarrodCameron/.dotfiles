@@ -1,0 +1,13 @@
+/**
+ * Author: ==NAME==
+ * Date:   ==DATE==
+ */
+
+class ==FILE_NAME== {
+
+    public static void main(String[] args)
+    {
+        ==START==
+    }
+
+}

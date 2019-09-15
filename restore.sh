@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 # Colors
-RED="\e[31m"
-GREEN="\e[32m"
-BOLD="\e[1m"
-RESET="\e[0m"
+RED="$(echo -e "\e[31m")"
+GREEN="$(echo -e "\e[32m")"
+BOLD="$(echo -e "\e[1m")"
+RESET="$(echo -e "\e[0m")"
 
 # Path to the .dotfiles
 # If changed don't forget to update backup.sh
@@ -74,6 +74,16 @@ if [ -r "${DOTFILES_SRC}/dwm.diff" ]; then
     fi
     echo "${GREEN}""dwm restored and patched""${RESET}"
     git -C "${DOTFILES_SUCK}/dwm" apply "${DOTFILES_SRC}/dwm.diff"
+fi
+
+if [ -r "${DOTFILES_SRC}/dmenu.diff" ]; then
+    if [ -d "${DOTFILES_SUCK}/dmenu" ]; then
+        git -C "${DOTFILES_SUCK}/dmenu" reset --hard 2>/dev/null
+    else
+        git clone https://git.suckless.org/dmenu "${DOTFILES_SUCK}/dmenu"
+    fi
+    echo "${GREEN}""dmenu restored and patched""${RESET}"
+    git -C "${DOTFILES_SUCK}/dmenu" apply "${DOTFILES_SRC}/dmenu.diff"
 fi
 
 if [ -r "${DOTFILES_SRC}/st.diff" ]; then

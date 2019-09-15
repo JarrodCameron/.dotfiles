@@ -144,65 +144,6 @@ fi
 # CUSTOM #
 ##########
 
-function aos () {
-
-    local os_path="$HOME""/Desktop/aos-2019"
-    local session="seL4"
-
-    if [ -z "$1" ]; then
-        echo "Where is my argv[0]?" >&2
-    elif [ "$1" = "pico" ]; then
-        picocom -b 115200 /dev/ttyUSB0
-    elif [ "$1" = "comp" ]; then
-        cd "$os_path/build"
-        ninja
-    elif [ "$1" = "refresh" ]; then
-        cd "$os_path/build"
-        ninja && ../reset.sh && nc -up 26719 192.168.168.2 26719
-    elif [ "$1" = "ifup" ]; then
-        sudo ifup enx180f76012290
-    elif [ "$1" = "ifdown" ]; then
-        sudo ifdown enx180f76012290
-    elif [ "$1" = "csc" ]; then
-        cd "$os_path"
-        ctags -R
-        cscope -R
-    elif [ "$1" = "cd" ]; then
-        cd "$os_path"
-    elif [ "$1" = "init" ]; then
-        cd "$os_path"
-        tmux new-session -d -s "$session" -n "Compiler"                         # Create session. Don't attach. Set window name
-        tmux split-window -h -t "$session"                                      # Create vertical split
-        tmux resize-pane -L -t "$session" 30                                    # Right side (compilation) is more dominate
-        tmux send-keys -t right "clear && cd $os_path/build/" C-m               # Move to build directory (right pane)
-        tmux send-keys -t left "clear && cd $os_path" C-m                       # Move to OS directory (left pane)
-        tmux new-window -n "Editor" -t "$session"                               # New window (editor)
-        tmux send-keys -t "$session" "clear && cd $os_path" C-m                 # Move to OS directory
-        tmux send-keys -t "$session" "rm -rf tags && ctags -R 2>/dev/null ; cscope -R" C-m     # Start up the beast
-        tmux new-window -n "Git" -t "$session"                                  # New window (git)
-        tmux last-window -t "$session"                                          # Move back to `editor'
-        tmux attach-session -t "$session"                                       # Join the session
-    else
-        echo -ne "$BOLD"
-        echo "   /---------------------------------------------/"
-        echo "  /         Advanced Operating Systems          / |"
-        echo " / Syntax: aos <option>                        /  |"
-        echo "/---------------------------------------------/ C |"
-        echo "|                                             | O |"
-        echo "|   aos cd        --> Move into \$OS_PATH      | M |"
-        echo "|   aos comp      --> Compile seL4            | P |"
-        echo "|   aos csc       --> Cscope/ctags            | 9 |"
-        echo "|   aos ifdown    --> Disable interface       | 2 |"
-        echo "|   aos ifup      --> Enable interface        | 4 |"
-        echo "|   aos init      --> Setup tmux connections  | 2 /"
-        echo "|   aos pico      --> Open pico to port       |  /"
-        echo "|   aos refresh   --> Compile + netcat        | /"
-        echo "|                                             |/"
-        echo "\\---------------------------------------------/"
-        echo -ne "$RESET"
-    fi
-}
-
 # Export colors used in man pages, less, etc
 export LESS_TERMCAP_mb=$(printf "\e[1;34m")
 export LESS_TERMCAP_md=$(printf "\e[1;34m")

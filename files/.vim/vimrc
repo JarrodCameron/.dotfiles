@@ -188,12 +188,15 @@ autocmd BufNewFile *.html       0r ~/.vim/templates/html.skel
 autocmd BufNewFile *.py         0r ~/.vim/templates/py.skel
 autocmd BufNewFile *.pl         0r ~/.vim/templates/prolog.skel
 autocmd BufNewFile *.js         0r ~/.vim/templates/js.skel
+autocmd BufNewFile *.java       0r ~/.vim/templates/java.skel
 
 " ==DATE==  Current date
 " ==NAME==  Authors name
 " ==START== Starting cursor position
+" ==FILE_NAME== Name of the file
 autocmd BufNewFile * %substitute/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/eg
 autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
+autocmd BufNewFile * %substitute/==FILE_NAME==/\=expand("%:t:r")/eg
 autocmd BufNewFile * %substitute/==START==//eg
 " }}}
 
