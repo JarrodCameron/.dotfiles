@@ -13,21 +13,37 @@ DOTFILES_SRC="${DOTFILES_HOME}""/files/"
 DOTFILES_SUCK="${DOTFILES_HOME}""/suckless/"
 
 back_up () {
-  local path="$1"
-  if [ -L "${path}" ]; then
-    echo "${RED}""${path} is a symbolic link. Ignored.""${RESET}"
-  elif [ -e "${path}" ]; then
-    cp -r "${path}" "${DOTFILES_SRC}"
-    echo "${GREEN}""${path} successfully backed up.""${RESET}"
-  else
-    echo "${RED}""${path} does not exist.""${RESET}"
-  fi
+    local path="$1"
+    if [ -L "${path}" ]; then
+        echo "${RED}""${path} is a symbolic link. Ignored.""${RESET}"
+    elif [ -e "${path}" ]; then
+        cp -r "${path}" "${DOTFILES_SRC}"
+        echo "${GREEN}""${path} successfully backed up.""${RESET}"
+    else
+        echo "${RED}""${path} does not exist.""${RESET}"
+    fi
+}
+
+# Creates a diff of the repo and backs up
+back_up_suckless () {
+    local prog="$1"
+    if [ -d "${DOTFILES_HOME}/suckless/${prog}" ]; then
+        if [ -r "${DOTFILES_HOME}/suckless/${prog}/config.h" ]; then
+            lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/${prog}/config.def.h")"
+            lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/${prog}/config.h")"
+            if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
+                cp "${DOTFILES_HOME}/suckless/${prog}/config.h" "${DOTFILES_HOME}/suckless/${prog}/config.def.h"
+            fi
+        fi
+        echo "${GREEN}""git-diff ${prog} backed up""${RESET}"
+        git -C "${DOTFILES_HOME}/suckless/${prog}/" diff > "${DOTFILES_SRC}/${prog}.diff"
+    fi
 }
 
 # Create a `files' folder to store the files
 if [ ! -d "${DOTFILES_SRC}" ]; then
-  mkdir "${DOTFILES_SRC}"
-  echo "${BOLD}""Creating directory in "'$DOTFILES_SRC'"${RESET}"
+    mkdir "${DOTFILES_SRC}"
+    echo "${BOLD}""Creating directory in "'$DOTFILES_SRC'"${RESET}"
 fi
 
 # When adding/removing file remember to modify `restore.sh'
@@ -40,38 +56,6 @@ back_up "${HOME}""/.tmux.conf"
 back_up "${HOME}""/.vim"
 back_up "${HOME}""/.config/radare2/radare2rc"
 
-if [ -d "${DOTFILES_HOME}/suckless/dwm" ]; then
-    if [ -r "${DOTFILES_HOME}/suckless/dwm/config.h" ]; then
-        lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dwm/config.def.h")"
-        lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dwm/config.h")"
-        if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
-            cp "${DOTFILES_HOME}/suckless/dwm/config.h" "${DOTFILES_HOME}/suckless/dwm/config.def.h"
-        fi
-    fi
-    echo "${GREEN}""git-diff dwm backed up""${RESET}"
-    git -C "${DOTFILES_HOME}/suckless/dwm/" diff > "${DOTFILES_SRC}/dwm.diff"
-fi
-
-if [ -d "${DOTFILES_HOME}/suckless/dmenu" ]; then
-    if [ -r "${DOTFILES_HOME}/suckless/dmenu/config.h" ]; then
-        lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dmenu/config.def.h")"
-        lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/dmenu/config.h")"
-        if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
-            cp "${DOTFILES_HOME}/suckless/dmenu/config.h" "${DOTFILES_HOME}/suckless/dmenu/config.def.h"
-        fi
-    fi
-    echo "${GREEN}""git-diff dmenu backed up""${RESET}"
-    git -C "${DOTFILES_HOME}/suckless/dmenu/" diff > "${DOTFILES_SRC}/dmenu.diff"
-fi
-
-if [ -d "${DOTFILES_HOME}/suckless/st" ]; then
-    if [ -r "${DOTFILES_HOME}/suckless/st/config.h" ]; then
-        lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/st/config.def.h")"
-        lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/st/config.h")"
-        if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
-            cp "${DOTFILES_HOME}/suckless/st/config.h" "${DOTFILES_HOME}/suckless/st/config.def.h"
-        fi
-    fi
-    echo "${GREEN}""git-diff st backed up""${RESET}"
-    git -C "${DOTFILES_HOME}/suckless/st/" diff > "${DOTFILES_SRC}/st.diff"
-fi
+back_up_suckless "dwm"
+back_up_suckless "dmenu"
+back_up_suckless "st"

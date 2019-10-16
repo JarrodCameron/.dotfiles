@@ -110,21 +110,39 @@ get_velo () {
     local rate_up=""
     if [ "$diff_up" -lt "1024" ]; then
         rate_up="$diff_up""Bs"
-    else
+    elif [ "$diff_up" -lt "1048576" ]; then
         rate_up="$((diff_up / 1024))""KBs"
+    else
+        rate_up="$((diff_up / 1024 / 1024))""MBs"
     fi
 
     local rate_down=""
     if [ "$diff_down" -lt "1024" ]; then
         rate_down="$diff_down""Bs"
-    else
+    elif [ "$diff_down" -lt "1048576" ]; then
         rate_down="$((diff_down / 1024))""KBs"
+    else
+        rate_down="$((diff_down / 1024 / 1024))""MBs"
     fi
 
     printf "Up: %s, Down: %s" "$rate_up" "$rate_down"
 }
 
 get_cpu () {
+#    temp="$(cat /sys/class/thermal/thermal_zone*/temp | awk '
+#    BEGIN{
+#        count = 0
+#        total = 0
+#    }
+#    {
+#        count += 1
+#        total += $1 / 1000
+#    }
+#    END{
+#        mean = total / count
+#        printf "(T %.0f)", mean
+#    }')"
+
     echo $CURR_CPU_USED $CURR_CPU_TOTAL $PREV_CPU_USED $PREV_CPU_TOTAL | awk '\
     {
         used = $1 - $3

@@ -40,8 +40,8 @@ set tabstop=4
 " Activate filetype detection
 filetype on
 
-" Helpful when pasting with older versions of vim
-"set paste
+" Source vimscript files from ~/.vim/ftlpugin/*.vim
+filetype plugin on
 
 " Display current line number
 set number
@@ -52,17 +52,11 @@ set relativenumber
 " Spaces (not tabs), except in Makefiles
 set expandtab
 
-" Disable error bell
-"set belloff=all
-
 " Leave 3 lines above/below cursor
 set scrolloff=3
 
 " Highlight current line
 set cursorline
-
-" Ignoring case when searching
-"set ignorecase
 
 " How to fold stuff
 set foldmethod=syntax
@@ -140,9 +134,6 @@ nnoremap <silent> <C-n> :tabN<CR>
 " Find the file, look recursibly
 nnoremap <leader>f :cscope find f<space>
 
-" Find functions calling this function
-nnoremap <leader>C :cscope find c<space>
-
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
 command! -nargs=* Wq  :wq <args>
@@ -156,7 +147,7 @@ command! -nargs=* SP  :sp <args>
 
 " If the 'rxvt' is a substring of $TERM
 " Make sure we are not on the CSE machines
-if tolower ($TERM) =~ "rxvt" && $USER !=? "z5210220"
+if tolower ($TERM) =~ "256color" && $USER !=? "z5210220"
   let &t_SI = "\<Esc>[6 q"
   let &t_SR = "\<Esc>[4 q"
   let &t_EI = "\<Esc>[2 q"
@@ -217,10 +208,7 @@ autocmd BufWritePost $MYVIMRC source $MYVIMRC
 autocmd BufWritePost ~/.dotfiles/files/.Xresources silent: !xrdb .Xresources
 autocmd BufWritePost ~/.dotfiles/files/i3/config silent :!i3-msg restart
 autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
-"autocmd BufWritePost ~/.config/compton/config silent: !killall compton 2>/dev/null; compton --config ~/.config/compton/config &
 
-" Vim jumps to the last position when reopening a file
-"autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 " }}}"
 
 " Custom file settings ---------------------- {{{
@@ -238,13 +226,13 @@ autocmd FileType html command! R :w | :!google-chrome --new-window %
 autocmd FileType html setlocal cursorcolumn
 
 autocmd FileType tex command! C :w | :!clear && pdflatex %
-autocmd FileType tex command! R :w | !clear && pdflatex % && xdg-open %<.pdf
+autocmd FileType tex command! R :w | :!clear && pdflatex % && xdg-open %<.pdf
 
 autocmd FileType c iabbrev <buffer> \N \n
 autocmd FileType c iabbrev <buffer> \m \n
 autocmd FileType c iabbrev <buffer> struc struct
-autocmd FileType c command! Dcheck :%s/check();\n//g
-autocmd FileType c inoremap <leader>dc debug_check();<CR>
+
+autocmd FileType sh command! R :w | :!clear && bash %
 
 autocmd FileType text setlocal spell spelllang=en_au
 
@@ -288,6 +276,8 @@ function! s:GetComment()
     return "\\/\\/"
   elseif &filetype == "prolog"
     return "%"
+  elseif &filetype == "java"
+    return "\\/\\/"
   elseif &filetype == "xdefaults"
     return "!"
   else

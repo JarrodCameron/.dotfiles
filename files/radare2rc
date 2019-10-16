@@ -12,3 +12,12 @@ e cfg.fortunes=false
 
 # Theme
 eco twilight
+
+# Offsets relative to function
+#e asm.reloff=1
+
+# Psuedo syntax
+#e asm.pseudo=1
+
+# Unicdoe lines
+e scr.utf8=true

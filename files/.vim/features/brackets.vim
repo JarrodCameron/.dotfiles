@@ -36,6 +36,10 @@ function! s:removepair()
     endif
 endfunction
 
+function! s:insertjump(open, close)
+    return a:open . '<CR>' . a:close . '<ESC>O'
+endfunction
+
 inoremap <expr> ( <SID>insertopen('(', ')')
 inoremap <expr> [ <SID>insertopen('[', ']')
 inoremap <expr> { <SID>insertopen('{', '}')
@@ -43,6 +47,11 @@ inoremap <expr> { <SID>insertopen('{', '}')
 inoremap <expr> ) <SID>insertclose(')')
 inoremap <expr> ] <SID>insertclose(']')
 inoremap <expr> } <SID>insertclose('}')
+
+" Not clean but it works
+inoremap {<CR> {<CR>}<ESC>O
+inoremap (<CR> (<CR>)<ESC>O
+inoremap [<CR> [<CR>]<ESC>O
 
 inoremap <expr> " <SID>insertquote('"')
 inoremap <expr> ' <SID>insertquote("'")

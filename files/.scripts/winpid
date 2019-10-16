@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Returns pid of window (not process running inside)
-
-xprop | awk '/^_NET_WM_PID\(CARDINAL) = / {print $NF}'

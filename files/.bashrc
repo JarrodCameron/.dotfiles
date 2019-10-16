@@ -200,6 +200,8 @@ alias retag="rm -f tags ; ctags -R"
 alias q="exit"
 alias mkae="make"
 alias mak="make"
+alias z="zathura"
+alias ropper="python3 $(which ropper)"
 
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 
@@ -229,6 +231,9 @@ fi
 function rfind () {
     find -name '*'$1'*'
 }
+
+# Key bindings
+bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
 
 #if ! pgrep -u "$USER" ssh-agent > /dev/null; then
 #    ssh-agent > "$XDG_RUNTIME_DIR/ssh-agent.env"

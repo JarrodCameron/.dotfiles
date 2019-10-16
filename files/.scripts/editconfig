@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# Author: Jarrod Cameron (z5210220)
-
 [ -z "$EDITOR" ] && EDITOR="$(which vim)"
 [ -z "$TERMINAL" ] && TERMINAL="$(which st)"
 
@@ -13,15 +11,18 @@ COLORS="-nb $BLACK -nf $WHITE -sf $GRAY -sb $AQUA"
 
 get_file () {
   local FULL_PATH="$1"
-  local OPTIONS="$(ls $FULL_PATH)"
+  local OPTIONS="$(ls -a $FULL_PATH | grep -Ev '^\.\.?$')"
   local HEIGHT="$(echo "$OPTIONS" | wc -l)"
   local OUTPUT="$(echo "$OPTIONS" | dmenu -i -l $HEIGHT -p "Edit file:" $COLORS)"
 
   if [ -z "$OUTPUT" ]; then
     exit 1
+  elif [ -d "$FULL_PATH"'/'"$OUTPUT" ]; then
+    echo "$(get_file "$FULL_PATH"'/'"$OUTPUT")"
+  else
+    echo "$FULL_PATH"/"$OUTPUT"
   fi
 
-  echo $OUTPUT
 }
 
 options=".vimrc\ni3-gaps\ni3blocks\n.bashrc\n.Xresources\n.gdbinit\ncompton\ntodo\nradare2rc\nsuckless ->\nhome_scripts ->\ni3blocks_scripts ->"
@@ -47,9 +48,9 @@ case "$output" in
   "todo")        cmd="$EDITOR "$HOME"/.todo"                                  ;;
   ".gdbinit")    cmd="$EDITOR "$HOME"/.gdbinit"                               ;;
   "radare2rc")   cmd="$EDITOR "$HOME"/.config/radare2/radare2rc"              ;;
-  "suckless ->")         cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
-  "home_scripts ->")     cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
-  "i3blocks_scripts ->") cmd="$EDITOR ""$FULL_PATH""$(get_file "$FULL_PATH")" ;;
+  "suckless ->")         cmd="$EDITOR ""$(get_file "$FULL_PATH")" ;;
+  "home_scripts ->")     cmd="$EDITOR ""$(get_file "$FULL_PATH")" ;;
+  "i3blocks_scripts ->") cmd="$EDITOR ""$(get_file "$FULL_PATH")" ;;
   *)             exit 1 ;;
 esac
 
