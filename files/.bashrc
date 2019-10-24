@@ -234,6 +234,9 @@ function rfind () {
 
 # Key bindings
 bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
+bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
+bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
+#bind -x '"\C-g": ~/.scripts/.bash/open_grep.sh'
 
 #if ! pgrep -u "$USER" ssh-agent > /dev/null; then
 #    ssh-agent > "$XDG_RUNTIME_DIR/ssh-agent.env"

@@ -18,7 +18,7 @@ let mapleader=","
 map <F6> :setlocal spell! spelllang=en_au<CR>
 
 " Toggle the grey bar thing
-map <silent> <F8> :call g:ToggleCC(79)<CR>
+map <silent> <F8> :call g:ToggleCC(80)<CR>
 syntax enable
 syntax on
 
