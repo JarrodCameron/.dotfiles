@@ -5,6 +5,10 @@
 
 line="$(grep -nr "TODO" | fzf --layout=reverse --margin=3 --header="pwd: $(pwd)" --inline-info --cycle)"
 
+if [ -z "$line" ]; then
+    exit 1
+fi
+
 # If there is a ':' in the file name or path we are fked
 file_name="$(echo $line | awk -F':' '{print $1}')"
 line_num="$(echo $line | awk -F':' '{print $2}')"

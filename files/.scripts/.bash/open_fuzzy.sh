@@ -3,7 +3,8 @@
 # Author: Jarrod Cameron (z5210220)
 # Date:   07/10/19 18:34
 
-source_file="$(for f in $(find . | grep -v '^\.$')
+IFS=''
+source_file="$(for f in $(find . | grep -v '^\.$' | grep -v '\.class$')
 do
     [ ! -d "$f" ] && echo $f
 done | fzf --layout=reverse --margin=3 --header="pwd: $(pwd)" --inline-info --cycle)"

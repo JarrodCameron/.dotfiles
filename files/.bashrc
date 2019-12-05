@@ -176,7 +176,7 @@ alias gitac="git add --all && git commit"
 alias r2="radare2"
 alias a2="radare2 -A"
 
-alias csc="cscope -R"
+alias csc="cscope -R -k"
 alias cro="(export CSCOPE_EDITOR=view && cscope -R)"
 alias tag="vim -t"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
@@ -200,8 +200,11 @@ alias retag="rm -f tags ; ctags -R"
 alias q="exit"
 alias mkae="make"
 alias mak="make"
-alias z="zathura"
+alias z="zathura --fork"
 alias ropper="python3 $(which ropper)"
+alias nets="cd ~/repos/networks"
+alias lmr="cd ~/eclipse-workspace/linux_master_race2"
+alias cutil="cd ~/repos/c_utils/"
 
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 

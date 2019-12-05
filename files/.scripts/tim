@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   16/11/19 20:18
+
+# Simple script used execute a temporary bash script if saved:
+# 1. Store all input from stdin into $TEMP
+# 2. Use vim to open $TEMP
+# 3. If vim updates the $TEMP file the file is run with `bash $TEMP'
+
+TEMP="$(mktemp)"
+
+IFS=''
+while read line
+do
+    printf "%s\n" "$line"
+done > "$TEMP"
+
+start_modify="$(stat "${TEMP}" --format='%Y')"
+
+vim "$TEMP" 0</dev/tty 1>/dev/tty 2>/dev/tty
+
+end_modify="$(stat "${TEMP}" --format='%Y')"
+
+if [ "$end_modify" != "$start_modify" ]; then
+    bash "$TEMP"
+fi
+
+rm -f "$TEMP"

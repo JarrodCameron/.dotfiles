@@ -73,6 +73,9 @@ set tags=./tags;/
 " Don't read modeline strings
 set nomodeline
 
+" Set the vertical column
+set colorcolumn=80
+
 " When using the `find' command search recursively down
 "set path=**
 
@@ -133,6 +136,11 @@ nnoremap <silent> <C-n> :tabN<CR>
 
 " Find the file, look recursibly
 nnoremap <leader>f :cscope find f<space>
+
+" Add semi colons to end of line with control-c
+nnoremap <C-c> A;<esc>
+inoremap <C-c> <esc>mxA;<esc>`xl
+vnoremap <C-c> :s/$/;/g<CR>
 
 " maps "WQ" to ":wq"
 command! -nargs=* WQ  :wq <args>
@@ -196,6 +204,7 @@ autocmd BufNewFile * %substitute/==START==//eg
 source ~/.vim/features/brackets.vim
 source ~/.vim/features/smarttabs.vim
 source ~/.vim/features/statusline.vim
+source ~/.vim/features/todolist.vim
 
 " }}}
 
@@ -272,7 +281,7 @@ endfunction
 function! s:GetComment()
   if &filetype == "vim"
     return "\""
-  elseif &filetype == "c" || &filetype == "javascript"
+  elseif &filetype == "c" || &filetype == "javascript" || &filetype == "cpp"
     return "\\/\\/"
   elseif &filetype == "prolog"
     return "%"

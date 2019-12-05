@@ -1,9 +1,14 @@
-// Author: ==NAME==
-// Date:   ==DATE==
+/*******************************************
+ *                                         *
+ *    Author: ==NAME==    *
+ *    Date:   ==DATE==               *
+ *                                         *
+ *******************************************/
 
 #include <iostream>
 
-int main (void) {
+int main (void)
+{
 
 	==START==
 
