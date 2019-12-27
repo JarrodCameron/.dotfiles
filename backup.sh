@@ -10,7 +10,6 @@ RESET="$(echo -e "\e[0m")"
 # If changed don't forget to update restore.sh
 DOTFILES_HOME="${HOME}""/.dotfiles/"
 DOTFILES_SRC="${DOTFILES_HOME}""/files/"
-DOTFILES_SUCK="${DOTFILES_HOME}""/suckless/"
 
 back_up () {
     local path="$1"
@@ -21,22 +20,6 @@ back_up () {
         echo "${GREEN}""${path} successfully backed up.""${RESET}"
     else
         echo "${RED}""${path} does not exist.""${RESET}"
-    fi
-}
-
-# Creates a diff of the repo and backs up
-back_up_suckless () {
-    local prog="$1"
-    if [ -d "${DOTFILES_HOME}/suckless/${prog}" ]; then
-        if [ -r "${DOTFILES_HOME}/suckless/${prog}/config.h" ]; then
-            lastmod_confdefh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/${prog}/config.def.h")"
-            lastmod_confh="$(stat --format=%Y "${DOTFILES_HOME}/suckless/${prog}/config.h")"
-            if [ "$lastmod_confdefh" -lt "$lastmod_confh" ]; then
-                cp "${DOTFILES_HOME}/suckless/${prog}/config.h" "${DOTFILES_HOME}/suckless/${prog}/config.def.h"
-            fi
-        fi
-        echo "${GREEN}""git-diff ${prog} backed up""${RESET}"
-        git -C "${DOTFILES_HOME}/suckless/${prog}/" diff > "${DOTFILES_SRC}/${prog}.diff"
     fi
 }
 
@@ -55,7 +38,9 @@ back_up "${HOME}""/.Xresources"
 back_up "${HOME}""/.tmux.conf"
 back_up "${HOME}""/.vim"
 back_up "${HOME}""/.config/radare2/radare2rc"
+back_up "${HOME}""/.config/termite/config"
+back_up "${HOME}""/.gdbinit"
+back_up "${HOME}""/.xmonad/xmonad.hs"
+back_up "${HOME}""/.config/xmobar/xmobarrc"
+back_up "${HOME}""/images/wallpapers"
 
-back_up_suckless "dwm"
-back_up_suckless "dmenu"
-back_up_suckless "st"

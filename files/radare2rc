@@ -1,11 +1,8 @@
 # 24bit true color
-#e scr.color=3
+e scr.color=2
 
 # Good syntax only
 e asm.syntax=intel
-
-# vi prompt
-e scr.prompt.vi=true
 
 # No fortunes
 e cfg.fortunes=false

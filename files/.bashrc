@@ -19,6 +19,8 @@ RESET="\e[0m"
 RED="\e[31m"
 GREEN="\e[32m"
 
+export TERM=xterm-256color
+
 function _update_ps1() {
     PS1=$(powerline-shell $?)
 }
@@ -67,7 +69,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -182,8 +184,7 @@ alias tag="vim -t"
 alias cse="ssh -i ~/.ssh/cse z5210220@cse.unsw.edu.au"
 alias objdump="objdump -Mintel"
 alias p="python3 -q"
-alias p2="python"
-alias gdb="gdb -q"
+alias gdb="bash ~/.scripts/.alias/gdb_alias.sh"
 alias rr="ranger"
 alias bim="vim"
 alias gim="vim"
@@ -201,10 +202,8 @@ alias q="exit"
 alias mkae="make"
 alias mak="make"
 alias z="zathura --fork"
-alias ropper="python3 $(which ropper)"
-alias nets="cd ~/repos/networks"
-alias lmr="cd ~/eclipse-workspace/linux_master_race2"
-alias cutil="cd ~/repos/c_utils/"
+alias view="vim -R"
+alias ctf="cd ~/repos/ctfsolns/pwnable.kr"
 
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 
@@ -239,7 +238,6 @@ function rfind () {
 bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
 bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
 bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
-#bind -x '"\C-g": ~/.scripts/.bash/open_grep.sh'
 
 #if ! pgrep -u "$USER" ssh-agent > /dev/null; then
 #    ssh-agent > "$XDG_RUNTIME_DIR/ssh-agent.env"
