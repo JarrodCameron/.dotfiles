@@ -100,6 +100,17 @@ init_link () {
 	fi
 }
 
+# There is an optional paramater `init` which will be eval()'d after the
+# symlink is created. If the entry doesn't have an `init` command just quit
+run_init () {
+	name="$1"
+
+	cmd="$(jq '.["'"$name"'"].init' --raw-output "$DB")"
+	if [ "$cmd" != 'null' ]; then
+		eval "$cmd"
+	fi
+}
+
 do_restore () {
 	dname="$1"
 	dfile="$(get_dfile "$dname")"
@@ -108,6 +119,7 @@ do_restore () {
 	rm_dfile "$dpath" "$dfile" "$dname"
 	init_path "$dpath"
 	init_link "$dname" "$dfile" "$dpath"
+	run_init "$dname"
 }
 
 handle_args () {

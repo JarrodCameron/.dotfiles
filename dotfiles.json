@@ -45,7 +45,8 @@
     },
     "xmonad" : {
         "file" : "xmonad.hs",
-        "path" : "~/.xmonad"
+        "path" : "~/.xmonad",
+		"init" : "xmonad --recompile"
     },
     "Xresources" : {
         "file" : ".Xresources",
