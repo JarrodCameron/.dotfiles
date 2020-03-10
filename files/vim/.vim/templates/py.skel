@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+# Author: ==NAME==
+# Date:   ==DATE==
+
+from pwn import *
+
+context.arch = 'amd64'
+context.bits = 64
+
+==START==
+

@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   15/03/19 17:59
+
+# How to get this script to run as root:
+# 1) Use `sudo visudo`
+# 2) Add the line
+#      "jcameron  ALL=NOPASSWD: /home/jcameron/.scripts/brightness"
+# 3) Exit nano
+# 4) Set permissions:
+#      "chmod 755 ~/.scripts/brightness"
+# 5) The execute the script:
+#      "sudo ~/.scripts/brightness <args>"
+#    NOTE: Full path is needed
+
+ITERATIONS=15
+CURR_BRIGHT=$(cat /sys/class/backlight/intel_backlight/brightness)
+MAX_BRIGHT=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+MIN_BRIGHT=0
+
+print_help () {
+  echo 'Usage: brightness [OPTIONS]'
+  echo 'Arguments:'
+  echo '-inc               Increment brightness'
+  echo '-dec               Decrement brightness'
+  echo '-h                 Print this help and exit'
+}
+
+# Returns the maximium of two integers
+max () {
+  if [ "$1" -gt "$2" ]; then
+    echo "$1"
+  else
+    echo "$2"
+  fi
+}
+
+# Returns the minimium of two integers
+min () {
+  if [ "$1" -lt "$2" ]; then
+    echo "$1"
+  else
+    echo "$2"
+  fi
+}
+
+delta=""
+case "$1" in
+  "-inc") delta=$(expr $MAX_BRIGHT / $ITERATIONS)    ;;
+  "-dec") delta="-"$(expr $MAX_BRIGHT / $ITERATIONS) ;;
+  "-h")   print_help ; exit 0                        ;;
+  *)      print_help ; exit 1                        ;;
+esac
+
+if [ -n "$delta" ]; then
+  result="$(echo "$CURR_BRIGHT + $delta" | bc)"
+  result="$(max $result $MIN_BRIGHT)"
+  result="$(min $result $MAX_BRIGHT)"
+  if [ "$result" = "$MAX_BRIGHT" ];then
+    notify-send "Max brightness"
+  else
+    echo "$result" | tee '/sys/class/backlight/intel_backlight/brightness'
+  fi
+fi
+

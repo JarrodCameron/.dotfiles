@@ -1,65 +1,107 @@
-#!/bin/bash
+#!/bin/sh
 
-# Colors
-RED="$(echo -e "\e[31m")"
-GREEN="$(echo -e "\e[32m")"
-BOLD="$(echo -e "\e[1m")"
-RESET="$(echo -e "\e[0m")"
+# Author: Jarrod Cameron (z5210220)
+# Date:   03/03/20 19:55
 
-# Path to the .dotfiles
-# If changed don't forget to update backup.sh
-DOTFILES_HOME="${HOME}""/.dotfiles/"
-DOTFILES_SRC="${DOTFILES_HOME}""/files/"
+DB='dotfiles.json'
 
-# All the files are in $DOTFILES_SRC
-# They are 'restored' by being pointed to with symlinks
-# restore <name> <path>
-#  <name> -> The name of the file (e.g. ".bashrc", ".vim")
-#  <path> -> The path to place the file (e.g. .vim goes in "$HOME/vim")
-restore () {
-  local name="$1"
-  local path="$2"
-  if [ -z "$name" ]; then
-    echo "${RED}"Please specify name of file"${RESET}"
-    exit 1
-  elif [ -z "$path" ]; then
-    echo "${RED}"Please specify file path"${RESET}"
-    exit 1
-  elif [ ! -e "${DOTFILES_SRC}""/""${name}" ]; then
-    echo "${RED}""${name} is not in "'$DOTFILES_SRC'"${RESET}"
-    exit 1
-  fi
+FILES_PATH="$HOME"'/.dotfiles/files'
 
-  if [ -e "${path}" ]; then
-    # There is a file in the way and needs to be removed
-    rm -rf "${path}"
-  fi
-
-  ln -s "${DOTFILES_SRC}""/""${name}" "${path}"
-  local retval="$?"
-  if [ "${retval}" = "0" ]; then
-    echo "${GREEN}""${path} successfully restored""${RESET}"
-  else
-    echo "${RED}"ERROR: \`ln\' returned ${retval}"${RESET}"
-  fi
+# Check if the name is actually in the json file
+check_dname () {
+	name="$1"
+	echo $name
+	if [ "$(jq '.["'"$name"'"]' "$DB")" = 'null' ]; then
+		printf 'Error: "%s" is not in the json file!\n' "$name" 1>&2
+		exit 1
+	fi
 }
 
-# Create a `files' folder to store the files
-if [ ! -d "${DOTFILES_SRC}" ]; then
-  mkdir "${DOTFILES_SRC}"
-  echo "${BOLD}""Creating directory in "'$DOTFILES_SRC'"${RESET}"
-fi
+# Check if the file is actually there
+check_fname () {
+	name="$1"
+	file="$2"
+	if [ ! -d "$FILES_PATH"'/'"$name" ]; then
+		printf 'Error: "%s" is not backed up!\n' "$name" 1>&2
+		exit 1
+	fi
 
-# When adding/removing file remember to modify `backup.sh'
-#restore "i3"          "${HOME}""/.config/i3"
-restore ".bashrc"     "${HOME}""/.bashrc"
-restore ".scripts"    "${HOME}""/.scripts"
-#restore "i3blocks"    "${HOME}""/.config/i3blocks"
-restore ".Xresources" "${HOME}""/.Xresources"
-restore ".tmux.conf"  "${HOME}""/.tmux.conf"
-restore ".vim"        "${HOME}""/.vim"
-restore "radare2rc"   "${HOME}""/.config/radare2/radare2rc"
-restore ".gdbinit"    "${HOME}""/.gdbinit"
-restore ".xmonad.hs"  "${HOME}""/.xmonad/xmonad.hs"
-restore "xmobarrc"    "${HOME}""/.config/xmobar/xmobarrc"
-restore "wallpapers"  "${HOME}""/images/wallpapers"
+	if [ ! -e "$FILES_PATH"'/'"$name"'/'"$file" ]; then
+		printf 'Error: "%s" is missing!\n' "$name" 1>&2
+		exit 1
+	fi
+}
+
+# Remove the file if it already exists somewhere in disk
+rm_dfile () {
+	path="$1"
+	file="$2"
+	name="$3"
+	status=''
+
+	full_path="$path"'/'"$file"
+
+	if [ -e "$full_path" ] || [ -h "$full_path" ]; then
+		printf 'Do you want to remove "%s"? [Y/n] ' "$name"
+		read status
+		if [ -z "$status" ] || [ "$status" = 'Y' ] || [ "$status" = 'y' ]; then
+			rm -rf "$full_path"
+		else
+			printf 'Exiting...\n'
+			exit 1
+		fi
+	fi
+
+}
+
+# Return the real name of the dot file (e.g. .gdbinit)
+get_dfile () {
+	name="$1"
+	jq --raw-output '.["'"$name"'"].file' "$DB"
+}
+
+# Return the real path of the dot file (e.g. .gdbinit)
+get_dpath () {
+	name="$1"
+	path="$(jq --raw-output '.["'"$name"'"].path' "$DB")"
+
+	# eval() will glob that path
+	eval echo "$path"
+}
+
+init_path () {
+	path="$1"
+	mkdir -p "$path"
+}
+
+init_link () {
+	name="$1"
+	file="$2"
+	path="$3"
+
+	# The real_path is the path of the original file, backed up by git
+	# The fake_path is the file path of the link
+	real_path="$FILES_PATH"'/'"$name"'/'"$file"
+	fake_path="$path"'/'"$file"
+
+	ln -s "$real_path" "$fake_path"
+	if [ "$?" != '0' ]; then
+		printf 'Error: Creating symlink from "%s" to "%s"\n' "$real_path" "$fake_path"
+		exit 1
+	fi
+}
+
+do_restore () {
+	dname="$1"
+	dfile="$(get_dfile "$dname")"
+	dpath="$(get_dpath "$dname")"
+	check_fname "$dname" "$dfile"
+	rm_dfile "$dpath" "$dfile" "$dname"
+	init_path "$dpath"
+	init_link "$dname" "$dfile" "$dpath"
+}
+
+for dotfile in $(jq 'keys | .[]' --raw-output "$DB")
+do
+	do_restore "$dotfile"
+done

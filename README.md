@@ -5,13 +5,20 @@ Two scripts are used, `backup.sh` and `restore.sh`, to automate the
 backing up process.
 
 Dot files for:
-- `.bashrc`
-- [`i3`](https://github.com/i3/i3)
-- [`i3blocks`](https://github.com/vivien/i3blocks)
-- `.scripts` (scripts used for automating various tasks)
 - [`.tmux.conf`](https://github.com/tmux/tmux)
 - [`.vim`](https://github.com/vim/vim)
+- [`bash`](https://www.gnu.org/software/bash/)
+- [`i3blocks`](https://github.com/vivien/i3blocks)
+- [`i3wm`](https://github.com/Airblader/i3)
+- [`radare2`](https://github.com/radareorg/radare2)
+- [`termite`](https://github.com/thestinger/termite/)
+- [`vim`](https://github.com/vim/vim)
+- [`xmobar`](https://github.com/jaor/xmobar)
+- [`xmonad`](https://github.com/xmonad/xmonad)
 - `.Xresources`
+- `.scripts` (personal scripts)
+- `wallpapers`
+
 
 Obligatory screenshot:
 
@@ -23,16 +30,7 @@ Clone the repository and distribute the files using `backup.sh`:
 ```{sh}
 git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 cd ~/.dotfiles
-sh backup.sh
-```
-
-## `backup.sh` usage
-
-`backup.sh` is used to copy configuration files from the user.
-This can be used by running the following commands:
-```{sh}
-cd ~/.dotfiles
-sh backup.sh
+sh restore.sh
 ```
 
 ## `restore.sh` usage
@@ -40,29 +38,37 @@ sh backup.sh
 `restore.sh` is used to create symbolic links
 from files around the system to the backed up files.
 This can be used by running the following commands:
+
 ```{sh}
 cd ~/.dotfiles
 sh restore.sh
 ```
 
-## Hacking
+`restore.sh` will restore each file in the `dotfiles.json` file.
 
-### Change default directory
+## `dotfiles.json`
 
-Currently `backup.sh` and `restore.sh` accesses all files from
-`DOTFILES_SRC` which is defined in both files.
-NOTE: moving `.dotfiles` requires `DOTFILES_SRC` to up updated.
+This is a _data base_ of all files. Each file needs three fields:
 
-### Adding more files to `backup.sh`
+- The `name` (this is the key in the dictionary).
+- The `file` (the file to store)
+- The `path` (directory containing this file)
 
-To back up more files add the following line to the end of `backup.sh`:
-```{sh}
-back_up /path/to/file
+Inside of `files/` is a directory for each `name` which contains the
+respective `file`.
+
+### Example
+
+If `dotfiles.json` looked like:
+
+```
+{
+    "bashrc" : {
+        "file" : ".bashrc",
+        "path" : "~"
+    }
+}
 ```
 
-### Adding more files to `restore.sh`
-
-To add another file to restore add the following line to the end of `restore.sh`:
-```{sh}
-restore name_of_file /path/to/file
-```
+The file is stored in `files/bashrc/.bashrc` and the symbolic link will be
+created in `~/.bashrc`.

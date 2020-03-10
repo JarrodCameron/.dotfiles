@@ -1,0 +1,34 @@
+Config {
+
+    -- appearance
+      font             = "xft:Bitstream Vera Sans Mono:size=10:bold:antialias=true"
+    , bgColor          = "#282828"
+    , fgColor          = "#ebdbb2"
+    , position         = Top
+    --, allDesktops      = True
+    --, overrideRedirect = False,
+    --, lowerOnStart     = True
+    --, persistent       = True
+    , sepChar          = "%"
+    , alignSep         = "}{"
+
+    , lowerOnStart =     False   -- send to bottom of window stack on start
+    , hideOnStart =      False   -- start with window unmapped (hidden)
+    , allDesktops =      True    -- show on all desktops
+    , overrideRedirect = True    -- set the Override Redirect flag (Xlib)
+    , pickBroadest =     False   -- choose widest display (multi-monitor)
+    , persistent =       False   -- enable/disable hiding (True = disabled)
+
+    , commands = [
+               Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 5
+             , Run Memory ["-t","Mem: <usedratio>%"] 5
+             , Run Date "%a %b %d %Y %H:%M:%S " "date" 1
+             , Run Com "sh" ["/home/jc/.scripts/.menubar/battery.sh"] "bat" 1
+             --, Run Com "sh" ["/home/jc/.scripts/.menubar/seperator.sh"] "sep" 0
+             , Run Com "echo" ["-e", "\"\\x00\\x00\\xb7\""] "sep" 0
+             , Run StdinReader
+             ]
+
+    , template = "%StdinReader% }{ | %cpu% | %memory% | %bat% | %sep% <fc=#e0e0e0>%date%</fc>"
+
+    }

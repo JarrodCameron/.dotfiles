@@ -1,0 +1,146 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   25/01/20 12:38
+
+# Exit if error
+set -e
+
+# Grap those os tools :P
+export PATH="$PATH":"$HOME"'/bin'
+
+# Print the usage of this script
+usage () {
+    printf 'Usage: os <arg>\n'
+    printf 'arg=full  -> Compile everything\n'
+    printf 'arg=kern  -> Compile the kernel\n'
+    printf 'arg=user  -> Compile userland\n'
+    printf 'arg=run   -> run kernel\n'
+    printf 'arg=wait  -> wait for debugger\n'
+    printf 'arg=conn  -> connect to waiting session\n'
+    printf 'arg=help  -> print help\n'
+    printf 'arg=vm    -> toggle dumbvm/normal mm\n'
+}
+
+# compile everything from scratch
+compile_full () {
+    # Configure source?
+    cd ~/cs3231/asst2-src
+    ./configure
+
+    # Convigure kernel
+    cd ~/cs3231/asst2-src/kern/conf
+    ./config ASST2
+
+    # Compile/install kernel
+    cd ~/cs3231/asst2-src/kern/compile/ASST2
+    bmake depend
+    bmake
+    bmake install
+
+    # Compiler/install userland
+    cd ~/cs3231/asst2-src
+    bmake
+    bmake install
+
+    if [ ! -e "$HOME"'/cs3231/root/sys161.conf' ]; then
+        cd ~/cs3231/root
+        wget http://cgi.cse.unsw.edu.au/~cs3231/19T1/assignments/asst1/sys161.conf -O sys161.conf
+    fi
+
+    if [ ! -e "$HOME"'/cs3231/root/.gdbinit' ]; then
+        cd ~/cs3231/root
+        printf 'set can-use-hw-watchpoints 0\n' >> .gdbinit
+        printf 'define connect\n' >> .gdbinit
+        printf 'dir ~/cs3231/asst0-src/kern/compile/ASST0\n' >> .gdbinit
+        printf 'target remote unix:.sockets/gdb\n' >> .gdbinit
+        printf 'b panic\n' >> .gdbinit
+        printf 'end\n' >> .gdbinit
+    fi
+}
+
+# Compile the kernel
+compile_kern () {
+    cd ~/cs3231/asst2-src/kern/compile/ASST2
+    bmake
+    bmake install
+}
+
+# Compile the userland
+compile_user () {
+    # Compiler/install userland
+    cd ~/cs3231/asst2-src
+    bmake
+    bmake install
+}
+
+# Run the kernel
+kernel_run () {
+    cd ~/cs3231/root
+
+    if [ -z "$1" ]; then
+        sys161 kernel
+    else
+        sys161 kernel 'p '"$1"
+    fi
+}
+
+# Kernel waits for gdb connection
+kernel_wait () {
+    cd ~/cs3231/root
+    sys161 -w kernel
+}
+
+# Connect the the kernel when it is waiting for a debugger
+kernel_conn () {
+    cd ~/cs3231/root
+    os161-gdb -ex 'connect' kernel
+}
+
+kernel_vm () {
+    FILE_NAME='ASST2'
+    cd ~/cs3231/asst2-src/kern/conf
+    if [ "$(grep '^#options dumbvm.*$' "$FILE_NAME")" ]; then
+        sed -i 's/^#options\s*dumbvm.*$/options dumbvm			# dumbvm is now ENABLED/g' "$FILE_NAME"
+        printf "Now using the dumbvm memory manager\n"
+        printf "it is recommended to run \`\`os full\'\'\n"
+    else
+        sed -i 's/^options\s*dumbvm.*/#options dumbvm			# dumbvm is now DISABLED/g' "$FILE_NAME"
+        printf "Now using your virtural memory!\n"
+        printf "Good luck!!!\n"
+        printf "it is recommended to run \`\`os full\'\'\n"
+    fi
+}
+
+main () {
+
+    if [ "$#" = '0' ]; then
+        usage 1>&2
+        exit 1
+    fi
+
+    arg="$1"
+    shift 1
+
+    if [ "$arg" = "clear" ]; then
+        clear
+        arg="$1"
+        shift 1
+    fi
+
+    case "$arg" in
+        'full') compile_full "$@" ;;
+        'kern') compile_kern "$@" ;;
+        'user') compile_user "$@" ;;
+        'run')  kernel_run "$@"   ;;
+        'wait') kernel_wait "$@"  ;;
+        'conn') kernel_conn "$@"  ;;
+        'vm')   kernel_vm "$@"  ;;
+        'help') usage ;;
+        *)      usage 1>&2 && exit 1;;
+    esac
+
+    exit 0
+}
+
+main "$@"

@@ -1,0 +1,14 @@
+import java.util.Scanner;
+
+/**
+ * ==FILE_NAME== (==DATE==)
+ * @author ==NAME==
+ */
+public class ==FILE_NAME== {
+
+    public static void main(String[] args)
+    {
+        ==START==
+    }
+
+}

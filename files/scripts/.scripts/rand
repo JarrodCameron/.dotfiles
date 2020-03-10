@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+# Author: Jarrod Cameron (z5210220)
+# Date:   23/02/20 20:37
+
+import sys
+import random
+
+if len(sys.argv) != 3:
+    print(f"Usage: {sys.argv[0]} <min> <max>")
+    sys.exit(1)
+
+lo = int(sys.argv[1])
+hi = int(sys.argv[2])
+
+random.seed(None)
+num = random.randint(lo, hi)
+print(num)
+
+sys.exit(0)

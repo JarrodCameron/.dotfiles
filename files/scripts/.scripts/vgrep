@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Open up all files in vim  (tab mode)
+FILES="$( grep --files-with-matches $* 2> /dev/null )"
+if [ -n "$FILES" ]; then
+  vim -p $FILES
+fi
+

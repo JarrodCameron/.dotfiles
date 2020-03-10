@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+
+# This script was inspired by Luke Smith:
+# https://www.youtube.com/watch?v=MNwpdqD_I8Y
+
+# notify-send markdown syntax;
+# http://www.galago-project.org/specs/notification/0.9/x161.html
+
+BACKGROUND=689d6a
+FOREGROUND=282828
+
+# Display info
+notify () {
+  free=$(free -h | awk '/^Mem/ {print $4}')
+  used=$(free -h | awk '/^Mem/ {print $3}')
+  total=$(free -h | awk '/^Mem/ {print $2}')
+
+  results="$( ps -e ch -o "pid cmd %mem" --sort=-%mem | awk -F" " 'NR<11 { printf "   %d: %s (%.1f%%)\n", $1, $2, $3}' -)"
+
+  notify-send --expire-time=10000 "\
+
+    <span font='20px'><b>Memory Summary</b></span>
+    <span font='15px'>Used:  "$used"</span>
+    <span font='15px'>Free:  "$free"</span>
+    <span font='15px'>Total: "$total"</span>
+
+<span font='15px'>$results</span>
+"
+}
+
+case $BLOCK_BUTTON in
+  1) notify        ;; # Left click
+  2) notify        ;; # Scroll click
+  3) notify        ;; # Right click
+esac
+
+# Label
+OUTPUT="Mem: $(free -h | awk '/^Mem:/ { print $3 " / " $2 }')"
+
+echo "<span foreground='#${FOREGROUND}' background='#${BACKGROUND}'> $OUTPUT </span>"
+echo "<span foreground='#${FOREGROUND}' background='#${BACKGROUND}'> $OUTPUT </span>"

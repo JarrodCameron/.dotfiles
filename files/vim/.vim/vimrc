@@ -1,0 +1,330 @@
+" Vim Configuration File
+"        _
+"       (_)
+" __   ___ _ __ ___  _ __ ___
+" \ \ / / | '_ ` _ \| '__/ __|
+"  \ V /| | | | | | | | | (__
+"   \_/ |_|_| |_| |_|_|  \___|
+
+" Global settings {{{
+
+" Reset all autocmds (useful for sourcing $MYVIMRC" multiple times)
+autocmd!
+
+" Set the <leader> to ","
+let mapleader=","
+
+" spell-check set to F6
+map <F6> :setlocal spell! spelllang=en_au<CR>
+
+" Toggle the grey bar thing
+map <silent> <F8> :call g:ToggleCC(80)<CR>
+syntax enable
+syntax on
+
+set t_Co=256
+set background=dark
+colorscheme gruvbox
+
+"set shiftwidth=2
+set shiftwidth=4
+set numberwidth=4
+set smartindent
+set autoindent
+set showcmd
+set wildmenu
+
+" The width of tab characters
+set tabstop=4
+
+" Activate filetype detection
+filetype on
+
+" Source vimscript files from ~/.vim/ftlpugin/*.vim
+filetype plugin on
+
+" Display current line number
+set number
+
+" Why are your numbers weird?
+set relativenumber
+
+" Spaces (not tabs), except in Makefiles
+"set expandtab
+
+" Leave 3 lines above/below cursor
+set scrolloff=3
+
+" Highlight current line
+set cursorline
+
+" How to fold stuff
+set foldmethod=syntax
+
+" No folds when opening buffer
+set foldlevelstart=99
+
+" Shows the tabs
+set list listchars=tab:>-,trail:~
+
+" Search recursivly up the directory tree to find tags files (for ctags)
+set tags=./tags;/
+
+" Don't read modeline strings
+set nomodeline
+
+" Set the vertical column
+set colorcolumn=80
+
+" When using the `find' command search recursively down
+"set path=**
+
+" ???
+set backspace=indent,eol,start
+set backspace=2
+
+" add any database in current directory
+if filereadable("cscope.out")
+    cs add cscope.out
+endif
+
+" }}}
+
+" Function mappings -------------------- {{{
+
+" Edit + reload vimrc anytime
+nnoremap <leader>ev :tabnew $MYVIMRC<CR>
+nnoremap <leader>rv :source $MYVIMRC<CR>
+
+" Duplicate current line
+nnoremap <leader>p Vyp
+inoremap <leader>p <esc>Vyp
+
+" Useless help menu is mapped to <esc>
+nnoremap <F1> <esc>
+inoremap <F1> <esc>
+
+" <space>, <enter> and <backspace> keys that actually work
+nnoremap <cr> o<esc>
+nnoremap <space> i<space><esc>l
+
+" Yank/paste to the system keyboard
+vnoremap Y :'<,'>:w !xclip -selection clip <CR><CR>
+nnoremap P :r !xclip -selection clip -out<CR>
+
+" Convert word to upper case, not recursive
+inoremap <c-u> <esc>mxviwu`xa
+nnoremap <c-u> <esc>mxviwu`x
+
+" Comments a chunk of text
+vnoremap <leader>c :call g:ToggleComments()<CR>
+
+" save and quit
+inoremap <leader>q <esc>:q<CR>
+nnoremap <leader>q :q<CR>
+inoremap <leader>wq <esc>:wq<CR>
+nnoremap <leader>wq :wq<CR>
+
+inoremap <leader>w <esc>:w<CR>a
+nnoremap <leader>w :w<CR>
+
+inoremap <leader>u <esc>mxviwu`xa
+nnoremap <leader>u <esc>mxviwu`x
+
+nnoremap <silent> <C-p> :tabp<CR>
+nnoremap <silent> <C-n> :tabN<CR>
+
+" Find the file, look recursibly
+nnoremap <leader>f :cscope find f<space>
+""nnoremap <leader>f :vs | :FZF
+
+" Copy and move current window to new tab
+nnoremap <leader>T :vs<CR><C-w>T<CR>
+
+" Add semi colons to end of line with control-c
+nnoremap <C-c> A;<esc>
+inoremap <C-c> <esc>mxA;<esc>`xl
+vnoremap <C-c> :s/$/;/g<CR>
+
+" maps "WQ" to ":wq"
+command! -nargs=* WQ  :wq <args>
+command! -nargs=* Wq  :wq <args>
+command! -nargs=* W   :w <args>
+command! -nargs=* Q   :q <args>
+command! -nargs=* Vsp :vsp <args>
+command! -nargs=* VSp :vsp <args>
+command! -nargs=* VSP :vsp <args>
+command! -nargs=* Sp  :sp <args>
+command! -nargs=* SP  :sp <args>
+
+" If the 'rxvt' is a substring of $TERM
+" Make sure we are not on the CSE machines
+if tolower ($TERM) =~ "256color" && $USER !=? "z5210220"
+  let &t_SI = "\<Esc>[6 q"
+  let &t_SR = "\<Esc>[4 q"
+  let &t_EI = "\<Esc>[2 q"
+endif
+
+
+" Turn on hlsearch when searching
+" Turn it off in insert mode
+nnoremap / :setlocal hlsearch<cr>/
+nnoremap ? :setlocal hlsearch<cr>?
+nnoremap n :setlocal hlsearch<cr>n
+nnoremap N :setlocal hlsearch<cr>N
+nnoremap # :setlocal hlsearch<cr>#
+nnoremap * :setlocal hlsearch<cr>*
+autocmd InsertEnter * setlocal nohlsearch
+
+autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
+
+" Vertically center document when entering insert mode
+"autocmd InsertEnter * norm zz
+
+"}}}
+
+" File initilisation ---------------------- {{{
+" Skeletons
+autocmd BufNewFile *.c          0r ~/.vim/templates/c.skel
+autocmd BufNewFile *.cpp        0r ~/.vim/templates/cpp.skel
+autocmd BufNewFile Makefile     0r ~/.vim/templates/make.skel
+autocmd BufNewFile *.sh         0r ~/.vim/templates/bash.skel
+autocmd BufNewFile *.rmd        0r ~/.vim/templates/rmd.skel
+autocmd BufNewFile *.html       0r ~/.vim/templates/html.skel
+autocmd BufNewFile *.py         0r ~/.vim/templates/py.skel
+autocmd BufNewFile *.pl         0r ~/.vim/templates/prolog.skel
+autocmd BufNewFile *.js         0r ~/.vim/templates/js.skel
+autocmd BufNewFile *.java       0r ~/.vim/templates/java.skel
+autocmd BufNewFile *.rr2        0r ~/.vim/templates/rr2.skel
+autocmd BufNewFile gdbinit      0r ~/.vim/templates/gdbinit.skel
+
+" ==DATE==  Current date
+" ==NAME==  Authors name
+" ==START== Starting cursor position
+" ==FILE_NAME== Name of the file
+autocmd BufNewFile * %substitute/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/eg
+autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
+autocmd BufNewFile * %substitute/==FILE_NAME==/\=expand("%:t:r")/eg
+autocmd BufNewFile * %substitute/==START==//eg
+" }}}
+
+" Bonus features (plugins) {{{
+
+source ~/.vim/features/brackets.vim
+source ~/.vim/features/smarttabs.vim
+source ~/.vim/features/statusline.vim
+source ~/.vim/features/todolist.vim
+
+" }}}
+
+" Saving buffers ---------------------- {{{
+" Remove any trailing white space
+autocmd BufWritePre * %substitute/\s\+$//e
+
+" Refresh program after saving config file
+autocmd BufWritePost $MYVIMRC source $MYVIMRC
+autocmd BufWritePost ~/.dotfiles/files/.Xresources silent: !xrdb .Xresources
+autocmd BufWritePost ~/.dotfiles/files/i3/config silent :!i3-msg restart
+autocmd BufWritePost ~/.dotfiles/files/i3blocks/config silent: !i3-msg restart
+
+" }}}"
+
+" Custom file settings ---------------------- {{{
+autocmd FileType rmd command! R :w | :!clear && Rscript -e "rmarkdown::render('%')" && xdg-open %<.pdf
+autocmd FileType rmd command! C :w | :!clear && Rscript -e "rmarkdown::render('%')"
+autocmd FileType rmd command! O :!clear && xdg-open %<.pdf
+autocmd FileType rmd iabbrev tbf textbf
+autocmd FileType rmd iabbrev tit textit
+autocmd FileType text setlocal spell spelllang=en_au
+
+"autocmd FileType python inoremap <leader>s ?^class
+autocmd FileType python command! R :w | :!clear && python3 %
+
+autocmd FileType html command! R :w | :!google-chrome --new-window %
+autocmd FileType html setlocal cursorcolumn
+
+autocmd FileType tex command! C :w | :!clear && pdflatex %
+autocmd FileType tex command! R :w | :!clear && pdflatex % && xdg-open %<.pdf
+
+autocmd FileType c iabbrev <buffer> \N \n
+autocmd FileType c iabbrev <buffer> \m \n
+autocmd FileType c iabbrev <buffer> struc struct
+
+autocmd FileType sh command! R :w | :!clear && bash %
+
+autocmd FileType text setlocal spell spelllang=en_au
+
+autocmd FileType make setlocal noexpandtab
+
+autocmd FileType vim setlocal foldmethod=marker
+autocmd FileType vim normal zM
+" }}}
+
+" Kindergarten spelling skills ---------------------- {{{
+iabbrev tehn then
+iabbrev didnt didn't
+iabbrev dont don't
+iabbrev waht what
+iabbrev wehn when
+iabbrev wont won't
+iabbrev teh the
+iabbrev adn and
+iabbrev si is
+iabbrev nad and
+iabbrev ifle file
+iabbrev im I'm
+iabbrev sel4 seL4_
+" }}}
+
+" vimscript functions  ---------------------- {{{
+" Toggle the vertical bar
+function! g:ToggleCC(width)
+  if &cc == 0
+    execute "set colorcolumn=".a:width
+  else
+    set colorcolumn=0
+  endif
+endfunction
+
+" Return the comment per filetype
+function! s:GetComment()
+  if &filetype == "vim"
+    return "\""
+  elseif &filetype == "c" || &filetype == "javascript" || &filetype == "cpp"
+    return "\\/\\/"
+  elseif &filetype == "prolog"
+    return "%"
+  elseif &filetype == "java"
+    return "\\/\\/"
+  elseif &filetype == "xdefaults"
+    return "!"
+  elseif &filetype == "haskell"
+    return "--"
+  else
+    " Default comment type
+    return "#"
+  endif
+endfunction
+
+" Toggle comments
+function! g:ToggleComments() range
+  let l:comment_type=s:GetComment()
+  let l:is_commented=1
+  for l:line_num in range(a:firstline, a:lastline)
+    let l:line = getline(l:line_num)
+    let l:regexp = "^\\s*" . l:comment_type
+    if l:line !~ l:regexp
+      let l:cmd = string(l:line_num) . "s/^/" . l:comment_type . "/"
+      execute l:cmd
+      let l:is_commented=0
+    endif
+  endfor
+  if l:is_commented == 1
+    let l:range = string(a:firstline) . "," . string (a:lastline)
+    let l:subs = "s/" . l:comment_type . "//"
+    let l:cmd = l:range . l:subs
+    execute l:cmd
+  endif
+endfunction
+
+" }}}

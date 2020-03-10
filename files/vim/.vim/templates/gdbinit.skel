@@ -1,0 +1,3 @@
+#shell python3 hak.py > payload
+#break main
+#run < payload

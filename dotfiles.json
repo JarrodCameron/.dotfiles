@@ -1,0 +1,58 @@
+ {
+    "bashrc" : {
+        "file" : ".bashrc",
+        "path" : "~"
+    },
+    "termite" : {
+        "file" : "config",
+        "path" : "~/.config/termite"
+    },
+    "gdbinit" : {
+        "file" : ".gdbinit",
+        "path" : "~"
+    },
+    "i3wm" : {
+        "file" : "i3",
+        "path" : "~/.config/i3"
+    },
+    "i3blocks" : {
+        "file" : "i3blocks",
+        "path" : "~/.config/i3blocks"
+    },
+    "radare2" : {
+        "file" : "radare2rc",
+        "path" : "~/.config/radare2"
+    },
+    "scripts" : {
+        "file" : ".scripts",
+        "path" : "~"
+    },
+    "tmux" : {
+        "file" : ".tmux.conf",
+        "path" : "~"
+    },
+    "vim" : {
+        "file" : ".vim",
+        "path" : "~"
+    },
+    "wallpapers" : {
+        "file" : "wallpapers",
+        "path" : "~/images"
+    },
+    "xmobar" : {
+        "file" : "xmobarrc",
+        "path" : "~/.config/xmobar"
+    },
+    "xmonad" : {
+        "file" : "xmonad.hs",
+        "path" : "~/.xmonad"
+    },
+    "Xresources" : {
+        "file" : ".Xresources",
+        "path" : "~"
+    },
+    "bspwm" : {
+        "file" : "bspwm",
+        "path" : "~/.config"
+    }
+}

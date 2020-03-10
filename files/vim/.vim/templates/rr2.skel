@@ -1,0 +1,9 @@
+#!/usr/bin/rarun2
+
+# Author: ==NAME==
+# Date:   ==DATE==
+
+#setenv=LD_PRELOAD=./libseccomp.so.2
+#stdin=file.txt
+
+==START==

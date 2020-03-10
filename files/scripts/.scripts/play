@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   24/11/19 22:35
+
+# TODO Stacks for same files with different functions
+
+function handle_cpp () {
+    filename="$1"
+    temp="$(mktemp)"
+    g++ "$filename" -o "$temp"
+    [ -x "$temp" ] && "$temp"
+    rm -f "$temp"
+}
+
+function handle_c () {
+    filename="$1"
+    temp="$(mktemp)"
+    gcc "$filename" -o "$temp"
+    [ -x "$temp" ] && "$temp"
+    rm -f "$temp"
+}
+
+function handle_java () {
+    filename="$1"
+    javac "$filename"
+
+    classname="$(printf "%s" "$filename" | sed 's/\.java$//g')"
+    java "$classname"
+}
+
+function usage () {
+    printf "Usage: play [stack] <file>\n"
+    printf "0 <= stack <= 0\n"
+}
+
+if [ "$#" = "0" ]; then
+    usage
+    exit 0
+fi
+
+while [ "$1" ]; do
+
+    filename="$1"
+
+    case "$filename"
+    in
+        *.cpp)          handle_cpp "$filename" ;;
+        *.c)            handle_c "$filename" ;;
+        *.java)         handle_java "$filename" ;;
+        *)              printf "\`play' can't handle ${filename}"
+                        exit 1
+    esac
+    shift
+done
+
+exit 0
+
+
+

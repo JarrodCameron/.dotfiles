@@ -1,0 +1,14 @@
+#!/bin/sh
+
+GDB_FLAGS="-quiet"
+
+wm_pid=$(xprop | grep _NET_WM_PID | sed 's/.* = //g')
+bin_pid=$(pstree $wm_pid -p | head -n 1 | sed 's/^.*(//g ; s/)//g')
+
+if [ -r "gdbinit" ]; then
+    gdb -p "$bin_pid" "${GDB_FLAGS}" -command="gdbinit" $@
+else
+    gdb -p "$bin_pid" "${GDB_FLAGS}" $@
+fi
+
+

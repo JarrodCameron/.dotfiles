@@ -1,0 +1,26 @@
+# 24bit true color
+e scr.color=2
+
+# Good syntax only
+e asm.syntax=intel
+
+# No fortunes
+e cfg.fortunes=false
+
+# Theme
+eco twilight
+
+# Enable descriptions
+#e asm.describe=1
+
+# Offsets relative to function
+#e asm.reloff=1
+
+# Psuedo syntax
+#e asm.pseudo=1
+
+# Show offsets, not vars (e.g. `objdump -d')
+#e asm.var.sub
+
+# Unicdoe lines
+e scr.utf8=true
