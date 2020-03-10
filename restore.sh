@@ -7,6 +7,10 @@ DB='dotfiles.json'
 
 FILES_PATH="$HOME"'/.dotfiles/files'
 
+# 0 -> Prompt the user if they want to remove the file if it already exists
+# 1 -> Remove the file if it exists
+force_remove='0'
+
 # Check if the name is actually in the json file
 check_dname () {
 	name="$1"
@@ -40,6 +44,11 @@ rm_dfile () {
 	status=''
 
 	full_path="$path"'/'"$file"
+
+	if [ "$force_remove" = '1' ]; then
+		rm -rf "$full_path"
+		return
+	fi
 
 	if [ -e "$full_path" ] || [ -h "$full_path" ]; then
 		printf 'Do you want to remove "%s"? [Y/n] ' "$name"
@@ -100,6 +109,20 @@ do_restore () {
 	init_path "$dpath"
 	init_link "$dname" "$dfile" "$dpath"
 }
+
+handle_args () {
+	while [ "$#" != '0' ]; do
+		arg="$1"
+		shift
+
+		case "$arg" in
+			'-f'|'--force') force_remove='1' ;;
+		esac
+
+	done
+}
+
+handle_args $@
 
 for dotfile in $(jq 'keys | .[]' --raw-output "$DB")
 do
