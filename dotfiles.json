@@ -48,6 +48,14 @@
         "path" : "~/.xmonad",
 		"init" : "xmonad --recompile"
     },
+    "xinitrc" : {
+        "file" : ".xinitrc",
+        "path" : "~"
+    },
+    "bash_profile" : {
+        "file" : ".bash_profile",
+        "path" : "~"
+    },
     "Xresources" : {
         "file" : ".Xresources",
         "path" : "~"
