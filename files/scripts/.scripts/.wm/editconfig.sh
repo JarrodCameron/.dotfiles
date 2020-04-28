@@ -56,8 +56,7 @@ ${HOME}/.tmux.conf
 ${HOME}/.cache/todo
 ${HOME}/.vim
 ${HOME}/.vim/vimrc
-${HOME}/.xmonad/xmonad.hs
-"
+${HOME}/.xmonad/xmonad.hs"
 } | run_dmenu "$num_files" "Edit file:")"
 
 if [ -z "$conf_file" ]; then

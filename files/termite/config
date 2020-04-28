@@ -22,5 +22,5 @@ color15 = #ebdbb2
 
 [options]
 font = DejaVuSansMono 12
-
+scrollback_lines = -1
 

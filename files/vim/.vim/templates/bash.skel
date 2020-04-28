@@ -1,7 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: ==NAME==
 # Date:   ==DATE==
+
+# Exit on non-zero return status
+set -e
 
 ==START==
 

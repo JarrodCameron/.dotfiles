@@ -83,6 +83,9 @@ set colorcolumn=80
 set backspace=indent,eol,start
 set backspace=2
 
+" Move viminfo out of default home directory
+set viminfo+=n~/.cache/viminfo
+
 " add any database in current directory
 if filereadable("cscope.out")
     cs add cscope.out
@@ -91,14 +94,6 @@ endif
 " }}}
 
 " Function mappings -------------------- {{{
-
-" Edit + reload vimrc anytime
-nnoremap <leader>ev :tabnew $MYVIMRC<CR>
-nnoremap <leader>rv :source $MYVIMRC<CR>
-
-" Duplicate current line
-nnoremap <leader>p Vyp
-inoremap <leader>p <esc>Vyp
 
 " Useless help menu is mapped to <esc>
 nnoremap <F1> <esc>
@@ -147,15 +142,15 @@ inoremap <C-c> <esc>mxA;<esc>`xl
 vnoremap <C-c> :s/$/;/g<CR>
 
 " maps "WQ" to ":wq"
-command! -nargs=* WQ  :wq <args>
-command! -nargs=* Wq  :wq <args>
-command! -nargs=* W   :w <args>
-command! -nargs=* Q   :q <args>
-command! -nargs=* Vsp :vsp <args>
-command! -nargs=* VSp :vsp <args>
-command! -nargs=* VSP :vsp <args>
-command! -nargs=* Sp  :sp <args>
-command! -nargs=* SP  :sp <args>
+command! -nargs=* -complete=file WQ  :wq <args>
+command! -nargs=* -complete=file Wq  :wq <args>
+command! -nargs=* -complete=file W   :w <args>
+command! -nargs=* -complete=file Q   :q <args>
+command! -nargs=* -complete=file Vsp :vsp <args>
+command! -nargs=* -complete=file VSp :vsp <args>
+command! -nargs=* -complete=file VSP :vsp <args>
+command! -nargs=* -complete=file Sp  :sp <args>
+command! -nargs=* -complete=file SP  :sp <args>
 
 " If the 'rxvt' is a substring of $TERM
 " Make sure we are not on the CSE machines

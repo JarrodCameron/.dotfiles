@@ -16,7 +16,7 @@ do
     printf " %s" "$line"
 done)"
 
-feh --bg-center $images
+feh --no-fehbg --bg-center $images
 
 
 

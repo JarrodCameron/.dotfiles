@@ -1,0 +1,14 @@
+{
+	"debian (glibc 2.24)" : {
+		"docker_file" : "debian_stretch.Dockerfile",
+		"docker_name" : "debianstretch"
+	},
+	"minimal" : {
+		"docker_file" : "minimal.Dockerfile",
+		"docker_name" : "minimal"
+	},
+	"ubuntu 19.10" : {
+		"docker_file" : "ubuntu_19_10.Dockerfile",
+		"docker_name" : "ubuntu19.10"
+	}
+}

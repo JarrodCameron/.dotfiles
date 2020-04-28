@@ -1,10 +1,9 @@
 # .dotfiles
 
-These are my .dotfiles (files often used for configuring other programs).
-Two scripts are used, `backup.sh` and `restore.sh`, to automate the
-backing up process.
+Just some of my dotfiles. `restore.sh` is a script to create symbolic links
+saving time from moving files from here to where they belong.
+These dotfiles include:
 
-Dot files for:
 - [`.tmux.conf`](https://github.com/tmux/tmux)
 - [`.vim`](https://github.com/vim/vim)
 - [`bash`](https://www.gnu.org/software/bash/)
@@ -26,7 +25,7 @@ Obligatory screenshot:
 
 ## Install
 
-Clone the repository and distribute the files using `backup.sh`:
+Clone the repository and distribute the files using `restore.sh`:
 ```{sh}
 git clone https://github.com/z5210220/.dotfiles ~/.dotfiles
 cd ~/.dotfiles

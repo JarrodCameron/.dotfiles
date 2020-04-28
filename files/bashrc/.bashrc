@@ -111,10 +111,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -198,8 +194,24 @@ alias gdbinit="vim gdbinit"
 alias 2121="cd ~/repos/2121/"
 alias 4337="cd ~/repos/4337/"
 alias R='R --quiet --vanilla'
+alias 1='cd ~/cs3231/asst1-src && vim *.diff'
+alias dl='cd ~/cs3231/ && ./download.sh'
+alias tarup='tar -zcvf'
+alias cp='cp -i'
+alias mv='mv -i'
+alias sudo='sh ~/.scripts/.alias/sudo_alias.sh'
 
 alias dumbshell='setarch `uname -m` -R /bin/bash'
+
+function music () {
+	inf=0
+	[ -n "$1" ] && [ "$1" = 'inf' ] && inf=1
+	cd ~/music/
+	mpv "$(ls | grep "^[0-9][0-9]\.mkv$" | shuf -n1)"
+	while [ "$inf" = 1 ]; do
+		mpv "$(ls | grep "^[0-9][0-9]\.mkv$" | shuf -n1)"
+	done
+}
 
 function aslr () {
     if [ -z "$1" ]; then
@@ -231,3 +243,24 @@ bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
 bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
 bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
 bind -x '"\C-a": ~/.scripts/.bash/open_man.sh'
+
+#source /home/jc/.config/broot/launcher/bash/br
+function br {
+	f=$(mktemp)
+	(
+		set +e
+		broot --outcmd "$f" "$@"
+		code=$?
+		if [ "$code" != 0 ]; then
+			rm -f "$f"
+			exit "$code"
+		fi
+	)
+	code=$?
+	if [ "$code" != 0 ]; then
+		return "$code"
+	fi
+	d=$(<"$f")
+	rm -f "$f"
+	eval "$d"
+}

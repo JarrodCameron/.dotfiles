@@ -6,8 +6,11 @@
 # Exit if error
 set -e
 
+DIR_NAME='asst2-src'
+COMPILE_NAME='ASST2'
+
 # Grap those os tools :P
-export PATH="$PATH":"$HOME"'/bin'
+export PATH="$PATH":"$HOME"'/cs3231/tools'
 
 # Print the usage of this script
 usage () {
@@ -20,26 +23,27 @@ usage () {
     printf 'arg=conn  -> connect to waiting session\n'
     printf 'arg=help  -> print help\n'
     printf 'arg=vm    -> toggle dumbvm/normal mm\n'
+    printf 'arg=test1 -> Compile and run all tests for assignement 1\n'
 }
 
 # compile everything from scratch
 compile_full () {
     # Configure source?
-    cd ~/cs3231/asst2-src
+    cd ~/cs3231/"$DIR_NAME"
     ./configure
 
     # Convigure kernel
-    cd ~/cs3231/asst2-src/kern/conf
-    ./config ASST2
+    cd ~/cs3231/"$DIR_NAME"/kern/conf
+    ./config "$COMPILE_NAME"
 
     # Compile/install kernel
-    cd ~/cs3231/asst2-src/kern/compile/ASST2
+    cd ~/cs3231/"$DIR_NAME"/kern/compile/"$COMPILE_NAME"
     bmake depend
     bmake
     bmake install
 
     # Compiler/install userland
-    cd ~/cs3231/asst2-src
+    cd ~/cs3231/"$DIR_NAME"
     bmake
     bmake install
 
@@ -52,7 +56,7 @@ compile_full () {
         cd ~/cs3231/root
         printf 'set can-use-hw-watchpoints 0\n' >> .gdbinit
         printf 'define connect\n' >> .gdbinit
-        printf 'dir ~/cs3231/asst0-src/kern/compile/ASST0\n' >> .gdbinit
+        printf 'dir ~/cs3231/'"$DIR_NAME"'/kern/compile/'"$COMPILE_NAME"'\n' >> .gdbinit
         printf 'target remote unix:.sockets/gdb\n' >> .gdbinit
         printf 'b panic\n' >> .gdbinit
         printf 'end\n' >> .gdbinit
@@ -61,7 +65,7 @@ compile_full () {
 
 # Compile the kernel
 compile_kern () {
-    cd ~/cs3231/asst2-src/kern/compile/ASST2
+    cd ~/cs3231/"$DIR_NAME"/kern/compile/"$COMPILE_NAME"
     bmake
     bmake install
 }
@@ -69,7 +73,7 @@ compile_kern () {
 # Compile the userland
 compile_user () {
     # Compiler/install userland
-    cd ~/cs3231/asst2-src
+    cd ~/cs3231/"$DIR_NAME"
     bmake
     bmake install
 }
@@ -98,18 +102,26 @@ kernel_conn () {
 }
 
 kernel_vm () {
-    FILE_NAME='ASST2'
-    cd ~/cs3231/asst2-src/kern/conf
-    if [ "$(grep '^#options dumbvm.*$' "$FILE_NAME")" ]; then
-        sed -i 's/^#options\s*dumbvm.*$/options dumbvm			# dumbvm is now ENABLED/g' "$FILE_NAME"
+    cd ~/cs3231/"$DIR_NAME"/kern/conf
+    if [ "$(grep '^#options dumbvm.*$' "$COMPILE_NAME")" ]; then
+        sed -i 's/^#options\s*dumbvm.*$/options dumbvm			# dumbvm is now ENABLED/g' "$COMPILE_NAME"
         printf "Now using the dumbvm memory manager\n"
         printf "it is recommended to run \`\`os full\'\'\n"
     else
-        sed -i 's/^options\s*dumbvm.*/#options dumbvm			# dumbvm is now DISABLED/g' "$FILE_NAME"
+        sed -i 's/^options\s*dumbvm.*/#options dumbvm			# dumbvm is now DISABLED/g' "$COMPILE_NAME"
         printf "Now using your virtural memory!\n"
         printf "Good luck!!!\n"
         printf "it is recommended to run \`\`os full\'\'\n"
     fi
+}
+
+# Run all of the tests for assingment 1
+test_ass1 () {
+	compile_full
+	clear
+
+	cd ~/cs3231/root
+	sys161 kernel '1a;1b;1c;q'
 }
 
 main () {
@@ -136,6 +148,7 @@ main () {
         'wait') kernel_wait "$@"  ;;
         'conn') kernel_conn "$@"  ;;
         'vm')   kernel_vm "$@"  ;;
+        'test1') test_ass1 "$@" ;;
         'help') usage ;;
         *)      usage 1>&2 && exit 1;;
     esac
