@@ -26,8 +26,6 @@ if [ ! -d '/proc/'"$pid" ]; then
 	exit 1
 fi
 
-echo $cmd
-
 while [ -d '/proc/'"$pid" ]; do
 	sleep "$DELAY"
 done

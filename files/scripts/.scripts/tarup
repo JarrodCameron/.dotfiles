@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   01/05/20 15:01
+
+# Exit on non-zero return status
+set -e
+
+if [ "$#" != '1' ]; then
+	printf 'Usage: %s <file>\n' "$0" >&2
+	exit 1
+fi
+
+# Remove a trailing '/' we get from autocomplete on a directory
+file="$(echo "$1" | sed 's#/$##g')"
+
+if [ ! -e "$file" ]; then
+	printf '"%s" does not exist...\n' "$file" >&2
+	exit 2
+fi
+
+tar -zcvf "$file"'.tar.gz' "$file"

@@ -6,8 +6,11 @@
 # Exit if error
 set -e
 
-DIR_NAME='asst2-src'
-COMPILE_NAME='ASST2'
+# Change this for asst2/asst3
+ASSNUM='3'
+
+DIR_NAME='asst'"$ASSNUM"'-src'
+COMPILE_NAME='ASST'"$ASSNUM"
 
 # Grap those os tools :P
 export PATH="$PATH":"$HOME"'/cs3231/tools'
@@ -115,15 +118,6 @@ kernel_vm () {
     fi
 }
 
-# Run all of the tests for assingment 1
-test_ass1 () {
-	compile_full
-	clear
-
-	cd ~/cs3231/root
-	sys161 kernel '1a;1b;1c;q'
-}
-
 main () {
 
     if [ "$#" = '0' ]; then
@@ -131,27 +125,24 @@ main () {
         exit 1
     fi
 
-    arg="$1"
-    shift 1
+	while [ "$#" != '0' ]; do
+		arg="$1"
+		shift 1
 
-    if [ "$arg" = "clear" ]; then
-        clear
-        arg="$1"
-        shift 1
-    fi
+		case "$arg" in
+			'full')  compile_full "$@" ;;
+			'kern')  compile_kern "$@" ;;
+			'user')  compile_user "$@" ;;
+			'run')   kernel_run "$@"   ;;
+			'wait')  kernel_wait "$@"  ;;
+			'conn')  kernel_conn "$@"  ;;
+			'vm')    kernel_vm "$@"  ;;
+			'clear') clear ;;
+			'help')  usage ;;
+			*)       usage 1>&2 && exit 1;;
+		esac
 
-    case "$arg" in
-        'full') compile_full "$@" ;;
-        'kern') compile_kern "$@" ;;
-        'user') compile_user "$@" ;;
-        'run')  kernel_run "$@"   ;;
-        'wait') kernel_wait "$@"  ;;
-        'conn') kernel_conn "$@"  ;;
-        'vm')   kernel_vm "$@"  ;;
-        'test1') test_ass1 "$@" ;;
-        'help') usage ;;
-        *)      usage 1>&2 && exit 1;;
-    esac
+	done
 
     exit 0
 }

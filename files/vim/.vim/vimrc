@@ -86,6 +86,24 @@ set backspace=2
 " Move viminfo out of default home directory
 set viminfo+=n~/.cache/viminfo
 
+" Force statusline to always be displayed
+set laststatus=2
+
+" Make the status line
+set statusline=%r   " Is modifiable
+set statusline+=\   " <space>
+set statusline+=%f  " File name
+set statusline+=\   " <space>
+set statusline+=%y  " File type
+set statusline+=%=  " Switch to right side
+set statusline+=%l  " Current line
+set statusline+=/   " Seperator
+set statusline+=%L  " Total lines
+set statusline+=\   " <space>
+set statusline+=(%p " Percentage through file
+set statusline+=%%) " Percent sign
+set statusline+=\   " <space>
+
 " add any database in current directory
 if filereadable("cscope.out")
     cs add cscope.out
@@ -113,6 +131,9 @@ nnoremap <c-u> <esc>mxviwu`x
 
 " Comments a chunk of text
 vnoremap <leader>c :call g:ToggleComments()<CR>
+
+" Append to multiple lines at once
+vnoremap <leader>a :norm A
 
 " save and quit
 inoremap <leader>q <esc>:q<CR>
@@ -160,7 +181,6 @@ if tolower ($TERM) =~ "256color" && $USER !=? "z5210220"
   let &t_EI = "\<Esc>[2 q"
 endif
 
-
 " Turn on hlsearch when searching
 " Turn it off in insert mode
 nnoremap / :setlocal hlsearch<cr>/
@@ -181,6 +201,7 @@ autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 " File initilisation ---------------------- {{{
 " Skeletons
 autocmd BufNewFile *.c          0r ~/.vim/templates/c.skel
+autocmd BufNewFile *.h          0r ~/.vim/templates/h.skel
 autocmd BufNewFile *.cpp        0r ~/.vim/templates/cpp.skel
 autocmd BufNewFile Makefile     0r ~/.vim/templates/make.skel
 autocmd BufNewFile *.sh         0r ~/.vim/templates/bash.skel
@@ -195,26 +216,17 @@ autocmd BufNewFile gdbinit      0r ~/.vim/templates/gdbinit.skel
 
 " ==DATE==  Current date
 " ==NAME==  Authors name
+" ==FILE_U==  Name of file, '.' is swapped with '_', upper case
 " ==START== Starting cursor position
 " ==FILE_NAME== Name of the file
 autocmd BufNewFile * %substitute/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/eg
 autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
+autocmd BufNewFile * %substitute/==FILE_U==/\=toupper(substitute(expand('%'), '\.', '_', 'g'))/eg
 autocmd BufNewFile * %substitute/==FILE_NAME==/\=expand("%:t:r")/eg
 autocmd BufNewFile * %substitute/==START==//eg
 " }}}
 
-" Bonus features (plugins) {{{
-
-source ~/.vim/features/brackets.vim
-source ~/.vim/features/smarttabs.vim
-source ~/.vim/features/statusline.vim
-source ~/.vim/features/todolist.vim
-
-" }}}
-
 " Saving buffers ---------------------- {{{
-" Remove any trailing white space
-autocmd BufWritePre * %substitute/\s\+$//e
 
 " Refresh program after saving config file
 autocmd BufWritePost $MYVIMRC source $MYVIMRC

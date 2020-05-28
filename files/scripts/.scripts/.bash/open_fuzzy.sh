@@ -16,6 +16,7 @@ fi
 
 case "$source_file" in
     *.pdf)  zathura "$source_file" &    ;;
+	*.png)  feh "$source_file" &        ;;
     *)      vim "$source_file"          ;;
 esac
 

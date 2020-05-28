@@ -22,7 +22,7 @@ CURR_CPU_TOTAL="0"
 # Update variables associated with networking
 update_nets () {
     INTERFACE=""
-    for d in $(ls /sys/class/net/); do
+    for d in $(ls /sys/class/net/ | grep -E '^en|^wl'); do
         # NOTE: Loopback device (lo) is never up
         if [ "$(cat "/sys/class/net/""$d""/operstate")" = "up" ]; then
             INTERFACE="$d"

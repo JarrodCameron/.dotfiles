@@ -56,12 +56,12 @@
         "file" : ".bash_profile",
         "path" : "~"
     },
+    "dwm" : {
+        "file" : "dwm",
+        "path" : "~/.config"
+    },
     "Xresources" : {
         "file" : ".Xresources",
         "path" : "~"
-    },
-    "bspwm" : {
-        "file" : "bspwm",
-        "path" : "~/.config"
     }
 }

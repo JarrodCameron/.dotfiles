@@ -1,6 +1,10 @@
+*.nfs*
 *.swp
 .netrwhist
-*.nfs*
+drw.o
+dwm
+dwm.o
 secret
 suckless
 tags
+util.o

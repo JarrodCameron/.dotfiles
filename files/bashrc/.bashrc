@@ -135,6 +135,10 @@ fi
 # CUSTOM #
 ##########
 
+# Make `cd' better
+bind 'set completion-ignore-case on'
+complete -d cd
+
 # Export colors used in man pages, less, etc
 export LESS_TERMCAP_mb=$(printf "\e[1;34m")
 export LESS_TERMCAP_md=$(printf "\e[1;34m")
@@ -157,7 +161,6 @@ set -o vi
 ## `export' sets global variables
 export PATH="$PATH"":""$HOME""/.scripts/"
 export EDITOR="$(which vim)"
-#export TERMINAL="$(which st)"
 
 # Copy
 alias copy="xclip -selection clip 2> /dev/null"
@@ -191,12 +194,7 @@ alias ctf="cd ~/repos/ctfsolns/"
 alias cs="cd ~/cs3231/asst2-src/ && rm -f tags && ctags -R && cscope -R -k"
 alias todo="rg TODO"
 alias gdbinit="vim gdbinit"
-alias 2121="cd ~/repos/2121/"
-alias 4337="cd ~/repos/4337/"
 alias R='R --quiet --vanilla'
-alias 1='cd ~/cs3231/asst1-src && vim *.diff'
-alias dl='cd ~/cs3231/ && ./download.sh'
-alias tarup='tar -zcvf'
 alias cp='cp -i'
 alias mv='mv -i'
 alias sudo='sh ~/.scripts/.alias/sudo_alias.sh'

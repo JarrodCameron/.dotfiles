@@ -36,10 +36,6 @@ function! s:removepair()
     endif
 endfunction
 
-function! s:insertjump(open, close)
-    return a:open . '<CR>' . a:close . '<ESC>O'
-endfunction
-
 inoremap <expr> ( <SID>insertopen('(', ')')
 inoremap <expr> [ <SID>insertopen('[', ']')
 inoremap <expr> { <SID>insertopen('{', '}')
