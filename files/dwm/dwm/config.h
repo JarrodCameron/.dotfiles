@@ -2,6 +2,9 @@
 
 #include <X11/XF86keysym.h> /* For the XF86XK_* keys */
 
+/* Patches */
+#include "swap.c"
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -70,14 +73,14 @@ static const char *dmenucmd[] = {"dmenu_run", "-m", dmenumon, "-fn", dmenufont, 
 static const char *termcmd[] = {"termite", NULL};
 static const char *firefox[] = {"firefox", NULL};
 static const char *pfirefox[] = {"firefox", "--private-window", NULL};
-static const char *samedir[] = {HOME_PATH "/.scripts/.wm/samedir.sh", NULL};
-static const char *bookmarks[] = {HOME_PATH "/.scripts/.wm/bookmarks.sh", NULL};
-static const char *screensh[] = {HOME_PATH "/.scripts/.wm/screen.sh", NULL};
-static const char *editconfig[] = {HOME_PATH "/.scripts/.wm/editconfig.sh", NULL};
+static const char *samedir[] = {HOME "/.scripts/.wm/samedir.sh", NULL};
+static const char *bookmarks[] = {HOME "/.scripts/.wm/bookmarks.sh", NULL};
+static const char *screensh[] = {HOME "/.scripts/.wm/screen.sh", NULL};
+static const char *editconfig[] = {HOME "/.scripts/.wm/editconfig.sh", NULL};
 static const char *volup[] = {"pactl", "set-sink-volume", "0", "-5%", NULL};
 static const char *voldown[] = {"pactl", "set-sink-volume", "0", "+5%", NULL};
 static const char *voltoggle[] = {"pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL};
-static const char *automan[] = {HOME_PATH "/.scripts/.wm/automan.sh", NULL};
+static const char *automan[] = {HOME "/.scripts/.wm/automan.sh", NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -97,27 +100,23 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = editconfig } },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_h,      focusmon,       {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_h,      tagmon,         {.i = -1 } },
+	{ MODKEY,                       XK_i,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_l,      focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_l,      tagmon,         {.i = +1 } },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = screensh} },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_u,      setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_z,      swap,           {0} },
 	{ 0,              XF86XK_AudioLowerVolume, spawn,          {.v = volup} },
 	{ 0,              XF86XK_AudioRaiseVolume, spawn,          {.v = voldown} },
 	{ 0,              XF86XK_AudioMute,        spawn,          {.v = voltoggle} },
-
-	/* TODO Order this */
-	{ MODKEY,                       XK_h,  focusmon,       {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_h,  tagmon,         {.i = -1 } },
-	{ MODKEY,                       XK_l, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_l, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_u,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_i,      setmfact,       {.f = +0.05} },
-
-	{ MODKEY,                       XK_bracketleft, swap,      {0} },
-
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)

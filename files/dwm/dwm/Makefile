@@ -15,7 +15,7 @@ options:
 	@echo "CC       = ${CC}"
 
 .c.o:
-	${CC} -DHOME_PATH=\"/home/jc\" -c ${CFLAGS} $<
+	${CC} -DHOME=\"/home/jc\" -c ${CFLAGS} $<
 
 ${OBJ}: config.h config.mk
 

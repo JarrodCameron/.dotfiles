@@ -121,7 +121,7 @@ struct Monitor {
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
 	unsigned int seltags;
-	unsigned int sellt;
+	unsigned int sellt;  /* Selected layout */
 	unsigned int tagset[2];
 	int showbar;
 	int topbar;
@@ -157,6 +157,8 @@ static void clientmessage(XEvent *e);
 static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
+static void getclients(Monitor *src, Client **ret);
+static void setclients(Monitor *dest, Client *c);
 static Monitor *createmon(void);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
@@ -181,7 +183,6 @@ static void killclient(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
-static void xchg(void *abuf, void *bbuf, unsigned int len);
 static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
@@ -210,7 +211,6 @@ static void sigchld(int unused);
 static void spawn(const Arg *arg);
 static void tag(const Arg *arg);
 static void swap(const Arg *arg);
-static void exchange(Monitor *first, Monitor *second);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
@@ -1664,51 +1664,6 @@ spawn(const Arg *arg)
 		perror(" failed");
 		exit(EXIT_SUCCESS);
 	}
-}
-
-void
-swap(const Arg *arg)
-{
-	Monitor *first, *second;
-	Client *c;
-	if (mons->next == NULL)
-		return; /* Only one monitor */
-
-	first = mons;
-	second = mons->next;
-
-	for (c = first->clients; c; c = c->next) c->mon = first;
-	for (c = second->clients; c; c = c->next) c->mon = second;
-
-	exchange(first, second);
-
-	/* TODO refresh monitors */
-	focus(NULL);
-	arrange(NULL);
-
-	(void) arg;
-}
-
-void
-xchg(void *abuf, void *bbuf, unsigned int len)
-{
-	unsigned int i;
-	char *a, *b;
-
-	a = abuf;
-	b = bbuf;
-
-	for (i = 0; i < len; i++) {
-		a[i] = a[i] ^ b[i];
-		b[i] = a[i] ^ b[i];
-		a[i] = a[i] ^ b[i];
-	}
-}
-
-void
-exchange(Monitor *first, Monitor *second)
-{
-	/* TODO */
 }
 
 void
