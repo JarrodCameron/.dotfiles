@@ -67,6 +67,6 @@ while [ "$#" != '0' ]; do
 	case "$arg" in
 		'-c'|'--config') move_configs ; exit 0 ;;
 		'-h'|'--help') usage >&2 ; exit 0 ;;
-		*) move_file "$1" ; exit 0 ;;
+		*) move_file "$arg" ; exit 0 ;;
 	esac
 done

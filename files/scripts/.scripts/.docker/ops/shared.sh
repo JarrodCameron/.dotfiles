@@ -7,7 +7,7 @@
 set -e
 
 # Shared directory between host and container
-SHARED_DIR="$HOME"'/repos/ctfsolns'
+SHARED_DIR="$(pwd)"
 
 # The process that is run when entering the container
 PROC_ZERO='/bin/bash'
@@ -61,10 +61,11 @@ copy_configs () {
 
 	# To prevent docker-cp from complaining
 	docker_exec "$id" 'mkdir -p /root/.config'
+	docker_exec "$id" 'mkdir -p /root/.config/radare2/'
 
 	docker_send "$id" "$HOME"/.bashrc /root/.bashrc
 	docker_send "$id" "$HOME"/.gdbinit /root/.gdbinit
-	docker_send "$id" "$HOME"/.config/radare2/ /root/.config/radare2/
+	docker_send "$id" "$HOME"/.config/radare2/radare2rc /root/.config/radare2/radare2rc
 	docker_send "$id" "$HOME"/.scripts /root/.scripts
 	docker_send "$id" "$HOME"/.tmux.conf /root/.tmux.conf
 	docker_send "$id" "$HOME"/.vim /root/.vim

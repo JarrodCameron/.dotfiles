@@ -7,21 +7,20 @@ ENV LC_CTYPE C.UTF-8
 RUN dpkg --add-architecture i386 \
 	&& apt-get update \
 	 \
-	&& apt-get install -y build-essential jq strace ltrace curl wget rubygems \
-		gcc dnsutils netcat gcc-multilib net-tools vim gdb gdb-multiarch \
-		python python3 python3-pip python3-dev libssl-dev libffi-dev wget git \
-		make procps libpcre3-dev libdb-dev libxt-dev libxaw7-dev python-pip \
-		libc6:i386 libncurses5:i386 libstdc++6:i386 virtualenvwrapper cmake \
-		tmux locate man gawk fzf patchelf ripgrep nasm apt-utils ascii \
+	&& apt-get install -y apt-utils ascii build-essential cmake curl dnsutils \
+		fzf gawk gcc gcc-multilib gdb gdb-multiarch git iproute2 jq \
+		libc6:i386 libdb-dev libffi-dev libncurses5:i386 libpcre3-dev \
+		libssl-dev libstdc++6:i386 libxaw7-dev libxt-dev locate ltrace make \
+		man nasm net-tools netcat patchelf procps python python-pip python3 \
+		python3-dev python3-pip ripgrep rubygems strace tmux vim \
+		virtualenvwrapper wget wget \
 	\
 	&& apt-get upgrade -y
 
 #RUN pip install capstone requests pwntools r2pipe
 RUN pip install capstone requests pwntools
 
-RUN pip3 install pwntools keystone-engine unicorn capstone ropper
-
-RUN mkdir -p ~/tools
+RUN pip3 install pwntools keystone-engine unicorn capstone ropper colorama
 
 RUN git clone https://github.com/JonathanSalwan/ROPgadget ~/tools/ROPgadget
 
@@ -40,6 +39,3 @@ RUN updatedb
 
 # Enable the man command
 #RUN unminimize
-
-# Used for scripts
-ENV ISDOCKER 1

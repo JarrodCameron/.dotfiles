@@ -7,7 +7,7 @@
 set -e
 
 # Change this for asst2/asst3
-ASSNUM='3'
+ASSNUM='1'
 
 DIR_NAME='asst'"$ASSNUM"'-src'
 COMPILE_NAME='ASST'"$ASSNUM"

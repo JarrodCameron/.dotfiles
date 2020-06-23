@@ -3,8 +3,6 @@
 # Author: Jarrod Cameron (z5210220)
 # Date:   24/11/19 22:35
 
-# TODO Stacks for same files with different functions
-
 function handle_cpp () {
     filename="$1"
     temp="$(mktemp)"
@@ -29,9 +27,27 @@ function handle_java () {
     java "$classname"
 }
 
+function handle_asm () {
+	src="$1"
+
+	# Trim extension
+	name="${src%.*}"
+
+	tmp="$(mktemp)"
+
+	if [ -n "$(grep '^\[BITS\s\s*32]\s*$' "$src")" ]; then
+		nasm -f elf "$src" -o "$tmp"
+		ld -m elf_i386 "$tmp" -o "$name"
+	else
+		echo 'Todo compile for 64bit'
+		# 64bit TODO
+	fi
+
+	rm -f "$tmp"
+}
+
 function usage () {
-    printf "Usage: play [stack] <file>\n"
-    printf "0 <= stack <= 0\n"
+    printf "Usage: play <file>\n"
 }
 
 if [ "$#" = "0" ]; then
@@ -48,6 +64,7 @@ while [ "$1" ]; do
         *.cpp)          handle_cpp "$filename" ;;
         *.c)            handle_c "$filename" ;;
         *.java)         handle_java "$filename" ;;
+		*.asm)          handle_asm "$filename" ;;
         *)              printf "\`play' can't handle ${filename}"
                         exit 1
     esac

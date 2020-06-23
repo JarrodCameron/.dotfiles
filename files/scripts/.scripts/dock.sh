@@ -103,32 +103,6 @@ docker_run () {
 		"$user_name":"$docker_name"
 }
 
-docker_open () {
-	if [ "$(docker images | wc -l)" = '1' ]; then
-		printf 'There are no docker images\n' >&2
-		printf "Use \`dock.sh -b' to creat a docker image\n" >&2
-		exit 1
-	fi
-	docker_image="$(docker images | tail -n +2 | fzf_wrapper)"
-	if [ -z "$docker_image" ]; then
-		printf 'Invalid docker image!\n'
-		exit 1
-	fi
-
-	user_name="$(echo $docker_image | awk '{print $1}')"
-	docker_name="$(echo $docker_image | awk '{print $2}')"
-
-	digest="$(docker_run "$user_name" "$docker_name")"
-	if [ -z "$digest" ]; then
-		# Container is already running
-		exit 1
-	fi
-
-	docker_exec "$digest"
-
-	exit 0
-}
-
 docker_help () {
 	printf 'dock.sh {-l|--list}\n'
 	printf '  Choose from one of the docker images.\n'
@@ -150,11 +124,11 @@ arg_parse () {
 		case "$arg" in
 			'-j'|'--join') docker_join ;;
 			'-s'|'--save') docker_save ;; # TODO Remove this crap
-			'-o'|'--open') docker_open ;;
 			'-h'|'--help') docker_help ; exit 0 ;;
 			'-r'|'--remove') ~/.scripts/.docker/ops/remove.sh "$@" ; exit 0 ;;
 			'-b'|'--build') ~/.scripts/.docker/ops/build.sh "$@" ; exit 0 ;;
 			'-m'|'--move') ~/.scripts/.docker/ops/move.sh "$@" ; exit 0 ;;
+			'-o'|'--open') ~/.scripts/.docker/ops/open.sh "$@" ; exit 0 ;;
 			'-k'|'--kill') ~/.scripts/.docker/ops/kill.sh "$@" ; exit 0 ;;
 			*) printf 'Invalid argument: "%s"\n' "$1" 1>&2
 			   docker_help 1>&2

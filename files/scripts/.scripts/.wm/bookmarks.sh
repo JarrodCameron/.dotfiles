@@ -68,7 +68,8 @@ get_bm_browser () {
     printf 'firefox
 firefox --new-window
 firefox --private-window
-' | run_dmenu 3 'Browser:'
+brave
+' | run_dmenu 4 'Browser:'
 }
 
 # Prompt user for new bookmark and save it
@@ -118,7 +119,7 @@ do_modify () {
 
     if [ -z "$bm_name" ]; then
         exit 0
-    elif [ "$(jq '."'$bm_name'"')" = 'null' ]; then
+    elif [ "$(jq '."'$bm_name'"' "${BOOKMARKS_FILE}")" = 'null' ]; then
         exit 0
     fi
 
