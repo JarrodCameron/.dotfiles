@@ -20,3 +20,5 @@ inoremap <buffer> <leader>c /*<space><space>*/<left><left><left>
 "https://vim.fandom.com/wiki/Execute_external_programs_asynchronously_under_Windows#Getting_results_back_into_Vim
 
 "autocmd BufWritePost *.c silent :call s:runCompiler() | redraw!
+
+iabbrev <buffer> ul unsigned long

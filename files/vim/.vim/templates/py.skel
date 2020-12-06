@@ -2,10 +2,8 @@
 # Author: ==NAME==
 # Date:   ==DATE==
 
-from pwn import *
+def main():
+    ==START==
 
-context.arch = 'amd64'
-context.bits = 64
-
-==START==
-
+if __name__ == '__main__':
+    main()

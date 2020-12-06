@@ -1,8 +1,8 @@
 # Author: ==NAME==
 # Date:   ==DATE==
 
-CC=gcc
-CFLAGS=-Wall -Wextra -ggdb 
+CC?=gcc
+CFLAGS?=-Wall -Wextra -ggdb
 
 all:
 	==START==

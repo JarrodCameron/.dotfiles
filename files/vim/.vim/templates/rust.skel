@@ -5,19 +5,8 @@
  *                                         *
  *******************************************/
 
-#include <errno.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+fn main () {
 
-#define check() printf("Here -> %d (%s)\n", __LINE__, __FUNCTION__)
+    ==START==
 
-int
-main(void)
-{
-
-	==START==
-
-	return 0;
 }

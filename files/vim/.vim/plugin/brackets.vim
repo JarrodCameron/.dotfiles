@@ -49,7 +49,7 @@ inoremap {<CR> {<CR>}<ESC>O
 inoremap (<CR> (<CR>)<ESC>O
 inoremap [<CR> [<CR>]<ESC>O
 
-inoremap <expr> " <SID>insertquote('"')
-inoremap <expr> ' <SID>insertquote("'")
+"inoremap <expr> " <SID>insertquote('"')
+"inoremap <expr> ' <SID>insertquote("'")
 
 inoremap <expr> <bs> <SID>removepair()

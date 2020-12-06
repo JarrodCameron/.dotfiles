@@ -76,6 +76,10 @@ set nomodeline
 " Set the vertical column
 set colorcolumn=80
 
+" Set no case sensitive when searching lower case,
+" turn on case sensitive when searching upper case
+set smartcase
+
 " When using the `find' command search recursively down
 "set path=**
 
@@ -157,6 +161,9 @@ nnoremap <leader>f :cscope find f<space>
 " Copy and move current window to new tab
 nnoremap <leader>T :vs<CR><C-w>T<CR>
 
+" Create vertical split
+nnoremap ,vs :vs<CR>
+
 " Add semi colons to end of line with control-c
 nnoremap <C-c> A;<esc>
 inoremap <C-c> <esc>mxA;<esc>`xl
@@ -200,18 +207,21 @@ autocmd VimEnter * echo "\"Talk is cheap. Show me the code\" - Linus Torvalds."
 
 " File initilisation ---------------------- {{{
 " Skeletons
+autocmd BufNewFile *.asm        0r ~/.vim/templates/asm.skel
+autocmd BufNewFile *.erl        0r ~/.vim/templates/erlang.skel
 autocmd BufNewFile *.c          0r ~/.vim/templates/c.skel
-autocmd BufNewFile *.h          0r ~/.vim/templates/h.skel
 autocmd BufNewFile *.cpp        0r ~/.vim/templates/cpp.skel
-autocmd BufNewFile Makefile     0r ~/.vim/templates/make.skel
-autocmd BufNewFile *.sh         0r ~/.vim/templates/bash.skel
-autocmd BufNewFile *.rmd        0r ~/.vim/templates/rmd.skel
+autocmd BufNewFile *.h          0r ~/.vim/templates/h.skel
 autocmd BufNewFile *.html       0r ~/.vim/templates/html.skel
-autocmd BufNewFile *.py         0r ~/.vim/templates/py.skel
-autocmd BufNewFile *.pl         0r ~/.vim/templates/prolog.skel
-autocmd BufNewFile *.js         0r ~/.vim/templates/js.skel
 autocmd BufNewFile *.java       0r ~/.vim/templates/java.skel
+autocmd BufNewFile *.js         0r ~/.vim/templates/js.skel
+autocmd BufNewFile *.pl         0r ~/.vim/templates/prolog.skel
+autocmd BufNewFile *.py         0r ~/.vim/templates/py.skel
+autocmd BufNewFile *.rmd        0r ~/.vim/templates/rmd.skel
 autocmd BufNewFile *.rr2        0r ~/.vim/templates/rr2.skel
+autocmd BufNewFile *.sh         0r ~/.vim/templates/bash.skel
+autocmd BufNewFile *.rs         0r ~/.vim/templates/rust.skel
+autocmd BufNewFile Makefile     0r ~/.vim/templates/make.skel
 autocmd BufNewFile gdbinit      0r ~/.vim/templates/gdbinit.skel
 
 " ==DATE==  Current date
@@ -242,7 +252,6 @@ autocmd FileType rmd command! C :w | :!clear && Rscript -e "rmarkdown::render('%
 autocmd FileType rmd command! O :!clear && xdg-open %<.pdf
 autocmd FileType rmd iabbrev tbf textbf
 autocmd FileType rmd iabbrev tit textit
-autocmd FileType text setlocal spell spelllang=en_au
 
 "autocmd FileType python inoremap <leader>s ?^class
 autocmd FileType python command! R :w | :!clear && python3 %
@@ -267,22 +276,6 @@ autocmd FileType vim setlocal foldmethod=marker
 autocmd FileType vim normal zM
 " }}}
 
-" Kindergarten spelling skills ---------------------- {{{
-iabbrev tehn then
-iabbrev didnt didn't
-iabbrev dont don't
-iabbrev waht what
-iabbrev wehn when
-iabbrev wont won't
-iabbrev teh the
-iabbrev adn and
-iabbrev si is
-iabbrev nad and
-iabbrev ifle file
-iabbrev im I'm
-iabbrev sel4 seL4_
-" }}}
-
 " vimscript functions  ---------------------- {{{
 " Toggle the vertical bar
 function! g:ToggleCC(width)
@@ -297,15 +290,15 @@ endfunction
 function! s:GetComment()
   if &filetype == "vim"
     return "\""
-  elseif &filetype == "c" || &filetype == "javascript" || &filetype == "cpp"
+  elseif &filetype == "c" || &filetype == "javascript" || &filetype == "cpp" || &filetype == "rust"
     return "\\/\\/"
-  elseif &filetype == "prolog"
+  elseif &filetype == "prolog" || &filetype == "erlang"
     return "%"
-  elseif &filetype == "java"
+  elseif &filetype == "java" || &filetype == "php"
     return "\\/\\/"
   elseif &filetype == "xdefaults"
     return "!"
-  elseif &filetype == "haskell"
+  elseif &filetype == "haskell" || &filetype == "sql"
     return "--"
   else
     " Default comment type

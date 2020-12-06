@@ -1,11 +1,11 @@
 /*******************************************
  *                                         *
- *    Author: ==NAME==    *
- *    Date:   ==DATE==               *
+ *    Author: Jarrod Cameron (z5210220)    *
+ *    Date:   29/06/20 19:54               *
  *                                         *
  *******************************************/
 
-#include <errno.h>
+#include <assert.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,11 +13,11 @@
 
 #define check() printf("Here -> %d (%s)\n", __LINE__, __FUNCTION__)
 
-int
-main(void)
+int main (void)
 {
 
-	==START==
+
 
 	return 0;
 }
+
