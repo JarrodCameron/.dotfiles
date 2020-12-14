@@ -1,8 +1,18 @@
 # 24bit true color
 e scr.color=2
 
+# Vi mode
+e scr.prompt.vi = true
+
+# Change colors depending on vi-mode
+e scr.prompt.mode = true
+
 # Good syntax only
 e asm.syntax=intel
+
+# Pop up window when using <tab>
+# This is the most buggy pos i have seen
+e scr.prompt.popup = true
 
 # No fortunes
 e cfg.fortunes=false
@@ -20,7 +30,16 @@ eco twilight
 #e asm.pseudo=1
 
 # Show offsets, not vars (e.g. `objdump -d')
-#e asm.var.sub
+#e asm.var.sub=1
 
 # Unicdoe lines
 e scr.utf8=true
+
+# r2 shows the fking strings, r2 is nearly as good a objdump
+e emu.str=true
+
+# Remove trash
+e asm.emu=false
+
+# remove variables in disassembly
+#e asm.var.sub=false

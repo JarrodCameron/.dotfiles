@@ -7,7 +7,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 16;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
@@ -28,7 +28,8 @@ static const char *colors[][3]      = {
 static const char *inits[] = {
 	"~/.scripts/.wm/init_screen.sh",
 	"~/.scripts/.wm/wallpaper.sh",
-	"~/.scripts/.dwm/menubar.sh &"
+	"~/.scripts/.dwm/menubar.sh &",
+	"dunst &",
 };
 
 /* tagging */
@@ -39,9 +40,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class      instance    title       tags mask  iscentered    isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,         0,             1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,    0,             0,           -1 },
+	{ NULL,       "termite",  "p3calc",   0,         1,             1,           -1 },
+	{ "feh-qr",   "feh",      NULL,       0,         1,             1,           -1 },
 };
 
 /* layout(s) */
@@ -52,8 +55,8 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
+	{ "[M]",      monocle }, /* full screen */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
 };
 
 /* key definitions */
@@ -77,10 +80,15 @@ static const char *samedir[] = {HOME "/.scripts/.wm/samedir.sh", NULL};
 static const char *bookmarks[] = {HOME "/.scripts/.wm/bookmarks.sh", NULL};
 static const char *screensh[] = {HOME "/.scripts/.wm/screen.sh", NULL};
 static const char *editconfig[] = {HOME "/.scripts/.wm/editconfig.sh", NULL};
-static const char *volup[] = {"pactl", "set-sink-volume", "0", "-5%", NULL};
-static const char *voldown[] = {"pactl", "set-sink-volume", "0", "+5%", NULL};
+static const char *volup[] = {"pactl", "set-sink-volume", "0", "-2%", NULL};
+static const char *voldown[] = {"pactl", "set-sink-volume", "0", "+2%", NULL};
 static const char *voltoggle[] = {"pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL};
 static const char *automan[] = {HOME "/.scripts/.wm/automan.sh", NULL};
+static const char *brightup[] =   {"xbacklight", "-inc", "10", NULL};
+static const char *brightdown[] = {"xbacklight", "-dec", "10", NULL};
+static const char *wallpaper[] = {HOME "/.scripts/.wm/wallpaper.sh", NULL};
+static const char *p3calc[] = {HOME "/.scripts/.wm/p3calc.sh", NULL};
+static const char *lockscreen[] = {HOME "/.scripts/.wm/lock-screen.sh", NULL};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -99,17 +107,20 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = editconfig } },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_h,      focusmon,       {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_h,      tagmon,         {.i = -1 } },
 	{ MODKEY,                       XK_i,      setmfact,       {.f = +0.05} },
+	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = lockscreen} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_l,      focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_l,      tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = screensh} },
+	{ MODKEY|ShiftMask,             XK_n,      spawn,          {.v = wallpaper} },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = p3calc } },
 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_u,      setmfact,       {.f = -0.05} },
@@ -117,6 +128,8 @@ static Key keys[] = {
 	{ 0,              XF86XK_AudioLowerVolume, spawn,          {.v = volup} },
 	{ 0,              XF86XK_AudioRaiseVolume, spawn,          {.v = voldown} },
 	{ 0,              XF86XK_AudioMute,        spawn,          {.v = voltoggle} },
+	{ 0,               XF86XK_MonBrightnessUp, spawn,          {.v = brightup} },
+	{ 0,             XF86XK_MonBrightnessDown, spawn,          {.v = brightdown} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -127,10 +140,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 };
-
-// -- For the brightness keys
-// -- xF86XK_MonBrightnessUp
-// -- xF86XK_MonBrightnessDown
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */

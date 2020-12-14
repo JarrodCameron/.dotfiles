@@ -113,7 +113,9 @@ export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomo
 set -o vi
 
 ## `export' sets global variables
-export PATH="$PATH"":""$HOME""/.scripts/"
+if [[ "$PATH" != *"$HOME""/.scripts/"* ]]; then
+	export PATH="$PATH"":""$HOME""/.scripts/"
+fi
 export EDITOR="$(which vim)"
 
 # Copy
@@ -146,10 +148,20 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 alias 20t1='cd ~/repos/20t1 && br -f && clear && ls -l'
-alias music='cd ~/music && mpv $(ls [0-9][0-9].mp3 | sort -R | tr "\n" " ")'
 alias ui='cd /usr/include'
 alias tmp='cd "$(mktemp -d)"'
 alias rg='rg --no-ignore'
+
+function music () {(
+	cd ~/music
+	while true
+	do
+		for f in `ls ~/music/*.mp3 | shuf`
+		do
+			mpv "$f"
+		done
+	done
+)}
 
 function csc () {
 	rm -f tags

@@ -108,7 +108,7 @@ mode "$resize" {
   bindsym space  mode "default"
 }
 
-bindsym $mod+Return exec urxvt
+bindsym $mod+Return exec termite
 bindsym $mod+Shift+Return exec bash "$HOME"/.scripts/samedir
 
 #bindsym $mod+a

@@ -1,4 +1,8 @@
-source /usr/share/pwndbg/gdbinit.py
+#source /usr/share/pwndbg/gdbinit.py
+
+# number of source code lines to print by the context command
+# default: 10
+#set context-source-code-lines 25
 
 # Don't save .gdb_history
 set history save off
@@ -15,9 +19,9 @@ define gdbinit
     shell vim gdbinit
 end
 
-define clear
-    shell clear
-end
+#define clear
+#    shell clear
+#end
 
 alias -a di = disassemble
 

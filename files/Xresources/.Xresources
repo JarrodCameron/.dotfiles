@@ -20,7 +20,7 @@ URxvt.saveLines: 7500
 *background: #1d2021
 *foreground: #ebdbb2
 ! Black + DarkGrey
-*color0:  #282828
+*color0:  #000000
 *color8:  #928374
 ! DarkRed + Red
 *color1:  #cc241d
