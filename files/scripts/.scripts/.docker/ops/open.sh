@@ -29,7 +29,7 @@ if [ -z "$docker_image" ]; then
 	exit 1
 fi
 
-user_name="$(echo $docker_image | awk '{print $1}')"
+user_name="$(echo $docker_image | awk '{print $1}' | awk -F'/' '{print $NF}')"
 docker_name="$(echo $docker_image | awk '{print $2}')"
 
 digest="$(docker_run "$user_name" "$docker_name")"

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   01/10/20 21:55
+
+# Exit on non-zero return status
+set -e
+
+# Use class for dwm config
+CLASS='feh-qr'
+SIZE='20'
+
+if [ -z "$1" ]; then
+	printf 'Usage: qr <string>\n' >&2
+	exit 1
+fi
+
+s="$1"
+tmp="$(mktemp)"
+
+if [ "$s" = '-' ]; then
+	qrencode -o "$tmp" -s "$SIZE"
+else
+	qrencode -o "$tmp" -s "$SIZE" "$s"
+fi
+
+(
+	feh --class "$CLASS" "$tmp" &>/dev/null
+	rm -f "$tmp"
+) &
+
+
+

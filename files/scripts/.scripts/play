@@ -39,8 +39,8 @@ function handle_asm () {
 		nasm -f elf "$src" -o "$tmp"
 		ld -m elf_i386 "$tmp" -o "$name"
 	else
-		echo 'Todo compile for 64bit'
-		# 64bit TODO
+		nasm -f elf64 "$src" -o "$tmp"
+		ld -m elf_x86_64 "$tmp" -o "$name"
 	fi
 
 	rm -f "$tmp"

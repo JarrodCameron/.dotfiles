@@ -7,7 +7,7 @@
 set -e
 
 # Change this for asst2/asst3
-ASSNUM='1'
+ASSNUM='3'
 
 DIR_NAME='asst'"$ASSNUM"'-src'
 COMPILE_NAME='ASST'"$ASSNUM"
@@ -41,14 +41,14 @@ compile_full () {
 
     # Compile/install kernel
     cd ~/cs3231/"$DIR_NAME"/kern/compile/"$COMPILE_NAME"
-    bmake depend
-    bmake
-    bmake install
+    bmake depend -j `nproc`
+    bmake -j `nproc`
+    bmake install -j `nproc`
 
     # Compiler/install userland
     cd ~/cs3231/"$DIR_NAME"
-    bmake
-    bmake install
+    bmake -j `nproc`
+    bmake install -j `nproc`
 
     if [ ! -e "$HOME"'/cs3231/root/sys161.conf' ]; then
         cd ~/cs3231/root
@@ -69,16 +69,16 @@ compile_full () {
 # Compile the kernel
 compile_kern () {
     cd ~/cs3231/"$DIR_NAME"/kern/compile/"$COMPILE_NAME"
-    bmake
-    bmake install
+    bmake -j `nproc`
+    bmake install -j `nproc`
 }
 
 # Compile the userland
 compile_user () {
     # Compiler/install userland
     cd ~/cs3231/"$DIR_NAME"
-    bmake
-    bmake install
+    bmake -j `nproc`
+    bmake install -j `nproc`
 }
 
 # Run the kernel
@@ -101,6 +101,17 @@ kernel_wait () {
 # Connect the the kernel when it is waiting for a debugger
 kernel_conn () {
     cd ~/cs3231/root
+
+	if [ ! -e '.gdbinit' ]; then
+		{
+			echo 'set can-use-hw-watchpoints 0'
+			echo 'define connect'
+			echo '	dir ~/cs3231/asst'"$ASSNUM"'-src/kern/compile/ASST'"$ASSNUM"
+			echo '	target remote unix:.sockets/gdb'
+			echo '	b panic'
+			echo 'end'
+		} > .gdbinit
+	fi
     os161-gdb -ex 'connect' kernel
 }
 

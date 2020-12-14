@@ -3,9 +3,17 @@
 		"docker_file" : "debian_stretch.Dockerfile",
 		"docker_name" : "debianstretch"
 	},
+	"angr" : {
+		"docker_file" : "angr.Dockerfile",
+		"docker_name" : "angr"
+	},
 	"minimal" : {
 		"docker_file" : "minimal.Dockerfile",
 		"docker_name" : "minimal"
+	},
+	"flask" : {
+		"docker_file" : "flask.Dockerfile",
+		"docker_name" : "flask"
 	},
 	"ubuntu 19.10" : {
 		"docker_file" : "ubuntu_19_10.Dockerfile",

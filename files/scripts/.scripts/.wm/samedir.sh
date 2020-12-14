@@ -11,7 +11,11 @@
 win_id="$(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/ {print $NF}')"
 
 # If no window is in focus $win_id should be an empty string, if so then exit
-[ -n "$win_id" ] || "$TERMINAL; exit 1"
+if [ -z "$win_id" ]; then
+	$TERMINAL &>/dev/null
+	exit "$?"
+fi
+#[ -n "$win_id" ] || "$TERMINAL; exit 1"
 
 # This is the process ID of the terminal (not the shell)
 term_pid="$(xprop -id "$win_id" | awk '/_NET_WM_PID\(CARDINAL\)/ {print $NF}')"
@@ -25,4 +29,5 @@ shell_pid="$(ps --ppid $term_pid | awk '/bash|sh/ {print $1}')"
 path="$(readlink /proc/"$shell_pid"/cwd)"
 
 cd "$path"
-"$TERMINAL"
+$TERMINAL &>/dev/null
+exit "$?"

@@ -1,0 +1,156 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   08/09/20 16:10
+
+# Script used to generge a .gitignore file from "gitignore.io"
+
+fzf_wrapper () {
+	fzf \
+		--layout=reverse \
+		--inline-info \
+		--cycle \
+		--margin=3
+}
+
+get_items () {
+	{
+		echo '1c,1c-bitrix,a-frame,actionscript,ada'
+		echo 'adobe,advancedinstaller,adventuregamestudio,agda,al'
+		echo 'alteraquartusii,altium,amplify,android,androidstudio'
+		echo 'angular,anjuta,ansible,apachecordova,apachehadoop'
+		echo 'appbuilder,appceleratortitanium,appcode,appcode+all,appcode+iml'
+		echo 'appengine,aptanastudio,arcanist,archive,archives'
+		echo 'archlinuxpackages,aspnetcore,assembler,ate,atmelstudio'
+		echo 'ats,audio,automationstudio,autotools,autotools+strict'
+		echo 'awr,backup,ballerina,basercms,basic'
+		echo 'batch,bazaar,bazel,bitrise,bitrix'
+		echo 'bittorrent,blackbox,bloop,bluej,bookdown'
+		echo 'bower,bricxcc,buck,c,c++'
+		echo 'cake,cakephp,cakephp2,cakephp3,calabash'
+		echo 'carthage,certificates,ceylon,cfwheels,chefcookbook'
+		echo 'chocolatey,clean,clion,clion+all,clion+iml'
+		echo 'clojure,cloud9,cmake,cocoapods,cocos2dx'
+		echo 'cocoscreator,code,code-java,codeblocks,codecomposerstudio'
+		echo 'codeigniter,codeio,codekit,codesniffer,coffeescript'
+		echo 'commonlisp,composer,compressed,compressedarchive,compression'
+		echo 'concrete5,coq,cordova,craftcms,crashlytics'
+		echo 'crbasic,crossbar,crystal,csharp,cuda'
+		echo 'cvs,d,dart,darteditor,data'
+		echo 'database,datarecovery,dbeaver,defold,delphi'
+		echo 'dframe,diff,direnv,diskimage,django'
+		echo 'dm,docfx,docpress,docz,dotenv'
+		echo 'dotfilessh,dotnetcore,dotsettings,dreamweaver,dropbox'
+		echo 'drupal,drupal7,drupal8,e2studio,eagle'
+		echo 'easybook,eclipse,eiffelstudio,elasticbeanstalk,elisp'
+		echo 'elixir,elm,emacs,ember,ensime'
+		echo 'episerver,erlang,espresso,executable,exercism'
+		echo 'expressionengine,extjs,fancy,fastlane,finale'
+		echo 'firebase,flashbuilder,flask,flex,flexbuilder'
+		echo 'floobits,flutter,font,fontforge,forcedotcom'
+		echo 'forgegradle,fortran,freepascal,fsharp,fuelphp'
+		echo 'fusetools,games,gcov,genero4gl,geth'
+		echo 'ggts,gis,git,gitbook,go'
+		echo 'godot,goodsync,gpg,gradle,grails'
+		echo 'greenfoot,groovy,grunt,gwt,haskell'
+		echo 'helm,hexo,hol,homeassistant,homebrew'
+		echo 'hsp,hugo,hyperledgercomposer,iar,iar_ewarm'
+		echo 'iarembeddedworkbench,idapro,idris,igorpro,images'
+		echo 'infer,inforcms,inforcrm,intellij,intellij+all'
+		echo 'intellij+iml,ionic3,jabref,java,java-web'
+		echo 'jboss,jboss-4-2-3-ga,jboss-6-x,jboss4,jboss6'
+		echo 'jdeveloper,jekyll,jenv,jetbrains,jetbrains+all'
+		echo 'jetbrains+iml,jgiven,jigsaw,jmeter,joe'
+		echo 'joomla,jspm,julia,jupyternotebooks,justcode'
+		echo 'kate,kdevelop4,kdiff3,keil,kentico'
+		echo 'kicad,kirby2,kobalt,kohana,komodoedit'
+		echo 'konyvisualizer,kotlin,labview,labviewnxg,lamp'
+		echo 'laravel,latex,lazarus,leiningen,lemonstand'
+		echo 'less,liberosoc,librarian-chef,libreoffice,lilypond'
+		echo 'linux,lithium,localstack,logtalk,lsspice'
+		echo 'ltspice,lua,lyx,m2e,macos'
+		echo 'magento,magento1,magento2,magic-xpa,matlab'
+		echo 'maven,mavensmate,mdbook,mean,mercurial'
+		echo 'mercury,meson,metals,metaprogrammingsystem,meteor'
+		echo 'meteorjs,microsoftoffice,mikroc,moban,modelsim'
+		echo 'modx,momentics,monodevelop,mplabx,mule'
+		echo 'nanoc,nativescript,ncrunch,nesc,netbeans'
+		echo 'nette,nikola,nim,ninja,node'
+		echo 'nodechakratimetraveldebug,nohup,notepadpp,now,nuxt'
+		echo 'nuxtjs,nwjs,objective-c,ocaml,octave'
+		echo 'octobercms,opa,opencart,opencv,openfoam'
+		echo 'openframeworks,openframeworks+visualstudio,oracleforms,orcad,osx'
+		echo 'otto,oxideshop,oxygenxmleditor,packer,particle'
+		echo 'patch,pawn,perl,perl6,ph7cms'
+		echo 'phalcon,phoenix,phpcodesniffer,phpstorm,phpstorm+all'
+		echo 'phpstorm+iml,phpunit,pico8,pimcore,pimcore4'
+		echo 'pimcore5,pinegrow,platformio,playframework,plone'
+		echo 'polymer,powershell,premake-gmake,prepros,prestashop'
+		echo 'processing,progressabl,psoccreator,puppet,puppet-librarian'
+		echo 'purebasic,purescript,putty,pvs,pycharm'
+		echo 'pycharm+all,pycharm+iml,pydev,python,qml'
+		echo 'qooxdoo,qt,qtcreator,r,racket'
+		echo 'rails,react,reactnative,reasonml,red'
+		echo 'redcar,redis,retool,rhodesrhomobile,rider'
+		echo 'root,ros,ruby,rubymine,rubymine+all'
+		echo 'rubymine+iml,rust,salesforce,salesforcedx,sas'
+		echo 'sass,sbt,scala,scheme,scons'
+		echo 'scrivener,sdcc,seamgen,senchatouch,serverless'
+		echo 'shopware,silverstripe,sketchup,slickedit,smalltalk'
+		echo 'snap,snapcraft,solidity,soliditytruffle,sonar'
+		echo 'sonarqube,sourcepawn,spark,splunk,spreadsheet'
+		echo 'ssh,standardml,stata,stdlib,stella'
+		echo 'stellar,stylus,sublimetext,sugarcrm,svn'
+		echo 'swift,swiftpackagemanager,swiftpm,symfony,symphonycms'
+		echo 'synology,synopsysvcs,tags,tarmainstallmate,terraform'
+		echo 'terragrunt,test,testcomplete,testinfra,tex'
+		echo 'text,textmate,textpattern,theos-tweak,thinkphp'
+		echo 'tla+,tortoisegit,tower,turbogears2,twincat3'
+		echo 'typings,typo3,typo3-composer,umbraco,unity'
+		echo 'unrealengine,vaadin,vagrant,valgrind,vapor'
+		echo 'venv,vertx,video,vim,virtualenv'
+		echo 'virtuoso,visualstudio,visualstudiocode,vivado,vlab'
+		echo 'vue,vuejs,vvvv,waf,wakanda'
+		echo 'web,webmethods,webstorm,webstorm+all,webstorm+iml'
+		echo 'werckercli,windows,wintersmith,wordpress,wyam'
+		echo 'xamarinstudio,xcode,xcodeinjection,xilinx,xilinxise'
+		echo 'xilinxvivado,xill,xojo,xtext,y86'
+		echo 'yarn,yeoman,yii,yii2,zendframework'
+		echo 'zephir,zig,zsh,zukencr8000'
+	} | sed 's/,/\n/g' | shuf
+}
+
+if [ -e '.gitignore' ]; then
+	echo 'The .gitignore already exists!' >&2
+	exit 1
+fi
+
+items=''
+while true
+do
+	new="$(get_items | fzf_wrapper)"
+	if [ -z "$new" ]; then
+		break
+	fi
+
+	if [ -z "$items" ]; then
+		items="$new"
+	else
+		items="$items"','"$new"
+	fi
+done
+
+if [ -z "$items" ]; then
+	echo 'No items selected :(' >&2
+	exit 1
+fi
+
+echo '# Getting .gitignore from:'
+echo '#     https://www.toptal.com/developers/gitignore/api/"$items"'
+echo '#'
+echo '# Items are:'
+echo "$items" | sed 's/,/\n/g' | sort | sed 's/^/# - /g'
+
+url='https://www.toptal.com/developers/gitignore/api/'"$items"
+curl -o .gitignore "$url"
+

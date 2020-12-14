@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# Search for files using find
-
-FILES="$( find -name $* 2> /dev/null )"
-if [ -n "$FILES" ]; then
-  vim -p $FILES
-fi
-

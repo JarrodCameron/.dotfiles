@@ -36,20 +36,34 @@ context.arch = '==ARCH=='
 context.bits = ==NBITS==
 context.terminal = ['tmux', 'new-window']
 
+'''
+EOF
+
+checksec --file "$exe" 2>&1
+
+echo ''
+
+file "$exe" | sed 's/, /\n/g' | sed 's/^/    /g'
+
+cat << EOF
+'''
+
 def main(io):
     io.interactive()
     io.close()
 
+
 if __name__ == '__main__':
-    if REMOTE:
+    if args['REMOTE']:
         io = remote('==HOST==', ==PORT==)
-    elif 1:
-        io = process('==EXEC==')
-    else:
+    elif args['GDB']:
         gs = '''
         b main
         '''
         io = gdb.debug('==EXEC==', gs)
+    else:
+        io = process('==EXEC==')
+    main(io)
 
 EOF
 

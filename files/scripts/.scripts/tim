@@ -65,4 +65,5 @@ if [ "$end_modify" != "$start_modify" ]; then
     "$interpreter" "$TEMP"
 fi
 
-rm -f "$TEMP"
+#rm -f "$TEMP"
+shred -u "$TEMP"

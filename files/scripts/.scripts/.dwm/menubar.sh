@@ -95,7 +95,7 @@ get_wifi () {
         return
     fi
     local ssid="$(iw dev "$INTERFACE" info | grep ssid | cut -d ' ' -f 2)"
-    local ipv4="$(ip addr show "$INTERFACE" | awk '/inet / {print $2}')"
+    local ipv4="$(ip addr show "$INTERFACE" | awk '/inet / {print $2}' | head -n1)"
     printf "%s (%s)" "$ssid" "$ipv4"
 }
 

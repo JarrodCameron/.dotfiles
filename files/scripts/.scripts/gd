@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   27/09/20 12:43
+
+# Exit on non-zero return status
+set -e
+
+if [ -z "$1" ]; then
+	echo 'Usage: gd <# diffs>'
+	exit 1
+fi
+
+n="$1"
+
+git log -p -"$n" | vim - -R -c 'set foldmethod=syntax'
+
+
+

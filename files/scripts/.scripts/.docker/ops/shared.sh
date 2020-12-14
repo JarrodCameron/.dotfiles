@@ -69,6 +69,9 @@ copy_configs () {
 	docker_send "$id" "$HOME"/.scripts /root/.scripts
 	docker_send "$id" "$HOME"/.tmux.conf /root/.tmux.conf
 	docker_send "$id" "$HOME"/.vim /root/.vim
+
+	# So that gdb can use the right pwndbg
+	docker_exec "$id" "sed -i s#/usr/share/pwndbg/gdbinit.py#/root/tools/pwndbg/gdbinit.py#g /root/.gdbinit"
 }
 
 fzf_wrapper () {

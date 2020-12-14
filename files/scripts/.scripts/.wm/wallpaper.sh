@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
 # Date:   18/12/19 13:51
@@ -11,12 +11,8 @@
 
 num_screens="$(xrandr --query | grep ' connected' | wc -l)"
 
-images="$(ls ~/images/wallpapers/*.png | sort -R | head -n "$num_screens" | while read line
-do
-    printf " %s" "$line"
-done)"
+images="$(ls ~/images/wallpapers/*.png | shuf -n "$num_screens" | tr '\n' ' ')"
 
 feh --no-fehbg --bg-center $images
-
 
 
