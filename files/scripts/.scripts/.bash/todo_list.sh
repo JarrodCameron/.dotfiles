@@ -12,6 +12,10 @@ if [ ! -r "$TODO_PATH" ]; then
     exit 0
 fi
 
+if [ -n "$TMUX" ]; then
+    exit 0
+fi
+
 if [ "$(grep -v '^#' "$TODO_PATH" | wc -l)" = "0" ]; then
     exit 0;
 fi

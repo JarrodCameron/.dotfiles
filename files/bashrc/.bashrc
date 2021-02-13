@@ -114,7 +114,7 @@ set -o vi
 
 ## `export' sets global variables
 if [[ "$PATH" != *"$HOME""/.scripts/"* ]]; then
-	export PATH="$PATH"":""$HOME""/.scripts/"
+	export PATH="$HOME""/.scripts/"":""$PATH"
 fi
 export EDITOR="$(which vim)"
 
@@ -147,10 +147,11 @@ alias R='R --quiet --vanilla'
 alias cp='cp -i'
 alias mv='mv -i'
 alias dumbshell='setarch `uname -m` -R /bin/bash'
-alias 20t1='cd ~/repos/20t1 && br -f && clear && ls -l'
 alias ui='cd /usr/include'
 alias tmp='cd "$(mktemp -d)"'
 alias rg='rg --no-ignore'
+alias less='less -i'
+alias hosts='cat /etc/hosts'
 
 function music () {(
 	cd ~/music
@@ -220,3 +221,4 @@ function br {
 	rm -f "$f"
 	eval "$d"
 }
+alias nse-ls='ls /usr/bin/../share/nmap/scripts'

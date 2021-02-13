@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   28/01/21 18:54
+
+# Exit on non-zero return status
+set -e
+
+if [ -z "$1" ]; then
+	echo 'Usage: port <port #>'
+	exit 1
+fi
+
+port="$1"
+
+grep "$port" /etc/services
+
+
+

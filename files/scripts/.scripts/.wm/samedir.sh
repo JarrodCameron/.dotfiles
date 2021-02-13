@@ -2,7 +2,11 @@
 
 # Author: Jarrod Cameron (z5210220)
 
-[ -z "$TERMINAL" ] && TERMINAL="$(which termite)"
+if [ -n "$1" ]; then
+	TERMINAL="$1"
+elif [ -z "$TERMINAL" ]; then
+	TERMINAL="$(which termite)"
+fi
 
 # More information about window properties can be found at:
 #  https://standards.freedesktop.org/wm-spec/wm-spec-latest.html

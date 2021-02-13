@@ -1,9 +1,13 @@
 /* See LICENSE file for copyright and license details. */
 
+/* This is the config file when using kali linux */
+
 #include <X11/XF86keysym.h> /* For the XF86XK_* keys */
 
 /* Patches */
 #include "swap.c"
+
+#define TERMINAL "termite"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -42,10 +46,8 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask  iscentered    isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,         0,             1,           -1 },
-	//{ "Firefox",  NULL,       NULL,       1 << 8,    0,             0,           -1 },
-	{ NULL,       "termite",  "p3calc",   0,         1,             1,           -1 },
+	{ NULL,       TERMINAL,  "p3calc",   0,         1,             1,           -1 },
 	{ "feh-qr",   "feh",      NULL,       0,         1,             1,           -1 },
-	{ "feh-graph","feh",      NULL,       0,         1,             1,           -1 },
 };
 
 /* layout(s) */
@@ -74,10 +76,10 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = {"dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL};
-static const char *termcmd[] = {"termite", NULL};
+static const char *termcmd[] = {TERMINAL, NULL};
 static const char *firefox[] = {"firefox", NULL};
 static const char *pfirefox[] = {"firefox", "--private-window", NULL};
-static const char *samedir[] = {HOME "/.scripts/.wm/samedir.sh", NULL};
+static const char *samedir[] = {HOME "/.scripts/.wm/samedir.sh", TERMINAL, NULL};
 static const char *bookmarks[] = {HOME "/.scripts/.wm/bookmarks.sh", NULL};
 static const char *screensh[] = {HOME "/.scripts/.wm/screen.sh", NULL};
 static const char *editconfig[] = {HOME "/.scripts/.wm/editconfig.sh", NULL};

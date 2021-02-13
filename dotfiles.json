@@ -46,7 +46,7 @@
 	"xmonad" : {
 		"file" : "xmonad.hs",
 		"path" : "~/.xmonad",
-		"init" : "xmonad --recompile"
+		"init" : "echo xmonad --recompile"
 	},
 	"xinitrc" : {
 		"file" : ".xinitrc",

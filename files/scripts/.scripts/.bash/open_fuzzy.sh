@@ -18,7 +18,7 @@ case "$source_file" in
     *.pdf)  zathura "$source_file" &>/dev/null &    ;;
 	*.png)  feh "$source_file" &        ;;
 	*.jpg)  feh "$source_file" &        ;;
-    *)      vim "$source_file"          ;;
+    *)      exec vim "$source_file"     ;;
 esac
 
 

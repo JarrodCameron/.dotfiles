@@ -104,8 +104,8 @@ get_velo () {
         printf "Up: 0KBs, Down: 0KBs"
         return
     fi
-    local diff_up="$(($NET_CURR_UP - $NET_PREV_UP))"
-    local diff_down="$(($NET_CURR_DOWN - $NET_PREV_DOWN))"
+    diff_up="$((NET_CURR_UP-NET_PREV_UP))"
+    diff_down="$((NET_CURR_DOWN-NET_PREV_DOWN))"
 
     local rate_up=""
     if [ "$diff_up" -lt "1024" ]; then
