@@ -1,190 +1,273 @@
 #!/bin/sh
 
 # Author: Jarrod Cameron (z5210220)
-# Date:   19/01/20 13:40
+# Date:   21/02/21 10:49
 
-[ -z "$BROWSER" ] && BROWSER='firefox'
+# The contents of the bookmark file is
+# name1,url1,browser1
+# name2,url2,browser2
+# name3,url3,browser3
+# ...
+# nameN,urlN,browserN
 
 BOOKMARKS_DIR="$HOME"'/.cache/bookmarks/'
-BOOKMARKS_FILE="$BOOKMARKS_DIR"'bookmarks.json'
+BOOKMARKS_FILE="$BOOKMARKS_DIR"'bookmarks.csv'
 
 # Simple dmenu wrapper
-run_dmenu () {
-    height="$1"
-    prompt="$2"
-    IFS=''
-    while read line
-    do
-        printf "%s\n" "$line"
-    done | dmenu -i -l "$height" -p "$prompt" \
-            -fn 'monospace:size=10' \
-            -nb "#282828" \
-            -nf "#ebdbb2" \
-            -sf "#1d2021" \
-            -sb "#689d68"
+run_dmenu ()
+{
+	height="$1"
+	prompt="$2"
+	IFS=''
+	while read line
+	do
+		printf "%s\n" "$line"
+	done | dmenu -i -l "$height" -p "$prompt" \
+			-fn 'monospace:size=10' \
+			-nb "#282828" \
+			-nf "#ebdbb2" \
+			-sf "#1d2021" \
+			-sb "#689d68"
 }
 
-# Given the name of a bookmark open it up
-do_open () {
-    bm_name="$1"
-
-    bm_status="$(jq --raw-output '.'"\"${bm_name}\"" "${BOOKMARKS_FILE}")"
-
-    if [ "$bm_status" = 'null' ]; then
-        printf 'Unknown bookmark: %s\n' "$bm_name" >&2
-        exit 0
-    fi
-
-    bm_url="$(jq --raw-output '."'"$bm_name"'".url' "$BOOKMARKS_FILE")"
-    bm_browser="$(jq --raw-output '."'"$bm_name"'".browser' "$BOOKMARKS_FILE")"
-
-    $bm_browser "$bm_url"
+encode ()
+{
+	/bin/echo -n "$1" | base64 | tr -d '\n'
 }
 
-# Get the bookmark name from the user
-get_bm_name () {
-    bm_name="$(run_dmenu 0 'Bookmark name:' < /dev/null)"
-    if [ -z "$bm_name" ]; then
-        printf ''
-        exit 0
-    fi
-
-    status="$(jq '."'"$bm_name"'"' "$BOOKMARKS_FILE")"
-
-    if [ "$status" != 'null' ]; then
-        printf ''
-    else
-        printf '%s' "${bm_name}"
-    fi
+decode ()
+{
+	echo "$1" | base64 -d
 }
 
-# Get the bookmark url from the user
-get_bm_url () {
-    run_dmenu 0 "Bookmark url:" < /dev/null
+decode_name ()
+{
+	echo "$1" | awk -F',' '{print $1}' | base64 -d
 }
 
-# Get the bookmark browser from the user
-get_bm_browser () {
-    printf 'firefox
+decode_url ()
+{
+	echo "$1" | awk -F',' '{print $2}' | base64 -d
+}
+
+decode_browser ()
+{
+	echo "$1" | awk -F',' '{print $3}' | base64 -d
+}
+
+die ()
+{
+	echo "$1" >&2
+	exit 1
+}
+
+# Prints each name in the bookmarks file after decoding the string
+print_names ()
+{
+	{
+		cat "$BOOKMARKS_FILE" | awk -F',' '{print $1}' | while read name
+		do
+			decode "$name"
+			echo
+		done
+	} | sort
+}
+
+intro_prompt ()
+{
+	height="$(wc -l < "$BOOKMARKS_FILE")"
+	height="$((height+3))"
+	{
+		print_names
+		echo '[Insert]'
+		echo '[Modify]'
+		echo '[Remove]'
+	} | run_dmenu "$height" 'Open bookmark:'
+}
+
+user_input ()
+{
+	prompt="$1"
+	run_dmenu 0 "$prompt" < /dev/null
+}
+
+get_browser ()
+{
+	printf 'firefox
 firefox --new-window
 firefox --private-window
 brave
-' | run_dmenu 4 'Browser:'
+' | run_dmenu 4 'Bookmark browser:'
 }
 
-# Prompt user for new bookmark and save it
-do_insert () {
-
-    bm_name="$(get_bm_name)"
-    [ -z "$bm_name" ] && exit 1
-
-    bm_url="$(get_bm_url)"
-    [ -z "$bm_url" ] && exit 1
-
-    bm_browser="$(get_bm_browser)"
-    [ -z "$bm_browser" ] && exit 1
-
-    new_bookmarks_temp="$(mktemp)"
+# Returns an entry in the booksmarks file given the name of the bookmark
+get_entry ()
 {
-    cat "$BOOKMARKS_FILE"
-        printf '{
-    "%s" : {
-        "url" : "%s",
-        "browser" : "%s"
-    }
-}\n' "$bm_name" "$bm_url" "$bm_browser"
-} | jq --raw-output --slurp add > "$new_bookmarks_temp"
-
-    mv "$new_bookmarks_temp" "$BOOKMARKS_FILE"
-
+	name="$(encode "$1")"
+	awk -F',' '{
+		if ("'"$name"'" == $1)
+			print $0
+	}' "$BOOKMARKS_FILE"
 }
 
-# Remove an entry from the $BOOKMARKS_FILE
-do_remove () {
-    bm_height="$(jq '. | length' "${BOOKMARKS_FILE}")"
-    bm_name="$(jq --raw-output '. | keys[]' "${BOOKMARKS_FILE}" | sort |
-        run_dmenu "$bm_height" 'Remove bookmark:')"
-
-    temp_file="$(mktemp)"
-
-    jq 'del(."'"$bm_name"'")' "$BOOKMARKS_FILE" > "$temp_file"
-    mv "$temp_file" "$BOOKMARKS_FILE"
-}
-
-# Modify an entry in the $BOOKMARKS_FILE
-do_modify () {
-    bm_height="$(jq '. | length' "${BOOKMARKS_FILE}")"
-    bm_name="$(jq --raw-output '. | keys[]' "${BOOKMARKS_FILE}" | sort |
-        run_dmenu "$bm_height" 'Modify bookmark:')"
-
-    if [ -z "$bm_name" ]; then
-        exit 0
-    elif [ "$(jq '."'$bm_name'"' "${BOOKMARKS_FILE}")" = 'null' ]; then
-        exit 0
-    fi
-
-    prop="$(printf '%s\n%s\n%s\n' '[browser]' '[name]' '[url]' | run_dmenu 3 'Property:')"
-
-    curr_url="$(jq --raw-output '."'"$bm_name"'".url' "${BOOKMARKS_FILE}")"
-    curr_browser="$(jq --raw-output '."'"$bm_name"'".browser' "${BOOKMARKS_FILE}")"
-    curr_name="$bm_name"
-
-    if [ -z "$prop" ]; then
-        exit 0
-    elif [ "$prop" = '[url]' ]; then
-        curr_url="$(get_bm_url)"
-        [ -z "$curr_url" ] && exit 0
-    elif [ "$prop" = '[name]' ]; then
-        curr_name="$(get_bm_name)"
-        [ -z "$curr_name" ] && exit 0
-    elif [ "$prop" = '[browser]' ]; then
-        curr_browser="$(get_bm_browser)"
-        [ -z "$curr_browser" ] && exit 0
-    else
-        exit 0
-    fi
-
-    new_bookmarks_temp="$(mktemp)"
+do_insert ()
 {
-    jq --raw-output 'del(."'$bm_name'")' "$BOOKMARKS_FILE"
-        printf '{
-    "%s" : {
-        "url" : "%s",
-        "browser" : "%s"
-    }
-}\n' "$curr_name" "$curr_url" "$curr_browser"
-} | jq --raw-output --slurp add > "$new_bookmarks_temp"
+	bm_name="$(user_input 'Bookmark name:')"
+	[ -z "$bm_name" ] && die 'ERROR: Invalid name'
 
-    mv "$new_bookmarks_temp" "$BOOKMARKS_FILE"
+	[ -n "$(get_entry "$bm_name")" ] && die 'ERROR: Bookmark already exists'
 
+	bm_url="$(user_input 'Bookmark url:')"
+	[ -z "$bm_url" ] && die 'ERROR: Invalid URL'
+
+	bm_browser="$(get_browser)"
+	[ -z "$bm_browser" ] && die 'ERROR: Invalid browser'
+
+	{
+		encode "$bm_name"
+		/bin/echo -n ','
+		encode "$bm_url"
+		/bin/echo -n ','
+		encode "$bm_browser"
+		echo
+	} >> "$BOOKMARKS_FILE"
 }
 
-if [ ! -e "$BOOKMARKS_FILE" ]; then
-    mkdir -p "$BOOKMARKS_DIR"
-    printf '{}' > "$BOOKMARKS_FILE"
-fi
+modify_browser ()
+{
+	entry="$1"
 
-bm_height="$(jq '. | length' "${BOOKMARKS_FILE}")"
-bm_height="$((bm_height+3))"
+	new_browser="$(get_browser)"
+	[ -z "$new_browser" ] && die 'ERROR: Invalid browser chosen'
 
-bm_name="$({
-    jq --raw-output '. | keys[]' "${BOOKMARKS_FILE}" | sort
-    cat << EOF
-[Insert]
-[Modify]
-[Remove]
-EOF
-} | run_dmenu "$bm_height" 'Open bookmark:')"
+	old_name="$(decode_name "$entry")"
+	old_url="$(decode_url "$entry")"
 
-if [ -z "$bm_name" ]; then
-    exit 1
-fi
+	tmp="$(mktemp)"
+	grep --fixed-strings -v "$entry" "$BOOKMARKS_FILE" > "$tmp"
+	{
+		encode "$old_name"
+		/bin/echo -n ','
+		encode "$old_url"
+		/bin/echo -n ','
+		encode "$new_browser"
+		echo
+	} >> "$tmp"
+	mv "$tmp" "$BOOKMARKS_FILE"
+}
 
-case "$bm_name" in
-    '[Insert]') do_insert          ;;
-    '[Modify]') do_modify          ;;
-    '[Remove]') do_remove          ;;
-    *)          do_open "$bm_name" ;;
-esac
+modify_name ()
+{
+	entry="$1"
 
+	new_name="$(user_input 'Bookmark name:')"
+	[ -z "$new_name" ] && die 'ERROR: Invalid name chosen'
 
+	[ -n "$(get_entry "$new_name")" ] && die 'ERROR: Bookmark already exists'
+
+	old_browser="$(decode_browser "$entry")"
+	old_url="$(decode_url "$entry")"
+
+	tmp="$(mktemp)"
+	grep --fixed-strings -v "$entry" "$BOOKMARKS_FILE" > "$tmp"
+	{
+		encode "$new_name"
+		/bin/echo -n ','
+		encode "$old_url"
+		/bin/echo -n ','
+		encode "$old_browser"
+		echo
+	} >> "$tmp"
+	mv "$tmp" "$BOOKMARKS_FILE"
+}
+
+modify_url ()
+{
+	entry="$1"
+
+	new_url="$(user_input 'Bookmark url:')"
+	[ -z "$new_url" ] && die 'ERROR: Invalid URL'
+
+	old_browser="$(decode_browser "$entry")"
+	old_name="$(decode_name "$entry")"
+
+	tmp="$(mktemp)"
+	grep --fixed-strings -v "$entry" "$BOOKMARKS_FILE" > "$tmp"
+	{
+		encode "$old_name"
+		/bin/echo -n ','
+		encode "$new_url"
+		/bin/echo -n ','
+		encode "$old_browser"
+		echo
+	} >> "$tmp"
+	mv "$tmp" "$BOOKMARKS_FILE"
+}
+
+do_modify ()
+{
+	height="$(wc -l < "$BOOKMARKS_FILE")"
+	bm="$(print_names | run_dmenu "$height" 'Remove bookmark:')"
+
+	entry="$(get_entry "$bm")"
+	[ -z "$entry" ] && die 'ERROR: Bookmark does not exist'
+
+	prop="$({
+		echo '[browser]'
+		echo '[name]'
+		echo '[url]'
+	} | run_dmenu 3 'Property:')"
+
+	case "$prop" in
+		'[browser]') modify_browser "$entry" ;;
+		'[name]')    modify_name "$entry"    ;;
+		'[url]')     modify_url "$entry"     ;;
+		*)           die 'ERROR: No property selected' ;;
+	esac
+}
+
+do_remove ()
+{
+	height="$(wc -l < "$BOOKMARKS_FILE")"
+	bm="$(print_names | run_dmenu "$height" 'Remove bookmark:')"
+
+	entry="$(get_entry "$bm")"
+	[ -z "$entry" ] && die 'ERROR: Bookmark does not exist'
+
+	tmp="$(mktemp)"
+	grep --fixed-strings -v "$entry" "$BOOKMARKS_FILE" > "$tmp"
+	mv "$tmp" "$BOOKMARKS_FILE"
+}
+
+do_open ()
+{
+	bm="$1"
+
+	entry="$(get_entry "$bm")"
+	[ -z "$entry" ] && die 'ERROR: Bookmark does not exist'
+
+	url="$(decode_url "$entry")"
+	browser="$(decode_browser "$entry")"
+
+	exec $browser "$url"
+}
+
+main ()
+{
+	if [ ! -e "$BOOKMARKS_FILE" ]; then
+		mkdir -p "$BOOKMARKS_DIR"
+		touch "$BOOKMARKS_FILE"
+	fi
+
+	ret="$(intro_prompt)"
+
+	case "$ret" in
+		'')         die 'ERROR: No bookmark selected' ;;
+		'[Insert]') do_insert      ;;
+		'[Modify]') do_modify      ;;
+		'[Remove]') do_remove      ;;
+		*)          do_open "$ret" ;;
+	esac
+}
+
+main "$@"

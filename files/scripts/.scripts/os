@@ -31,19 +31,34 @@ usage () {
 
 # compile everything from scratch
 compile_full () {
+	echo '== 1'
     # Configure source?
     cd ~/cs3231/"$DIR_NAME"
+	echo '== 2'
     ./configure
+	echo '== 3'
+
+	bmake
+	bmake install
 
     # Convigure kernel
     cd ~/cs3231/"$DIR_NAME"/kern/conf
+	echo '== 4'
     ./config "$COMPILE_NAME"
+	echo '== 5'
 
     # Compile/install kernel
     cd ~/cs3231/"$DIR_NAME"/kern/compile/"$COMPILE_NAME"
-    bmake depend -j `nproc`
+	pwd
+	ls
+	echo '== 6'
+    #bmake depend -j `nproc`
+    bmake depend
+	echo '== 7'
     bmake -j `nproc`
+	echo '== 8'
     bmake install -j `nproc`
+	echo '== 9'
 
     # Compiler/install userland
     cd ~/cs3231/"$DIR_NAME"
