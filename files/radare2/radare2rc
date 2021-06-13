@@ -12,7 +12,7 @@ e asm.syntax=intel
 
 # Pop up window when using <tab>
 # This is the most buggy pos i have seen
-e scr.prompt.popup = true
+#e scr.prompt.popup = true
 
 # No fortunes
 e cfg.fortunes=false

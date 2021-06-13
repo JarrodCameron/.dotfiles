@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Author: Jarrod Cameron (z5210220)
+# Date:   29/03/21 10:24
+
+# Exit on non-zero return status
+set -e
+
+PASSWORD_STORE="$HOME"'/.password-store/'
+
+fzf_wrapper () {
+	fzf \
+		--layout=reverse \
+		--inline-info \
+		--cycle \
+		--margin=3
+}
+
+get_list () {
+	cd "$PASSWORD_STORE"
+	find . -type f | grep -v '^\./\.gpg-id$' | sed 's#^\./##g ; s/\.gpg$//g'
+}
+
+name="$(get_list | fzf_wrapper)"
+pass -c "$name"

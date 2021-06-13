@@ -1,4 +1,4 @@
-#source /usr/share/pwndbg/gdbinit.py
+source /usr/share/pwndbg/gdbinit.py
 
 # number of source code lines to print by the context command
 # default: 10
@@ -49,6 +49,9 @@ set follow-fork-mode parent
 
 # For os161
 set auto-load safe-path /
+
+# Remove envp before starting process
+#unset environment
 
 # Execute commands after breakpoint is hit
 #break *0x080485bd

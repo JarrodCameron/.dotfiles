@@ -1,6 +1,6 @@
 # This is the generic docker file, uses the most up to date version of ubuntu
 
-FROM ubuntu:19.10
+FROM ubuntu
 
 ENV LC_CTYPE C.UTF-8
 
@@ -20,15 +20,13 @@ RUN apt-get install -y gdb-multiarch git iproute2 jq libc6:i386 libdb-dev
 RUN apt-get install -y libffi-dev libncurses5:i386 libpcre3-dev libssl-dev
 RUN apt-get install -y libstdc++6:i386 libxaw7-dev libxt-dev locate ltrace make
 RUN apt-get install -y man nasm net-tools netcat patchelf php procps psmisc
-RUN apt-get install -y python python-pip python3 python3-dev python3-pip
-RUN apt-get install -y ripgrep rubygems strace tmux valgrind vim
-RUN apt-get install -y virtualenvwrapper wget
-RUN apt-get install -y build-essential
+RUN apt-get install -y python python3 python3-dev python3-pip rubygems strace
+RUN apt-get install -y tmux valgrind vim virtualenvwrapper wget build-essential
 
 RUN apt-get upgrade -y
 
 #RUN pip install capstone requests pwntools r2pipe
-RUN pip install capstone requests pwntools
+RUN python3 -m pip install --upgrade capstone requests pwntools
 
 RUN pip3 install pwntools keystone-engine unicorn capstone ropper
 RUN pip3 install angr colorama
@@ -45,11 +43,6 @@ RUN git clone https://github.com/radare/radare2 ~/tools/radare2 \
 RUN git clone https://github.com/pwndbg/pwndbg ~/tools/pwndbg \
 	&& cd ~/tools/pwndbg/ \
 	&& ./setup.sh
-
-# A simple fuzzer
-RUN git clone https://gitlab.com/akihe/radamsa ~/tools/radamsa \
-	&& cd ~/tools/radamsa \
-	&& make -j $(nproc)
 
 RUN gem install one_gadget
 

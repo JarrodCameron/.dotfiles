@@ -26,7 +26,7 @@ fi
 
 (
 	feh --class "$CLASS" "$tmp" >/dev/null 2>/dev/null
-	rm -f "$tmp"
+	shred -u "$tmp"
 ) &
 
 

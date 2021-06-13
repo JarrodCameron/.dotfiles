@@ -141,7 +141,6 @@ alias q="exit"
 alias mkae="make"
 alias mak="make"
 alias z="zathura --fork"
-alias cs="cd ~/cs3231/asst2-src/ && rm -f tags && ctags -R && cscope -R -k"
 alias gdbinit="vim gdbinit"
 alias R='R --quiet --vanilla'
 alias cp='cp -i'
@@ -152,6 +151,10 @@ alias tmp='cd "$(mktemp -d)"'
 alias rg='rg --no-ignore'
 alias less='less -i'
 alias hosts='cat /etc/hosts'
+
+# Because dwm sux
+alias ghidra='_JAVA_AWT_WM_NONREPARENTING=1 ghidra'
+alias burpsuite='_JAVA_AWT_WM_NONREPARENTING=1 burpsuite'
 
 function music () {(
 	cd ~/music
