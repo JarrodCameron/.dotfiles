@@ -4,10 +4,7 @@
 # Date:   07/10/19 18:34
 
 IFS=''
-source_file="$(for f in $(find . 2>/dev/null | grep -v '^\.$' | grep -v '\.class$')
-do
-    [ ! -d "$f" ] && echo $f
-done | fzf --layout=reverse --margin=3 --header="pwd: $(pwd)" --inline-info --cycle)"
+source_file="$(find -type f 2>/dev/null | grep -v '\.class$' | fzf --layout=reverse --margin=3 --header="pwd: $(pwd)" --inline-info --cycle)"
 
 if [ -z "$source_file" ]
 then
@@ -23,6 +20,3 @@ case "$source_file" in
     *.sc)   sc "$source_file" &         ;;
     *)      exec vim "$source_file"     ;;
 esac
-
-
-
