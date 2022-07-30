@@ -1,4 +1,4 @@
-source /usr/share/pwndbg/gdbinit.py
+source ~/.config/gdb/gdbinit.py
 
 # number of source code lines to print by the context command
 # default: 10

@@ -5,8 +5,15 @@
 
 GDB_FLAGS="-quiet"
 
-if [ -r "gdbinit" ]; then
-	exec gdb "${GDB_FLAGS}" -command="gdbinit" $@
-else
-	exec gdb "${GDB_FLAGS}" $@
+cmd="gdb ${GDB_FLAGS}"
+
+pwn="$(locate -r '\/pwndbg\/gdbinit\.py$' | grep "^$HOME" | head -n1)"
+if [ -r "$pwn" ]; then
+	cmd="$cmd -command=$pwn"
 fi
+
+if [ -r "gdbinit" ]; then
+	cmd="$cmd -command=gdbinit"
+fi
+
+exec $cmd $@

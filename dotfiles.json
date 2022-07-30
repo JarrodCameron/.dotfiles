@@ -1,67 +1,71 @@
- {
-	"bashrc" : {
-		"file" : ".bashrc",
-		"path" : "~"
-	},
-	"termite" : {
-		"file" : "config",
-		"path" : "~/.config/termite"
-	},
-	"gdbinit" : {
-		"file" : ".gdbinit",
-		"path" : "~"
-	},
-	"i3wm" : {
-		"file" : "i3",
-		"path" : "~/.config/i3"
-	},
-	"i3blocks" : {
-		"file" : "i3blocks",
-		"path" : "~/.config/i3blocks"
-	},
-	"radare2" : {
-		"file" : "radare2rc",
-		"path" : "~/.config/radare2"
-	},
-	"scripts" : {
-		"file" : ".scripts",
-		"path" : "~"
-	},
-	"tmux" : {
-		"file" : ".tmux.conf",
-		"path" : "~"
-	},
-	"vim" : {
-		"file" : ".vim",
-		"path" : "~"
-	},
-	"wallpapers" : {
-		"file" : "wallpapers",
-		"path" : "~/images"
-	},
-	"xmobar" : {
-		"file" : "xmobarrc",
-		"path" : "~/.config/xmobar"
-	},
-	"xmonad" : {
-		"file" : "xmonad.hs",
-		"path" : "~/.xmonad",
-		"init" : "echo xmonad --recompile"
-	},
-	"xinitrc" : {
-		"file" : ".xinitrc",
-		"path" : "~"
-	},
-	"bash_profile" : {
-		"file" : ".bash_profile",
-		"path" : "~"
-	},
-	"dwm" : {
-		"file" : "dwm",
-		"path" : "~/.config"
-	},
-	"Xresources" : {
-		"file" : ".Xresources",
-		"path" : "~"
-	}
+{
+    "bash_profile": {
+        "file": ".bash_profile",
+        "path": "~"
+    },
+    "bashrc": {
+        "file": ".bashrc",
+        "path": "~"
+    },
+    "dwm": {
+        "file": "dwm",
+        "path": "~/.config"
+    },
+    "gdb": {
+        "file": "gdb",
+        "path": "~/.config"
+    },
+    "gdbinit": {
+        "file": ".gdbinit",
+        "path": "~"
+    },
+    "i3blocks": {
+        "file": "i3blocks",
+        "path": "~/.config/i3blocks"
+    },
+    "i3wm": {
+        "file": "i3",
+        "path": "~/.config/i3"
+    },
+    "radare2": {
+        "file": "radare2rc",
+        "path": "~/.config/radare2"
+    },
+    "scripts": {
+        "file": ".scripts",
+        "path": "~"
+    },
+    "termite": {
+        "file": "config",
+        "path": "~/.config/termite"
+    },
+    "tmux": {
+        "file": ".tmux.conf",
+        "path": "~"
+    },
+    "vim": {
+        "file": ".vim",
+        "path": "~"
+    },
+    "wallpapers": {
+        "file": "wallpapers",
+        "path": "~/images"
+    },
+    "Xresources": {
+        "file": ".Xresources",
+        "path": "~"
+    },
+    "xinitrc": {
+        "file": ".xinitrc",
+        "path": "~"
+    },
+    "xmobar": {
+        "file": "xmobarrc",
+        "path": "~/.config/xmobar"
+    },
+    "xmonad": {
+        "file": "xmonad.hs",
+        "path": "~/.xmonad",
+        "init": "echo xmonad --recompile"
+    }
 }
