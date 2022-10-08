@@ -16,18 +16,5 @@ if [ -z "$1" ]; then
 fi
 
 s="$1"
-tmp="$(mktemp)"
 
-if [ "$s" = '-' ]; then
-	qrencode -o "$tmp" -s "$SIZE"
-else
-	qrencode -o "$tmp" -s "$SIZE" "$s"
-fi
-
-(
-	feh --class "$CLASS" "$tmp" >/dev/null 2>/dev/null
-	shred -u "$tmp"
-) &
-
-
-
+qrencode -t UTF8 -s "$SIZE" "$s"

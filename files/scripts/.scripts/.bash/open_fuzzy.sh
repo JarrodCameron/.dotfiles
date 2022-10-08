@@ -3,7 +3,18 @@
 # Author: Jarrod Cameron (z5210220)
 # Date:   07/10/19 18:34
 
-source_file="$(find ! -name '*.class' -type f 2>/dev/null | fzf --layout=reverse --margin=3 --header="pwd: $(pwd)" --inline-info --cycle)"
+show=cat
+[ -n "$(which bat)" ] && show="$(which bat) --style plain --color always"
+[ -n "$(which batcat)" ] && show="$(which batcat) --style plain --color always"
+
+source_file="$(find ! -name '*.class' -type f 2>/dev/null | fzf \
+	--preview="$show {}" \
+	--layout=reverse \
+	--margin=3 \
+	--header="pwd: $(pwd)" \
+	--inline-info \
+	--cycle
+)"
 
 if [ -z "$source_file" ]
 then

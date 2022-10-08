@@ -107,7 +107,7 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")
 export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
 export MANWIDTH=80
-export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
+export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist' -\""
 
 # Bash with vim keys (god tier bash mode)
 set -o vi
@@ -225,3 +225,4 @@ function br {
 	eval "$d"
 }
 alias nse-ls='ls /usr/bin/../share/nmap/scripts'
+alias jc="cd /mnt/c/Users/JarrodCameron"
