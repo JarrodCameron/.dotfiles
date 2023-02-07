@@ -15,4 +15,6 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.rr2          setfiletype conf
     autocmd! BufRead,BufNewFile *.xyz          setfiletype drawing
     autocmd! BufRead,BufNewFile *.lds          setfiletype ld
+    autocmd! BufRead,BufNewFile *.plan         setfiletype plan
+    autocmd! BufRead,BufNewFile *.task         setfiletype markdown
 augroup END

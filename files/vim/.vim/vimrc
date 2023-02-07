@@ -221,6 +221,7 @@ autocmd BufNewFile *.rmd        0r ~/.vim/templates/rmd.skel
 autocmd BufNewFile *.rr2        0r ~/.vim/templates/rr2.skel
 autocmd BufNewFile *.sh         0r ~/.vim/templates/bash.skel
 autocmd BufNewFile *.rs         0r ~/.vim/templates/rust.skel
+autocmd BufNewFile *.plan       0r ~/.vim/templates/plan.skel
 autocmd BufNewFile Makefile     0r ~/.vim/templates/make.skel
 autocmd BufNewFile gdbinit      0r ~/.vim/templates/gdbinit.skel
 
