@@ -6,13 +6,6 @@ include config.mk
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
 
-# Different config files depending on OS
-ifeq ($(shell uname -n), kali)
-CONF = KALI_CONFIG
-else
-CONF = DEFAULT_CONFIG
-endif
-
 all: options dwm
 
 options:
@@ -22,7 +15,7 @@ options:
 	@echo "CC       = ${CC}"
 
 .c.o:
-	${CC} -DHOME=\"/home/jc\" -D${CONF} -c ${CFLAGS} $<
+	${CC} -DHOME=\"/home/jc\" -c ${CFLAGS} $<
 
 ${OBJ}: config.h config.mk
 

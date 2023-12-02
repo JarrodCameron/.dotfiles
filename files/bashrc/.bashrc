@@ -109,6 +109,10 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 export MANWIDTH=80
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist' -\""
 
+# Forces `groff' to output control characters in a format vim understands.
+# `groff' is called internally when running man (which pipes into `vim')
+export GROFF_NO_SGR=1
+
 # Bash with vim keys (god tier bash mode)
 set -o vi
 
@@ -127,7 +131,6 @@ alias objdump="objdump -Mintel"
 alias p="python3 -q"
 alias gdb="bash ~/.scripts/.alias/gdb_alias.sh"
 alias rr="ranger"
-alias bim="vim"
 alias gim="vim"
 alias v="vim"
 alias LS="ls"
@@ -151,6 +154,8 @@ alias tmp='cd "$(mktemp -d)"'
 alias rg='rg --no-ignore'
 alias less='less -i'
 alias hosts='cat /etc/hosts'
+alias jim="jq | vim -c 'set ft=json' -c 'foldopen!' -"
+
 
 # Because dwm sux
 alias ghidra='_JAVA_AWT_WM_NONREPARENTING=1 ghidra'
@@ -225,4 +230,26 @@ function br {
 	eval "$d"
 }
 alias nse-ls='ls /usr/bin/../share/nmap/scripts'
-alias jc="cd /mnt/c/Users/JarrodCameron"
+
+
+function bim {
+	if [ -z "$TMUX" ]; then
+		echo '+-------------------------------------+' >&2
+		echo '| ERROR: We are not in a tmux buffer! |' >&2
+		echo '+-------------------------------------+' >&2
+		return
+	fi
+
+	tmpfile="$(mktemp)"
+	lines="$(tput lines)"
+
+	tmux capture-pane -S "-$lines"
+	tmux save-buffer "$tmpfile"
+
+	vim -c 'set ft=sh' "$tmpfile"
+
+	source "$tmpfile"
+
+	shred -u "$tmpfile"
+
+}

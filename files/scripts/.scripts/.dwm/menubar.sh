@@ -4,7 +4,6 @@
 # Date:   04/09/19  7:56
 
 SEPERATOR="|"
-#SEPERATOR=""
 
 # Used for networking stats
 NET_PREV_UP="0"
@@ -65,21 +64,22 @@ get_date () {
 }
 
 get_vol () {
-    # NOTE: Only tested with single sink
-    local left="$(pacmd list-sinks | awk -F' ' '/volume: front/ {print $5}' | head -n1)"
-    local right="$(pacmd list-sinks | awk -F' ' '/volume: front/ {print $12}' | head -n1)"
-
-    # Trim last char (the `%')
-    left=${left%?}
-    right=${right%?}
-
-    printf "Vol: %s%%" "$(echo "($left + $right) / 2" | bc )"
+    # NOTE: `pactl get-sink-volume' prints the volume of the left ($5) and
+    #       right ($12) side. So we use `awk' to print the average.
+    volume="$(pactl get-sink-volume '@DEFAULT_SINK@' | awk '/^Volume/ {print ($5 + $12)/2}')"
+    printf "Vol: %s%%" "$volume"
 }
 
 get_bat () {
-    local full="$(cat /sys/class/power_supply/BAT0/charge_full)"
-    local curr="$(cat /sys/class/power_supply/BAT0/charge_now)"
-    local ratio="$(echo "100 * "$curr" / "$full"" | bc)%"
+    # More info @ https://www.kernel.org/doc/Documentation/power/power_supply_class.txt
+    local full="$(cat /sys/class/power_supply/BAT0/{charge,energy}_full 2>/dev/null)"
+    local curr="$(cat /sys/class/power_supply/BAT0/{charge,energy}_now 2>/dev/null)"
+
+    local ratio="$(echo "1 + (100 * $curr / $full)" | bc)%"
+    if [ "$ratio" = '101' ] ; then
+        # Shitty check for my bad rounding up method
+        ratio='100'
+    fi
     local status="$(cat /sys/class/power_supply/BAT0/status)"
 
     if [ "$status" = "Discharging" ]; then
@@ -94,7 +94,12 @@ get_wifi () {
         printf "(0.0.0.0)"
         return
     fi
-    local ssid="$(iw dev "$INTERFACE" info | grep ssid | cut -d ' ' -f 2)"
+
+    # If we are using ethranet, then there won't be a wireless interface or SSID
+    local ssid="$(iw dev "$INTERFACE" info 2>/dev/null | grep ssid | cut -d ' ' -f 2)"
+    if [ -z "$ssid" ]; then
+        local ssid="I:$INTERFACE"
+    fi
     local ipv4="$(ip addr show "$INTERFACE" | awk '/inet / {print $2}' | head -n1)"
     printf "%s (%s)" "$ssid" "$ipv4"
 }
@@ -125,7 +130,7 @@ get_velo () {
         rate_down="$((diff_down / 1024 / 1024))""MBs"
     fi
 
-    printf "Up: %s, Down: %s" "$rate_up" "$rate_down"
+    printf "Up: %6s, Down: %6s" "$rate_up" "$rate_down"
 }
 
 get_cpu () {

@@ -22,5 +22,5 @@ fi
 while true
 do
 	rm -f dwm.log
-	(dwm 2>&1 ) >> dwm.log
+	dwm &>> dwm.log
 done
