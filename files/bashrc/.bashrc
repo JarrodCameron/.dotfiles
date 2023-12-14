@@ -253,3 +253,43 @@ function bim {
 	shred -u "$tmpfile"
 
 }
+
+
+function xdopaste () {
+
+	data=''
+	unix2dos='0'
+
+	if [ "$#" -eq '1' ]; then
+		data="$1"
+	elif [ "$#" -eq '2' ] && [ "$2" = '--unix2dos' ]; then
+		data="$1"
+		unix2dos='1'
+	else
+		echo 'Usage: xdopaste <text|copy|-> [--unix2dos]' >&2
+		return
+	fi
+
+	/bin/echo -n 'Copying in '
+	for i in $(seq 5 -1 1)
+	do
+		/bin/echo -n "$i..."
+		sleep 1
+	done
+	echo
+
+
+	if [ -r "$data" ] || [ "$data" = '-' ]; then
+
+		if [ "$unix2dos" -eq '1' ]; then
+			unix2dos "$data"
+		fi
+
+		xdotool type --file "$data"
+
+	elif [ "$unix2dos" -eq '1' ]; then
+		/bin/echo -nE "$data" | unix2dos | xdotool type --file -
+	else
+		xdotool type "$data"
+	fi
+}

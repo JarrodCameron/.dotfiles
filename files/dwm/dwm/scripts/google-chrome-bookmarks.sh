@@ -6,6 +6,8 @@
 # Exit on non-zero return status
 set -e
 
+# TODO Should be able to search google from here
+
 LOCAL_STATE_FILE="$HOME"'/.config/google-chrome/Local State'
 MODIFIER_NEW_WINDOW='(( New Window ))'
 MODIFIER_INCOGNITO='(( Private ))'

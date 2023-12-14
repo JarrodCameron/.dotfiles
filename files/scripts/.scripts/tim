@@ -62,7 +62,8 @@ end_modify="$(stat "${TEMP}" --format='%Y')"
 
 if [ "$end_modify" != "$start_modify" ]; then
     print_temp "$TEMP"
-    "$interpreter" "$TEMP"
+    "$interpreter" "$TEMP" # TODO Remove this junk (<---)
+	bash "$TEMP" 0</dev/tty 1>/dev/tty 2>/dev/tty
 fi
 
 #rm -f "$TEMP"
