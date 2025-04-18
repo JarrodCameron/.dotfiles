@@ -19,14 +19,6 @@
         "file": ".gdbinit",
         "path": "~"
     },
-    "i3blocks": {
-        "file": "i3blocks",
-        "path": "~/.config/i3blocks"
-    },
-    "i3wm": {
-        "file": "i3",
-        "path": "~/.config/i3"
-    },
     "radare2": {
         "file": "radare2rc",
         "path": "~/.config/radare2"
@@ -58,14 +50,5 @@
     "xinitrc": {
         "file": ".xinitrc",
         "path": "~"
-    },
-    "xmobar": {
-        "file": "xmobarrc",
-        "path": "~/.config/xmobar"
-    },
-    "xmonad": {
-        "file": "xmonad.hs",
-        "path": "~/.xmonad",
-        "init": "echo xmonad --recompile"
     }
 }
