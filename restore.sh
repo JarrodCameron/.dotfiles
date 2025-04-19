@@ -38,16 +38,16 @@ do_restore () {
 	dfile="$(jq -r --arg key "$dname" '.[$key].file' "$CONFIG_FILE")"
 	dpath="$(jq -r --arg key "$dname" '.[$key].path' "$CONFIG_FILE" | sed "s#^~#$HOME#g")"
 
-	[ ! -d "$FILES_PATH"'/'"$dname" ] && die "\"$dname\" is not backed up!'"
-	[ ! -e "$FILES_PATH"'/'"$dname"'/'"$dfile" ] && die "\"$dname\" is missing!"
+	[ ! -d "$FILES_PATH/$dname" ] && die "\"$dname\" is not backed up!'"
+	[ ! -e "$FILES_PATH/$dname/$dfile" ] && die "\"$dname\" is missing!"
 
 	remove_existing_symlink "$dpath" "$dfile" "$dname"
 
 	mkdir -p "$dpath"
 
 
-	real_path="$FILES_PATH"'/'"$dname"'/'"$dfile"
-	fake_path="$dpath"'/'"$dfile"
+	real_path="$FILES_PATH/$dname/$dfile"
+	fake_path="$dpath/$dfile"
 	ln -s "$real_path" "$fake_path"
 	[ "$?" != '0' ] && "Creating symlink from \"$real_path\" to \"$fake_path\""
 }
