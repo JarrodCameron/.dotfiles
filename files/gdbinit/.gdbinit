@@ -59,3 +59,4 @@ set auto-load safe-path /
 #    printf "*pargv = %p", $eax
 #    continue
 #end
+source /home/jc/repos/pwndbg/gdbinit.py

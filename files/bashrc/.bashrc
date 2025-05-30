@@ -48,7 +48,30 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+# Shorten long ass paths in $PS1
+# Example: '/mnt/c/Users/JarrodCameron/Desktop' -> /m/c/U/J/Desktop
+_dump_path () {
+
+    cwd="$(dirs +0)"
+    cwdlen="$(/bin/echo -n "$cwd" | wc -c)"
+    if [ "$cwdlen" -lt 30 ]; then
+        dirs +0
+        return
+    fi
+
+    prefix="$(dirs +0 | grep --only-matching '^[/]' || true)"
+    path="$(dirs +0 \
+        | sed 's#/#\n#g' \
+        | head --lines -1 \
+        | grep --only-matching '^.' \
+        | tr '\n' '/'
+    )"
+    suffix="$(dirs +0 | sed 's#/#\n#g' | tail -n1)"
+
+    echo "$prefix$path$suffix"
+}
+
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]$(_dump_path)\[\033[00m\]\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -122,8 +145,6 @@ if [[ "$PATH" != *"$HOME""/.scripts/"* ]]; then
 fi
 export EDITOR="$(which vim)"
 
-# Copy
-alias copy="xclip -selection clip 2> /dev/null"
 alias r2="radare2"
 alias tag="vim -t"
 alias cse="ssh z5210220@cse.unsw.edu.au"
@@ -151,15 +172,22 @@ alias mv='mv -i'
 alias dumbshell='setarch `uname -m` -R /bin/bash'
 alias ui='cd /usr/include'
 alias tmp='cd "$(mktemp -d)"'
-alias rg='rg --no-ignore'
+alias rg='rg --no-ignore -g "!venv/" -g "!node_modules/"'
 alias less='less -i'
 alias hosts='cat /etc/hosts'
 alias jim="jq | vim -c 'set ft=json' -c 'foldopen!' -"
-
+alias hub='ssh hub'
+alias jc='cd /mnt/c/Users/JarrodCameron/Desktop/'
+alias c='cowsay'
+alias ansi2text='sed -E "s/\x1b\[[0-9;]*m//g"'
 
 # Because dwm sux
 alias ghidra='_JAVA_AWT_WM_NONREPARENTING=1 ghidra'
 alias burpsuite='_JAVA_AWT_WM_NONREPARENTING=1 burpsuite'
+
+function regex101 () {
+	echo 'UUIDs: \w{8}-\w{4}-\w{4}-\w{4}-\w{12}'
+}
 
 function music () {(
 	cd ~/music
@@ -205,8 +233,8 @@ stty -ixon
 
 # Key bindings
 bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
-bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
-bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
+#bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
+#bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
 bind -x '"\C-a": ~/.scripts/.bash/open_man.sh'
 
 #source /home/jc/.config/broot/launcher/bash/br
@@ -291,5 +319,20 @@ function xdopaste () {
 		/bin/echo -nE "$data" | unix2dos | xdotool type --file -
 	else
 		xdotool type "$data"
+	fi
+}
+
+function wpath () {
+    name="$1"
+    realpath $name | sed 's#/#\\#g ; s/^/\\\\wsl.localhost\\kali-linux/'
+}
+
+function copy () {
+	if [ -n "$WSL_DISTRO_NAME" ]; then
+		# Running in WSL
+		clip.exe
+	else
+		# X
+		xclip -selection clip 2> /dev/null
 	fi
 }
