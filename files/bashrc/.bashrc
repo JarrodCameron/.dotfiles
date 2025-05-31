@@ -17,7 +17,6 @@ RED="\e[31m"
 GREEN="\e[32m"
 
 export TERM=xterm-256color
-export RUN_ZID=z5210220
 
 # If not running interactively, don't do anything
 case $- in
@@ -48,7 +47,28 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+_dump_path () {
+
+	cwd="$(dirs +0)"
+	cwdlen="$(/bin/echo -n "$cwd" | wc -c)"
+	if [ "$cwdlen" -lt 30 ]; then
+		dirs +0
+		return
+	fi
+
+	prefix="$(dirs +0 | grep --only-matching '^[/]' || true)"
+	path="$(dirs +0 \
+		| sed 's#/#\n#g' \
+		| head --lines -1 \
+		| grep --only-matching '^.' \
+		|tr '\n' '/'
+	)"
+	suffix="$(dirs +0 | sed 's#/#\n#g' | tail -n1)"
+
+	echo "$prefix$path$suffix"
+}
+
+PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]$(_dump_path)\[\033[00m\]\$ '
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
@@ -123,7 +143,8 @@ fi
 export EDITOR="$(which vim)"
 
 # Copy
-alias copy="xclip -selection clip 2> /dev/null"
+#alias copy="xclip -selection clip 2> /dev/null"
+alias copy="wl-copy"
 alias r2="radare2"
 alias tag="vim -t"
 alias cse="ssh z5210220@cse.unsw.edu.au"
@@ -155,6 +176,10 @@ alias rg='rg --no-ignore'
 alias less='less -i'
 alias hosts='cat /etc/hosts'
 alias jim="jq | vim -c 'set ft=json' -c 'foldopen!' -"
+alias ftp='/usr/bin/tnftp'
+
+# https://stackoverflow.com/a/18000433
+alias ansi2text='sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g"'
 
 
 # Because dwm sux
@@ -205,30 +230,30 @@ stty -ixon
 
 # Key bindings
 bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
-bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
+#bind -x '"\C-h": ~/.scripts/.bash/open_history.sh'
 bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
 bind -x '"\C-a": ~/.scripts/.bash/open_man.sh'
 
 #source /home/jc/.config/broot/launcher/bash/br
-function br {
-	f=$(mktemp)
-	(
-		set +e
-		broot --outcmd "$f" "$@"
-		code=$?
-		if [ "$code" != 0 ]; then
-			rm -f "$f"
-			exit "$code"
-		fi
-	)
-	code=$?
-	if [ "$code" != 0 ]; then
-		return "$code"
-	fi
-	d=$(<"$f")
-	rm -f "$f"
-	eval "$d"
-}
+#function br {
+#	f=$(mktemp)
+#	(
+#		set +e
+#		broot --outcmd "$f" "$@"
+#		code=$?
+#		if [ "$code" != 0 ]; then
+#			rm -f "$f"
+#			exit "$code"
+#		fi
+#	)
+#	code=$?
+#	if [ "$code" != 0 ]; then
+#		return "$code"
+#	fi
+#	d=$(<"$f")
+#	rm -f "$f"
+#	eval "$d"
+#}
 alias nse-ls='ls /usr/bin/../share/nmap/scripts'
 
 
@@ -293,3 +318,21 @@ function xdopaste () {
 		xdotool type "$data"
 	fi
 }
+
+function htb-speed-test () {
+	tmp="$(mktemp -d)"
+	echo edge-{eu,us}-dante-{1,2,3,4}.hackthebox.eu | tr ' ' '\n' | while read domain
+	do
+		ping -c10 "$domain" | tee $tmp/$domain
+	done
+
+	echo '--------------------------------------------------------------------'
+
+	find $tmp \
+		-type f \
+		-exec awk -F/ '/^rtt / {print $5 " ms - " FILENAME}' {} \; | sort -n
+
+	rm -rf "$tmp"
+}
+
+source /home/jc/.config/broot/launcher/bash/br

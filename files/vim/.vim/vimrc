@@ -126,8 +126,11 @@ nnoremap <cr> o<esc>
 nnoremap <space> i<space><esc>l
 
 " Yank/paste to the system keyboard
-vnoremap Y :'<,'>:w !xclip -selection clip <CR><CR>
-nnoremap P :r !xclip -selection clip -out<CR>
+"vnoremap Y :'<,'>:w !xclip -selection clip <CR><CR>
+"nnoremap P :r !xclip -selection clip -out<CR>
+
+" Yank Wayland support
+vnoremap <silent> Y :w !wl-copy<CR><CR>
 
 " Convert word to upper case, not recursive
 inoremap <c-u> <esc>mxviwu`xa
@@ -301,6 +304,8 @@ function! s:GetComment()
     return "!"
   elseif &filetype == "haskell" || &filetype == "sql"
     return "--"
+  elseif &filetype == "vim"
+    return "\""
   else
     " Default comment type
     return "#"
