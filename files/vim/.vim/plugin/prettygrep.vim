@@ -33,6 +33,7 @@ function! g:VimRg(i)
 
 	" maybe we should blacklist some files (eg tags, cscope.out, .git/)
 	let l:cmd = 'rg --vimgrep ' . shellescape(r)
+	let l:cmd = l:cmd . " -g '!node_modules/' -g '!venv/'"
 	let l:cmd = l:cmd . ' > ' . l:grep_file . ' 2>/dev/null'
 	call system(l:cmd)
 

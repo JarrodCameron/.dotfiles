@@ -13,6 +13,6 @@ num_screens="$(xrandr --query | grep ' connected' | wc -l)"
 
 images="$(ls ~/images/wallpapers/*.png | shuf -n "$num_screens" | tr '\n' ' ')"
 
-feh --no-fehbg --bg-center $images
+feh --no-fehbg --bg-fill $images
 
 

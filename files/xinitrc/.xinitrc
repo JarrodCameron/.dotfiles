@@ -19,8 +19,8 @@ then
 	unset f
 fi
 
-while true
-do
-	rm -f dwm.log
-	dwm &>> dwm.log
-done
+#while true
+#do
+#	rm -f ~/.cache/dwm.log
+#	dwm &>> ~/.cache/dwm.log
+#done

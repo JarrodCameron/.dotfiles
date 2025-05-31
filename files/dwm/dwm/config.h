@@ -76,6 +76,7 @@ static const char *dmenucmd[] = {"dmenu_run", "-m", dmenumon, "-fn", dmenufont, 
 static const char *termcmd[] = {"termite", NULL};
 static const char *firefox[] = {"firefox", NULL};
 static const char *alacritty[] = {"alacritty", NULL};
+static const char *suckless_terminal[] = {"st", NULL};
 static const char *pfirefox[] = {"firefox", "--private-window", NULL};
 static const char *bookmarks[] = {HOME "/.config/dwm/scripts/google-chrome-bookmarks.sh", NULL};
 static const char *screensh[] = {HOME "/.scripts/.wm/screen.sh", NULL};
@@ -93,7 +94,7 @@ static const char *lockscreen[] = {HOME "/.scripts/.wm/lock-screen.sh", NULL};
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_Return, spawn,          {.v = alacritty } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = suckless_terminal } },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },

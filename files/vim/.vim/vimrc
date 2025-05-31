@@ -34,6 +34,10 @@ set autoindent
 set showcmd
 set wildmenu
 
+" `ignorecase` is required for `smartcase`
+set ignorecase
+set smartcase
+
 " The width of tab characters
 set tabstop=4
 
@@ -75,10 +79,6 @@ set nomodeline
 
 " Set the vertical column
 set colorcolumn=80
-
-" Set no case sensitive when searching lower case,
-" turn on case sensitive when searching upper case
-set smartcase
 
 " When using the `find' command search recursively down
 "set path=**
@@ -234,7 +234,7 @@ autocmd BufNewFile gdbinit      0r ~/.vim/templates/gdbinit.skel
 " ==START== Starting cursor position
 " ==FILE_NAME== Name of the file
 autocmd BufNewFile * %substitute/==DATE==/\=substitute(system('date +"%x %k:%M"'),'\n','','g')/eg
-autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron (z5210220)/eg
+autocmd BufNewFile * %substitute/==NAME==/Jarrod Cameron/eg
 autocmd BufNewFile * %substitute/==FILE_U==/\=toupper(substitute(expand('%'), '\.', '_', 'g'))/eg
 autocmd BufNewFile * %substitute/==FILE_NAME==/\=expand("%:t:r")/eg
 autocmd BufNewFile * %substitute/==START==//eg

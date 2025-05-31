@@ -1,1 +1,2 @@
-set tabstop=8
+set tabstop=2
+set expandtab
