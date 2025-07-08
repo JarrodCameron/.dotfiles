@@ -32,8 +32,8 @@
         "path": "~/.config/termite"
     },
     "tmux": {
-        "file": ".tmux.conf",
-        "path": "~"
+        "file": "tmux.conf",
+        "path": "~/.config/tmux"
     },
     "vim": {
         "file": ".vim",
