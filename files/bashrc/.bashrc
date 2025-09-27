@@ -35,8 +35,8 @@ shopt -s histappend
 shopt -s autocd
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=20000
-HISTFILESIZE=20000
+HISTSIZE=100000
+HISTFILESIZE=100000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -147,6 +147,7 @@ export EDITOR="$(which vim)"
 # Copy
 #alias copy="xclip -selection clip 2> /dev/null"
 alias copy="wl-copy"
+alias pnpm="npm"
 alias r2="radare2"
 alias tag="vim -t"
 alias cse="ssh z5210220@cse.unsw.edu.au"
@@ -179,6 +180,8 @@ alias less='less -i'
 alias hosts='cat /etc/hosts'
 alias jim="jq | vim -c 'set ft=json' -c 'foldopen!' -"
 alias ftp='/usr/bin/tnftp'
+alias fuff='ffuf'
+alias rp='realpath'
 
 # https://stackoverflow.com/a/18000433
 alias ansi2text='sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g"'
@@ -189,20 +192,35 @@ alias ansi2text='sed -E "s/\x1b\[[0-9;]*m//g"'
 alias ghidra='_JAVA_AWT_WM_NONREPARENTING=1 ghidra'
 alias burpsuite='_JAVA_AWT_WM_NONREPARENTING=1 burpsuite'
 
+function kali () {
+	NIXPKGS_ALLOW_UNFREE=1 exec nix-shell --packages bintools binutils \
+		bloodhound bloodhound-py cewl chisel enum4linux-ng evil-winrm \
+		exploitdb feroxbuster ffuf fzf gobuster hashid john jq kvmtool \
+		metasploit netexec nmap openvpn powershell pwntools \
+		python313Packages.bloodyad qemu responder samba seclists thc-hydra \
+		vagrant vim virt-manager python313Packages.bloodyad openldap \
+		certipy ntp $@
+
+}
+
+vagrant-winrm () {
+	evil-winrm -P 55985 -i 127.0.0.1 -u vagrant -p vagrant
+}
+
+vagrant-rdp () {
+	xfreerdp \
+		/u:vagrant \
+		/p:vagrant \
+		/v:127.0.0.1 \
+		/tls-seclevel:0 \
+		/timeout:80000 \
+		/dynamic-resolution \
+		/drive:shared,/home/jc/repos/htb-offshore/shared
+}
+
 function regex101 () {
 	echo 'UUIDs: \w{8}-\w{4}-\w{4}-\w{4}-\w{12}'
 }
-
-function music () {(
-	cd ~/music
-	while true
-	do
-		for f in `ls ~/music/*.mp3 | shuf`
-		do
-			mpv "$f"
-		done
-	done
-)}
 
 function csc () {
 	rm -f tags
@@ -241,26 +259,6 @@ bind -x '"\C-f": ~/.scripts/.bash/open_fuzzy.sh'
 #bind -x '"\C-t": ~/.scripts/.bash/open_todo.sh'
 bind -x '"\C-a": ~/.scripts/.bash/open_man.sh'
 
-#source /home/jc/.config/broot/launcher/bash/br
-#function br {
-#	f=$(mktemp)
-#	(
-#		set +e
-#		broot --outcmd "$f" "$@"
-#		code=$?
-#		if [ "$code" != 0 ]; then
-#			rm -f "$f"
-#			exit "$code"
-#		fi
-#	)
-#	code=$?
-#	if [ "$code" != 0 ]; then
-#		return "$code"
-#	fi
-#	d=$(<"$f")
-#	rm -f "$f"
-#	eval "$d"
-#}
 alias nse-ls='ls /usr/bin/../share/nmap/scripts'
 
 
